@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">NextGame</string>
+    <string name="text_fragment_a">Esta é a fragment A da TAB A</string>
+    <string name="text_fragment_b">Esta é a fragment B da TAB B</string>
+    <string-array name="titles_tab">
+        <item>Xbox One</item>
+        <item>Playstation 4</item>
+    </string-array>
+</resources>

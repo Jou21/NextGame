@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "211919954252",
+    "firebase_url": "https://nextgame-7e6ee.firebaseio.com",
+    "project_id": "nextgame-7e6ee",
+    "storage_bucket": "nextgame-7e6ee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:211919954252:android:aebc0a12aa163fb9",
+        "android_client_info": {
+          "package_name": "com.game.next.nextgame"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "211919954252-ean8j6l157muq61pq7shdmj18g0jrmd0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBq32MONl27DFEos1CgB5j4xqslTLm023Q"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:211919954252:android:a731c16d3985f442",
+        "android_client_info": {
+          "package_name": "com.game.next.recyclerhorizontal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "211919954252-ean8j6l157muq61pq7shdmj18g0jrmd0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBq32MONl27DFEos1CgB5j4xqslTLm023Q"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
