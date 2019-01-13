@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,9 +18,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
+import com.game.next.nextgame.ActivityMeusJogos;
+import com.game.next.nextgame.MainActivity;
 import com.game.next.nextgame.R;
 import com.game.next.nextgame.adapters.MyAdapterOfRecyclers;
 
@@ -40,12 +44,14 @@ public class FragmentA extends Fragment {
     private RecyclerView.Adapter mAdapterOfRecyclers;
     private RecyclerView.LayoutManager layoutManagerOfRecyclers;
 
+    private Button btnMyGames;
+
     @SuppressLint("RestrictedApi")
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_a, container, false);
+        final View view = inflater.inflate(R.layout.fragment_a, container, false);
 
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         exibirProgress(true);
@@ -78,7 +84,15 @@ public class FragmentA extends Fragment {
             }
         });
 
+        btnMyGames = (Button) view.findViewById(R.id.my_games_xbox);
 
+        btnMyGames.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent telaMeusJogos = new Intent(view.getContext(), ActivityMeusJogos.class);
+                startActivity(telaMeusJogos);
+            }
+        });
 
         return view;
     }
