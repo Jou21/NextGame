@@ -83,7 +83,8 @@
         android:scrollbars="vertical"
         app:layout_constraintBottom_toTopOf="@+id/b_guideline4"
         app:layout_constraintTop_toTopOf="@+id/b_guideline3"
-        tools:layout_editor_absoluteX="8dp" />
+        tools:layout_editor_absoluteX="8dp"
+        tools:ignore="MissingConstraints" />
 
     <ProgressBar
         android:id="@+id/progressBarB"
@@ -164,7 +165,7 @@
                 android:backgroundTint="#2d2d2d"
                 android:drawablePadding="0dp"
                 android:drawableTop="@drawable/ic_baseline_attach_money_b"
-                android:text="Cofrinho"
+                android:text="Carteira"
                 android:textColor="#ffffff"
                 android:textSize="11sp" />
 
