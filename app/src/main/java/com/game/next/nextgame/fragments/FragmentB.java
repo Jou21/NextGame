@@ -22,6 +22,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
+import com.game.next.nextgame.ActivityCarteira;
+import com.game.next.nextgame.ActivityChat;
+import com.game.next.nextgame.ActivityMapa;
 import com.game.next.nextgame.ActivityMeusJogos;
 import com.game.next.nextgame.R;
 import com.game.next.nextgame.adapters.MyAdapterOfRecyclersB;
@@ -43,7 +46,7 @@ public class FragmentB extends Fragment {
     private RecyclerView.Adapter mAdapterOfRecyclers;
     private RecyclerView.LayoutManager layoutManagerOfRecyclers;
 
-    private Button btnMyGames;
+    private Button btnMyGames, btnChat, btnCarteira, btnMapa;
 
     @SuppressLint("RestrictedApi")
     @Nullable
@@ -84,11 +87,38 @@ public class FragmentB extends Fragment {
         });
 
         btnMyGames = (Button) view.findViewById(R.id.my_games_ps4);
+        btnChat = (Button) view.findViewById(R.id.chat_ps4);
+        btnCarteira = (Button) view.findViewById(R.id.carteira_ps4);
+        btnMapa = (Button) view.findViewById(R.id.mapa_ps4);
 
         btnMyGames.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent telaMeusJogos = new Intent(view.getContext(), ActivityMeusJogos.class);
+                startActivity(telaMeusJogos);
+            }
+        });
+
+        btnChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent telaMeusJogos = new Intent(view.getContext(), ActivityChat.class);
+                startActivity(telaMeusJogos);
+            }
+        });
+
+        btnCarteira.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent telaMeusJogos = new Intent(view.getContext(), ActivityCarteira.class);
+                startActivity(telaMeusJogos);
+            }
+        });
+
+        btnMapa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent telaMeusJogos = new Intent(view.getContext(), ActivityMapa.class);
                 startActivity(telaMeusJogos);
             }
         });

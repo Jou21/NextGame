@@ -140,6 +140,7 @@
                 android:textSize="11sp" />
 
             <Button
+                android:id="@+id/chat_ps4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="-6dp"
@@ -155,6 +156,7 @@
                 android:textSize="11sp" />
 
             <Button
+                android:id="@+id/carteira_ps4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="-6dp"
@@ -170,6 +172,7 @@
                 android:textSize="11sp" />
 
             <Button
+                android:id="@+id/mapa_ps4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="-6dp"
