@@ -18,9 +18,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ActivityMeusJogos" />
-        <activity android:name=".ActivityChat" />
-        <activity android:name=".ActivityCarteira" />
+        <activity android:name=".ActivityMeusJogos"
+            android:theme="@style/MyTheme"/>
+        <activity android:name=".ActivityChat"
+            android:theme="@style/MyTheme"/>
+        <activity android:name=".ActivityCarteira"
+            android:theme="@style/MyTheme"/>
         <activity android:name=".ActivityMapa"></activity>
     </application>
 

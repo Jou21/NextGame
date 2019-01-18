@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
 
         Window window = getWindow();
 
-
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 
