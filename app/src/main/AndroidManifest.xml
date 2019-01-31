@@ -28,6 +28,13 @@
             android:name=".ActivityMeusJogos"
             android:theme="@style/MyTheme" />
         <activity
+            android:name=".CaptureActivityPortrait"
+            android:screenOrientation="portrait"
+            android:stateNotNeeded="true"
+            android:theme="@style/zxing_CaptureTheme"
+            android:windowSoftInputMode="stateAlwaysHidden">
+        </activity>
+        <activity
             android:name=".ActivityChat"
             android:theme="@style/MyTheme" />
         <activity

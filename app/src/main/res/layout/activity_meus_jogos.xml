@@ -14,7 +14,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:scrollbars="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/btn_meus_jogos_adicionar_jogo"
+        app:layout_constraintBottom_toTopOf="@+id/txtCodBar"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="8dp" />
 
@@ -39,5 +39,16 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
+
+    <TextView
+        android:id="@+id/txtCodBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="CÓDIGO DE BARRAS DO JOGO"
+        app:layout_constraintBottom_toTopOf="@+id/btn_meus_jogos_adicionar_jogo"
+        app:layout_constraintEnd_toStartOf="@+id/guideline10"
+        app:layout_constraintStart_toStartOf="@+id/guideline10" />
 
 </android.support.constraint.ConstraintLayout>
