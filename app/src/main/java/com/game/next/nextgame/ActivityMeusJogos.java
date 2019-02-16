@@ -93,6 +93,10 @@ public class ActivityMeusJogos extends AppCompatActivity {
 
             txtCodBar.setText(contents);
 
+            Intent telaIdentificaJogo = new Intent(ActivityMeusJogos.this, ActivityIdentificaJogo.class);
+            telaIdentificaJogo.putExtra("CODBAR",contents);
+            startActivity(telaIdentificaJogo);
+
         }
 
         super.onActivityResult(requestCode, resultCode, intent);
