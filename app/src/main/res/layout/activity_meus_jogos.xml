@@ -25,7 +25,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/shape_btn_arredondado_azul"
-        android:text="ADICIONAR jogo"
+        android:text="ADICIONAR JOGO"
         android:textColor="#ffffff"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
