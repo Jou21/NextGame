@@ -64,6 +64,7 @@ public class ActivityLogin extends AppCompatActivity{
     private EditText edtEmail, edtSenha;
     private Button btnEntrar, btnCadastrar;
     private Button loginButton;
+    private TextView txtEsqueceuSenha;
     private CallbackManager mCallbackManager;
     private FirebaseAuth mAuth;
 
@@ -89,6 +90,16 @@ public class ActivityLogin extends AppCompatActivity{
         btnEntrar = (Button) findViewById(R.id.btn_login_entrar);
         btnCadastrar = (Button) findViewById(R.id.btn_login_cadastrar);
         loginButton = (Button) findViewById(R.id.login_button);
+        txtEsqueceuSenha = (TextView) findViewById(R.id.txt_forgot_password) ;
+
+        txtEsqueceuSenha.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent telaResetPassword = new Intent(ActivityLogin.this, ResetPasswordActivity.class);
+                startActivity(telaResetPassword);
+                finish();
+            }
+        });
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();

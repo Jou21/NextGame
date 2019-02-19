@@ -17,7 +17,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class ActivityCadastro extends AppCompatActivity {
 
-    private EditText edtNome,edtEmail,edtSenha,edtConfirmeSuaSenha;
+    private EditText edtNome,edtEmail,edtSenha;
     private Button btnCadastrar;
 
     private FirebaseAuth mAuth;
@@ -30,7 +30,6 @@ public class ActivityCadastro extends AppCompatActivity {
         edtNome = (EditText) findViewById(R.id.edt_cadastro_nome);
         edtEmail = (EditText) findViewById(R.id.edt_cadastro_email);
         edtSenha = (EditText) findViewById(R.id.edt_cadastro_senha);
-        edtConfirmeSuaSenha = (EditText) findViewById(R.id.edt_cadastro_confirma_senha);
         btnCadastrar = (Button) findViewById(R.id.btn_cadastro_cadastrar);
 
         mAuth = FirebaseAuth.getInstance();
