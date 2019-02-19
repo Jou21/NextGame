@@ -49,12 +49,16 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -67,6 +71,9 @@ public class ActivityLogin extends AppCompatActivity{
     private TextView txtEsqueceuSenha;
     private CallbackManager mCallbackManager;
     private FirebaseAuth mAuth;
+    private DatabaseReference reference;
+    String imageURL = "";
+    String username = "";
 
     private static final int RC_SIGN_IN = 123;
 
@@ -157,13 +164,14 @@ public class ActivityLogin extends AppCompatActivity{
 
                                         // Application code
                                         try {
-                                            String email = object.getString("email");
-                                            String birthday = object.getString("birthday"); // 01/31/1980 format
+                                            String facebookUserId = object.getString("id");
+                                            //String email = object.getString("email");
+                                            //String birthday = object.getString("birthday"); // 01/31/1980 format
+                                            username = object.getString("name");
+                                            imageURL = "https://graph.facebook.com/" + facebookUserId + "/picture?type=large";
 
-                                            Intent it = new Intent(ActivityLogin.this, MainActivity.class);
-                                            it.putExtra("EMAIL", email);
-                                            startActivity(it);
-                                            finish();
+
+
 
                                         } catch (JSONException e) {
                                             e.printStackTrace();
@@ -209,7 +217,31 @@ public class ActivityLogin extends AppCompatActivity{
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                            assert firebaseUser != null;
+                            String firebaseUserId = firebaseUser.getUid();
+
+                            reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUserId);
+
+                            HashMap<String, String> hashMap = new HashMap<>();
+                            hashMap.put("id", firebaseUserId);
+                            hashMap.put("username", username);
+                            hashMap.put("imageURL", imageURL);
+                            hashMap.put("status", "offline");
+                            hashMap.put("search", username.toLowerCase());
+
+                            reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()){
+                                        Intent intent = new Intent(ActivityLogin.this, MainActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        //intent.putExtra("EMAIL", email);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                }
+                            });
 
                         } else {
                             // If sign in fails, display a message to the user.
