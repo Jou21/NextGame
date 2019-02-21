@@ -3,24 +3,30 @@ package com.game.next.nextgame;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.game.next.nextgame.adapters.MyAdapterMeusJogos;
+import com.game.next.nextgame.entidades.Jogo;
+import com.game.next.nextgame.entidades.UserGame;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ActivityMeusJogos extends AppCompatActivity {
 
@@ -30,7 +36,10 @@ public class ActivityMeusJogos extends AppCompatActivity {
 
     private Button btn_meus_jogos_adicionar_jogo;
 
-    private TextView txtCodBar;
+    private DatabaseReference reference;
+    private FirebaseUser user;
+
+    private ArrayList<UserGame> userGames = new ArrayList<>();
 
     private String contents;
     //private String format;
@@ -63,19 +72,37 @@ public class ActivityMeusJogos extends AppCompatActivity {
             }
         });
 
-        txtCodBar = (TextView) findViewById(R.id.txtCodBar);
-
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view_meus_jogos);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        List<String> input = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            input.add("Test" + i);
-        }
-        mAdapter = new MyAdapterMeusJogos(input);
-        recyclerView.setAdapter(mAdapter);
+        //List<String> input = new ArrayList<>();
+        //for (int i = 0; i < 100; i++) {
+        //    input.add("Test" + i);
+        //}
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        reference = FirebaseDatabase.getInstance().getReference("UserGame").child(user.getUid());
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    UserGame userGame = snapshot.getValue(UserGame.class);
+                    userGames.add(userGame);
+                }
+
+                mAdapter = new MyAdapterMeusJogos(userGames);
+                recyclerView.setAdapter(mAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
 
 
     }
@@ -90,8 +117,6 @@ public class ActivityMeusJogos extends AppCompatActivity {
             //format = intent.getStringExtra("SCAN_RESULT_FORMAT");
 
             //Log.d("CODBAR",""+contents);
-
-            txtCodBar.setText(contents);
 
             Intent telaIdentificaJogo = new Intent(ActivityMeusJogos.this, ActivityIdentificaJogo.class);
             telaIdentificaJogo.putExtra("CODBAR",contents);

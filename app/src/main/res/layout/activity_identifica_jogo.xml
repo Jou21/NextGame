@@ -38,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
+        app:layout_constraintGuide_percent="0.25" />
 
     <Button
         android:id="@+id/btn_adicionar_jogo_manualmente"
@@ -52,11 +52,11 @@
         android:text="ADICIONAR MANUALMENTE"
         android:textColor="#ffffff"
         android:textSize="30sp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_codigo_de_barras_identifica_jogo" />
+        app:layout_constraintTop_toTopOf="@+id/guideline12" />
 
     <TextView
         android:id="@+id/txt_codigo_de_barras_identifica_jogo"
@@ -87,5 +87,246 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline12" />
+
+    <TextView
+        android:id="@+id/txt_o_que_deseja_fazer_identifica_jogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="8dp"
+        android:text="O que deseja fazer?"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_codigo_de_barras_identifica_jogo" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline12"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linear_layout_3_buttons">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView android:id="@+id/txt_quanto_deseja_cobrar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="3dip"
+                    android:text="Quanto deseja cobrar na venda de seu jogo?"
+                    android:layout_gravity="center"/>
+
+                <TextView android:id="@+id/txt_preco_venda_jogo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="3dip"
+                    android:text="R$ 60,00"
+                    android:layout_gravity="center"/>
+
+                <SeekBar
+                    android:id="@+id/seek_bar_preco"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:max="360"
+                    android:progress="60"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView android:id="@+id/txt_por_quanto_deseja_alugar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="3dip"
+                    android:text="Por quanto as pessoas poderão alugar este jogo?"
+                    android:layout_gravity="center"/>
+
+                <TextView android:id="@+id/txt_preco_aluguel_jogo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="3dip"
+                    android:text="R$ 20,00"
+                    android:layout_gravity="center"/>
+
+                <SeekBar
+                    android:id="@+id/seek_bar_aluguel"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:max="110"
+                    android:progress="20"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView android:id="@+id/txt_dias_da_semana_deseja_entregar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="3dip"
+                    android:text="Em quais dias da semana você deseja entregar?"
+                    android:layout_gravity="center"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btn_domingo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/round_button_azul"
+                        android:text="D"
+                        android:layout_marginRight="2dp"
+                        android:textColor="#ffffff"
+                        android:textSize="30sp"
+                         />
+                    <Button
+                        android:id="@+id/btn_segunda"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/round_button_azul"
+                        android:text="S"
+                        android:layout_marginHorizontal="2dp"
+                        android:textColor="#ffffff"
+                        android:textSize="30sp"
+                        />
+                    <Button
+                        android:id="@+id/btn_terca"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/round_button_azul"
+                        android:text="T"
+                        android:layout_marginHorizontal="2dp"
+                        android:textColor="#ffffff"
+                        android:textSize="30sp"
+                        />
+                    <Button
+                        android:id="@+id/btn_quarta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/round_button_azul"
+                        android:text="Q"
+                        android:layout_marginHorizontal="2dp"
+                        android:textColor="#ffffff"
+                        android:textSize="30sp"
+                        />
+                    <Button
+                        android:id="@+id/btn_quinta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/round_button_azul"
+                        android:text="Q"
+                        android:layout_marginHorizontal="2dp"
+                        android:textColor="#ffffff"
+                        android:textSize="30sp"
+                        />
+                    <Button
+                        android:id="@+id/btn_sexta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/round_button_azul"
+                        android:text="S"
+                        android:layout_marginHorizontal="2dp"
+                        android:textColor="#ffffff"
+                        android:textSize="30sp"
+                        />
+                    <Button
+                        android:id="@+id/btn_sabado"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/round_button_azul"
+                        android:text="S"
+                        android:layout_marginLeft="2dp"
+                        android:textColor="#ffffff"
+                        android:textSize="30sp"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.85" />
+
+    <LinearLayout
+        android:id="@+id/linear_layout_3_buttons"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_o_que_deseja_fazer_identifica_jogo">
+
+        <Button
+            android:id="@+id/btn_alugar_identifica_jogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Alugar" />
+
+        <Button
+            android:id="@+id/btn_alugar_e_vender_identifica_jogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Alugar/Vender" />
+
+        <Button
+            android:id="@+id/btn_vender_identifica_jogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Vender" />
+
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>
