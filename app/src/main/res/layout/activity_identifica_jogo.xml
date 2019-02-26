@@ -18,7 +18,7 @@
         android:text="ADICIONAR MANUALMENTE"
         android:textColor="#ffffff"
         android:textSize="30sp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,17 +42,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline12" />
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view_identifica_jogo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:scrollbars="vertical"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="8dp" />
 
     <ScrollView
+        android:id="@+id/scroll_identifica_jogo"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline12"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -64,6 +74,7 @@
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_gravity="center"
+                android:visibility="gone"
                 tools:srcCompat="@tools:sample/avatars" />
 
             <TextView
@@ -81,6 +92,59 @@
                 android:layout_gravity="center"
                 android:text=""
                 android:textSize="20sp" />
+
+            <LinearLayout
+                android:id="@+id/lay_nao_achou_jogo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txt_veja_se_temos_seu_jogo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="3dip"
+                android:text="Veja se temos seu jogo em nossa base de dados" />
+
+            <AutoCompleteTextView
+                android:id="@+id/pesquisarAutoComplete"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="11dp"
+                android:hint="Pesquisar..."
+                android:paddingLeft="50dp"
+                android:paddingRight="45dp"
+                android:textStyle="italic"
+                android:layout_marginRight="8dp"
+                android:layout_marginLeft="8dp"/>
+
+            <TextView
+                android:id="@+id/txt_caso_não_ache"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="3dip"
+                android:text="Caso não ache clique no botão abaixo" />
+
+            <Button
+                android:id="@+id/btn_nao_achei_o_jogo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:backgroundTint="#28DE00"
+                android:text="NÃO ACHEI O JOGO NA BASE DE DADOS"
+                android:textColor="#ffffff" />
+
+        </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lay_achou_jogo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:orientation="vertical">
 
             <TextView
                 android:id="@+id/txt_o_que_deseja_fazer_identifica_jogo"
@@ -462,11 +526,13 @@
                     android:id="@+id/btn_adicionar_horario_identifica_jogo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="-30dp"
                     android:layout_gravity="center"
+                    android:layout_marginTop="-30dp"
                     android:backgroundTint="#28DE00"
                     android:text="ADICIONAR HORÁRIO"
                     android:textColor="#ffffff" />
+
+            </LinearLayout>
 
             </LinearLayout>
 

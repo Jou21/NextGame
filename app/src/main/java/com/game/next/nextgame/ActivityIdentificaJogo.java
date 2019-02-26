@@ -8,18 +8,28 @@ import android.support.annotation.DrawableRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.game.next.nextgame.adapters.MyAdapter;
+import com.game.next.nextgame.adapters.MyAdapterImgGoogle;
+import com.game.next.nextgame.adapters.MyAdapterListJogos;
+import com.game.next.nextgame.adapters.MyAdapterMeusJogos;
 import com.game.next.nextgame.adapters.MyAdapterTitulos;
 import com.game.next.nextgame.entidades.Jogo;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,8 +42,18 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ActivityIdentificaJogo extends AppCompatActivity {
 
@@ -43,14 +63,19 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
     private ArrayList<Jogo> jogosPS4 = new ArrayList<>();
     private ArrayList<Jogo> jogosXbox = new ArrayList<>();
 
-    private LinearLayout laySeekAlugar, laySeekPreco;
+    private ArrayList<Jogo> listTodosJogos = new ArrayList<>();
+    private List<String> listNomeTodosJogos = new ArrayList<>();
+    private AutoCompleteTextView autoCompletePesquisar;
+
+    private LinearLayout laySeekAlugar, laySeekPreco, layAchouJogo, layNaoAchouJogo;
     private LinearLayout layHorarios1, layHorarios2, layHorarios3;
     private CheckBox checkHora1, checkHora2, checkHora3;
     private TextView txtHora1, txtHora2, txtHora3, txtExcluirHora1, txtExcluirHora2, txtExcluirHora3;
 
     private Button btnDomingo, btnSegunda, btnTerca, btnQuarta, btnQuinta, btnSexta, btnSabado;
+    private Button btnAlugar, btnAlugarEVender, btnVender, btnNaoAcheiOJogo;
 
-    private Button btnAlugar, btnAlugarEVender, btnVender;
+    private ScrollView scrollIdentificaJogo;
 
     private boolean domingoSelecionado = false;
     private boolean segundaSelecionado = false;
@@ -67,6 +92,10 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
 
     private DatabaseReference reference;
     private FirebaseUser user;
+
+    private MyAdapterListJogos adapter = null;
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter mAdapter;
 
     private SeekBar seekBarPreco, seekBarAluguel;
 
@@ -105,11 +134,19 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
         horarioIdentificaJogo = (TimePicker)findViewById(R.id.horario_identifica_jogo);
         horarioIdentificaJogo2 = (TimePicker)findViewById(R.id.horario_2_identifica_jogo);
 
+        scrollIdentificaJogo = (ScrollView) findViewById(R.id.scroll_identifica_jogo);
+        btnNaoAcheiOJogo = (Button) findViewById(R.id.btn_nao_achei_o_jogo);
+        layNaoAchouJogo = (LinearLayout) findViewById(R.id.lay_nao_achou_jogo);
+        layAchouJogo = (LinearLayout) findViewById(R.id.lay_achou_jogo);
         laySeekAlugar = (LinearLayout) findViewById(R.id.lay_seek_aluguel);
         laySeekPreco = (LinearLayout) findViewById(R.id.lay_seek_preco);
         btnAlugar = (Button) findViewById(R.id.btn_alugar_identifica_jogo);
         btnAlugarEVender = (Button) findViewById(R.id.btn_alugar_e_vender_identifica_jogo);
         btnVender = (Button) findViewById(R.id.btn_vender_identifica_jogo);
+
+        autoCompletePesquisar = (AutoCompleteTextView) findViewById(R.id.pesquisarAutoComplete);
+
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view_identifica_jogo);
 
         btnAdicionarHorarioIdentificaJogo = (Button) findViewById(R.id.btn_adicionar_horario_identifica_jogo);
         layHorarios1 = (LinearLayout) findViewById(R.id.lay_horarios_1);
@@ -124,6 +161,8 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
         txtExcluirHora1 = (TextView) findViewById(R.id.txt_excluir_hora1_identifica_jogo);
         txtExcluirHora2 = (TextView) findViewById(R.id.txt_excluir_hora2_identifica_jogo);
         txtExcluirHora3 = (TextView) findViewById(R.id.txt_excluir_hora3_identifica_jogo);
+
+        
 
         btnAlugar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,6 +200,8 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
                 btnVender.getBackground().setColorFilter(ContextCompat.getColor(ActivityIdentificaJogo.this, R.color.corRoxo), PorterDuff.Mode.MULTIPLY);
             }
         });
+
+
 
         horarioIdentificaJogo.setIs24HourView(true);
 
@@ -422,8 +463,11 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Jogo jogo = snapshot.getValue(Jogo.class);
                         jogosPS4.add(jogo);
-
+                        listTodosJogos.add(jogo);
+                        listNomeTodosJogos.add(jogo.getNome());
                     }
+
+                    acionaDrop();
 
                     for(Jogo j : jogosPS4){
 
@@ -443,14 +487,19 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
                             jogoIdentificado = j;
                             txtCodigoDeBarras.setText(finalCodigoDeBarras);
                             jogoPS4Encontrado[0] = true;
-                            btnAdicionarJogoManualmente.setVisibility(View.GONE);
+                            //btnAdicionarJogoManualmente.setVisibility(View.GONE);
                             btnAdicionarJogoSucesso.setVisibility(View.VISIBLE);
+                            imgCodIdentificado.setVisibility(View.VISIBLE);
+                            layAchouJogo.setVisibility(View.VISIBLE);
+                            layNaoAchouJogo.setVisibility(View.GONE);
 
                         }else if (j == jogosPS4.get(jogosPS4.size()-1) && jogoXboxEncontrado[0] == false && jogoPS4Encontrado[0] == false) {
                             txtCodIdentificado.setText("Nenhum jogo encontrado");
                             txtCodigoDeBarras.setText(finalCodigoDeBarras);
-                            btnAdicionarJogoManualmente.setVisibility(View.VISIBLE);
+                            //btnAdicionarJogoManualmente.setVisibility(View.VISIBLE);
+                            layNaoAchouJogo.setVisibility(View.VISIBLE);
                             btnAdicionarJogoSucesso.setVisibility(View.GONE);
+                            layAchouJogo.setVisibility(View.GONE);
                         }
 
                     }
@@ -475,8 +524,11 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Jogo jogo = snapshot.getValue(Jogo.class);
                         jogosXbox.add(jogo);
-
+                        listTodosJogos.add(jogo);
+                        listNomeTodosJogos.add(jogo.getNome());
                     }
+
+                    acionaDrop();
 
                     for(Jogo j : jogosXbox){
 
@@ -496,14 +548,19 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
                             jogoIdentificado = j;
                             txtCodigoDeBarras.setText(finalCodigoDeBarras);
                             jogoXboxEncontrado[0] = true;
-                            btnAdicionarJogoManualmente.setVisibility(View.GONE);
+                            //btnAdicionarJogoManualmente.setVisibility(View.GONE);
                             btnAdicionarJogoSucesso.setVisibility(View.VISIBLE);
+                            imgCodIdentificado.setVisibility(View.VISIBLE);
+                            layAchouJogo.setVisibility(View.VISIBLE);
+                            layNaoAchouJogo.setVisibility(View.GONE);
 
                         }else if (j == jogosXbox.get(jogosXbox.size()-1) && jogoXboxEncontrado[0] == false && jogoPS4Encontrado[0] == false) {
                             txtCodIdentificado.setText("Nenhum jogo encontrado");
                             txtCodigoDeBarras.setText(finalCodigoDeBarras);
-                            btnAdicionarJogoManualmente.setVisibility(View.VISIBLE);
+                            //btnAdicionarJogoManualmente.setVisibility(View.VISIBLE);
                             btnAdicionarJogoSucesso.setVisibility(View.GONE);
+                            layAchouJogo.setVisibility(View.GONE);
+                            layNaoAchouJogo.setVisibility(View.VISIBLE);
                         }
 
                     }
@@ -518,7 +575,78 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
 
             });
 
+
+            recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+
+        btnNaoAcheiOJogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                scrollIdentificaJogo.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        final List<String> resultUrls = new ArrayList<String>();
+
+                        //final String url;
+                        try {
+                            Document doc = Jsoup.connect("https://www.google.com.br/search?tbm=isch&sa=1&ei=xTIUW5nGJYSPwwSZspqACg&q=" + finalCodigoDeBarras + "&oq=" + finalCodigoDeBarras + "&gs_l=img.3...4944.4944.0.5656.1.1.0.0.0.0.116.116.0j1.1.0....0...1c.1.64.img..0.0.0....0.AuKFroOBgdI#imgrc=_").get();
+
+                            Log.d("URL","https://www.google.com.br/search?tbm=isch&sa=1&ei=xTIUW5nGJYSPwwSZspqACg&q=" + finalCodigoDeBarras + "&oq=" + finalCodigoDeBarras + "&gs_l=img.3...4944.4944.0.5656.1.1.0.0.0.0.116.116.0j1.1.0....0...1c.1.64.img..0.0.0....0.AuKFroOBgdI#imgrc=_");
+                            //Document doc1 = Jsoup.connect("https://cosmos.bluesoft.com.br/produtos/" + finalCodigoDeBarras).get();
+
+                            //nomeProduto = doc1.getElementById("container-principal").getElementsByTag("h1").text();
+
+                            Elements elements = doc.select("div.rg_meta");
+
+                            JSONObject jsonObject;
+                            for (Element element : elements) {
+                                if (element.childNodeSize() > 0) {
+                                    jsonObject = (JSONObject) new JSONParser().parse(element.childNode(0).toString());
+                                    resultUrls.add((String) jsonObject.get("ou"));
+                                }
+                            }
+
+                        /*
+                        System.out.println("number of results: " + resultUrls.size());
+
+                        for (String imageUrl : resultUrls) {
+                            System.out.println(imageUrl);
+                        }
+                        */
+
+                        //    url = resultUrls.get(0);
+
+
+                        } catch (IOException e) {
+
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                //mAdapter = new MyAdapterImgGoogle(resultUrls, recyclerView);
+                                mAdapter = new MyAdapterImgGoogle(resultUrls);
+                                recyclerView.setAdapter(mAdapter);
+
+                                //Picasso.get().load(url).into(imageView);
+                                //txtCodBar.setText(nomeProduto);
+                                //exibirProgress(false);
+                            }
+                        });
+                    }
+                }).start();
+
+            }
+        });
+
         }
+        
     }
 
     @Override
@@ -536,5 +664,33 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
         btnAdicionarJogoSucesso.setVisibility(View.GONE);
         txtCodigoDeBarras.setText("");
         super.onDestroy();
+    }
+
+    private void acionaDrop(){
+        //====================Auto Complete Pesquisar========================================================
+        if(listTodosJogos.isEmpty() == false) {
+
+
+            adapter = new MyAdapterListJogos(ActivityIdentificaJogo.this, listTodosJogos);
+            autoCompletePesquisar.setAdapter(adapter);
+
+            autoCompletePesquisar.setThreshold(1);//Começa a procurar do primeiro caractere
+
+            autoCompletePesquisar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    String selection = (String) parent.getItemAtPosition(position);
+                    for (int j = 0; j < listTodosJogos.size(); j++) {
+                        if (selection.equals(listTodosJogos.get(j).getNome())) {
+
+                        }
+                    }
+
+
+                }
+            });
+
+        }
+        //======================================================================================================
     }
 }

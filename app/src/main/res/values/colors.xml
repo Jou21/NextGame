@@ -5,4 +5,7 @@
     <color name="colorAccent">#ff4081</color>
     <color name="corRoxo">#976DD0</color>
     <color name="corAzul">#00A6FF</color>
+    <color name="odd">#eee</color>
+    <color name="even">#fff</color>
+    <color name="devider">#ccc</color>
 </resources>
