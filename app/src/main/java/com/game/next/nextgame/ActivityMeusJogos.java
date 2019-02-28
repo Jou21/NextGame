@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.game.next.nextgame.adapters.MyAdapterMeusJogos;
@@ -33,6 +34,8 @@ public class ActivityMeusJogos extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
+
+    private ProgressBar mProgressBar;
 
     private Button btn_meus_jogos_adicionar_jogo;
 
@@ -57,6 +60,7 @@ public class ActivityMeusJogos extends AppCompatActivity {
 
         bar.setDisplayHomeAsUpEnabled(true);
 
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBarMeusJogos);
 
         btn_meus_jogos_adicionar_jogo = (Button) findViewById(R.id.btn_meus_jogos_adicionar_jogo);
         btn_meus_jogos_adicionar_jogo.setOnClickListener(new View.OnClickListener() {
@@ -77,10 +81,8 @@ public class ActivityMeusJogos extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        //List<String> input = new ArrayList<>();
-        //for (int i = 0; i < 100; i++) {
-        //    input.add("Test" + i);
-        //}
+
+        exibirProgress(true);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("UserGame").child(user.getUid());
@@ -94,6 +96,9 @@ public class ActivityMeusJogos extends AppCompatActivity {
                 }
 
                 mAdapter = new MyAdapterMeusJogos(userGames);
+
+                exibirProgress(false);
+
                 recyclerView.setAdapter(mAdapter);
             }
 
@@ -132,5 +137,15 @@ public class ActivityMeusJogos extends AppCompatActivity {
     public boolean onSupportNavigateUp(){
         finish();
         return true;
+    }
+
+    private void exibirProgress(boolean exibir) {
+        mProgressBar.setVisibility(exibir ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
     }
 }

@@ -22,6 +22,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -115,12 +116,16 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
 
     private int quantidadeMaxDeHorarios = 1;
 
+    private ProgressBar mProgressBar;
+
     private List<String> resultUrls = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_identifica_jogo);
+
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBarIdentificaJogo);
 
         txtPrecoAluguelJogo = (TextView) findViewById(R.id.txt_preco_aluguel_jogo);
         txtPrecoVendaJogo = (TextView) findViewById(R.id.txt_preco_venda_jogo);
@@ -462,6 +467,10 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
 
             final boolean[] jogoXboxEncontrado = {false};
             final boolean[] jogoPS4Encontrado = {false};
+            final boolean[] pesquisouJogosXbox = {false};
+            final boolean[] pesquisouJogosPS4 = {false};
+
+            exibirProgress(true);
 
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference myRefPS4 = database.getReference("PS4");
@@ -481,6 +490,10 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
                     acionaDrop();
 
                     for(Jogo j : jogosPS4){
+
+                        if (j == jogosPS4.get(jogosPS4.size()-1) && jogoPS4Encontrado[0] == false){
+                            pesquisouJogosPS4[0] = true;
+                        }
 
                         if (j.getCodigoDeBarra().equals(finalCodigoDeBarras)) {
                             txtCodIdentificado.setText(j.getNome());
@@ -504,13 +517,18 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
                             layAchouJogo.setVisibility(View.VISIBLE);
                             layNaoAchouJogo.setVisibility(View.GONE);
 
-                        }else if (j == jogosPS4.get(jogosPS4.size()-1) && jogoXboxEncontrado[0] == false && jogoPS4Encontrado[0] == false) {
+                            exibirProgress(false);
+
+
+                        }else if (j == jogosPS4.get(jogosPS4.size()-1) && jogoXboxEncontrado[0] == false && jogoPS4Encontrado[0] == false && pesquisouJogosXbox[0] == true && pesquisouJogosPS4[0] == true) {
                             txtCodIdentificado.setText("Nenhum jogo encontrado");
                             txtCodigoDeBarras.setText(finalCodigoDeBarras);
                             //btnAdicionarJogoManualmente.setVisibility(View.VISIBLE);
                             layNaoAchouJogo.setVisibility(View.VISIBLE);
                             btnAdicionarJogoSucesso.setVisibility(View.GONE);
                             layAchouJogo.setVisibility(View.GONE);
+
+                            exibirProgress(false);
                         }
 
                     }
@@ -543,6 +561,10 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
 
                     for(Jogo j : jogosXbox){
 
+                        if (j == jogosXbox.get(jogosXbox.size()-1) && jogoXboxEncontrado[0] == false){
+                            pesquisouJogosXbox[0] = true;
+                        }
+
                         if (j.getCodigoDeBarra().equals(finalCodigoDeBarras)) {
                             txtCodIdentificado.setText(j.getNome());
                             Picasso.get().load(j.getUrlImgJogo()).into(imgCodIdentificado, new Callback() {
@@ -565,13 +587,17 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
                             layAchouJogo.setVisibility(View.VISIBLE);
                             layNaoAchouJogo.setVisibility(View.GONE);
 
-                        }else if (j == jogosXbox.get(jogosXbox.size()-1) && jogoXboxEncontrado[0] == false && jogoPS4Encontrado[0] == false) {
+                            exibirProgress(false);
+
+                        }else if (j == jogosXbox.get(jogosXbox.size()-1) && jogoXboxEncontrado[0] == false && jogoPS4Encontrado[0] == false && pesquisouJogosXbox[0] == true && pesquisouJogosPS4[0] == true) {
                             txtCodIdentificado.setText("Nenhum jogo encontrado");
                             txtCodigoDeBarras.setText(finalCodigoDeBarras);
                             //btnAdicionarJogoManualmente.setVisibility(View.VISIBLE);
                             btnAdicionarJogoSucesso.setVisibility(View.GONE);
                             layAchouJogo.setVisibility(View.GONE);
                             layNaoAchouJogo.setVisibility(View.VISIBLE);
+
+                            exibirProgress(false);
                         }
 
                     }
@@ -596,6 +622,8 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
                 txtSelecioneUmaCapaIdentificaJogo.setVisibility(View.VISIBLE);
                 txtObsSelecioneUmaCapaIdentificaJogo.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.VISIBLE);
+
+                exibirProgress(true);
 
                 new Thread(new Runnable() {
                     @Override
@@ -645,7 +673,7 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
                                 mAdapter = new MyAdapterImgGoogle(resultUrls, ActivityIdentificaJogo.this);
                                 recyclerView.setAdapter(mAdapter);
 
-
+                                exibirProgress(false);
 
                                 //Picasso.get().load(url).into(imageView);
                                 //txtCodBar.setText(nomeProduto);
@@ -692,13 +720,14 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
             autoCompletePesquisar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    /*
                     String selection = (String) parent.getItemAtPosition(position);
                     for (int j = 0; j < listTodosJogos.size(); j++) {
                         if (selection.equals(listTodosJogos.get(j).getNome())) {
 
                         }
                     }
-
+                    */
 
                 }
             });
@@ -731,5 +760,9 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void exibirProgress(boolean exibir) {
+        mProgressBar.setVisibility(exibir ? View.VISIBLE : View.GONE);
     }
 }
