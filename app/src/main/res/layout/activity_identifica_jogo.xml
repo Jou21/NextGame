@@ -44,21 +44,26 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_identifica_jogo"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginHorizontal="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:scrollbars="vertical"
         android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="8dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_obs_selecione_uma_capa_identifica_jogo" />
 
     <ScrollView
         android:id="@+id/scroll_identifica_jogo"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/guideline12"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -76,6 +81,15 @@
                 android:layout_gravity="center"
                 android:visibility="gone"
                 tools:srcCompat="@tools:sample/avatars" />
+
+            <EditText
+                android:id="@+id/edt_digite_o_nome_de_seu_jogo_aqui"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Digite o nome do seu jogo aqui..."
+                android:gravity="center"
+                android:textSize="20sp"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/txt_cod_identificado"
@@ -97,442 +111,442 @@
                 android:id="@+id/lay_nao_achou_jogo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
-            <TextView
-                android:id="@+id/txt_veja_se_temos_seu_jogo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:padding="3dip"
-                android:text="Veja se temos seu jogo em nossa base de dados" />
+                <TextView
+                    android:id="@+id/txt_veja_se_temos_seu_jogo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="3dip"
+                    android:text="Veja se temos seu jogo em nossa base de dados" />
 
-            <AutoCompleteTextView
-                android:id="@+id/pesquisarAutoComplete"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="11dp"
-                android:hint="Pesquisar..."
-                android:paddingLeft="50dp"
-                android:paddingRight="45dp"
-                android:textStyle="italic"
-                android:layout_marginRight="8dp"
-                android:layout_marginLeft="8dp"/>
+                <AutoCompleteTextView
+                    android:id="@+id/pesquisarAutoComplete"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="11dp"
+                    android:layout_marginRight="8dp"
+                    android:hint="Pesquisar..."
+                    android:paddingLeft="50dp"
+                    android:paddingRight="45dp"
+                    android:textStyle="italic" />
 
-            <TextView
-                android:id="@+id/txt_caso_não_ache"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:padding="3dip"
-                android:text="Caso não ache clique no botão abaixo" />
+                <TextView
+                    android:id="@+id/txt_caso_não_ache"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="3dip"
+                    android:text="Caso não ache clique no botão abaixo" />
 
-            <Button
-                android:id="@+id/btn_nao_achei_o_jogo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:backgroundTint="#28DE00"
-                android:text="NÃO ACHEI O JOGO NA BASE DE DADOS"
-                android:textColor="#ffffff" />
+                <Button
+                    android:id="@+id/btn_nao_achei_o_jogo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="#28DE00"
+                    android:text="NÃO ACHEI O JOGO NA BASE DE DADOS"
+                    android:textColor="#ffffff" />
 
-        </LinearLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/lay_achou_jogo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/txt_o_que_deseja_fazer_identifica_jogo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="O que deseja fazer?" />
-
-            <LinearLayout
-                android:id="@+id/linear_layout_3_buttons"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/btn_alugar_identifica_jogo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:backgroundTint="#00A6FF"
-                    android:text="Alugar"
-                    android:textColor="#ffffff" />
-
-                <Button
-                    android:id="@+id/btn_alugar_e_vender_identifica_jogo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:backgroundTint="#976DD0"
-                    android:text="Alugar/Vender"
-                    android:textColor="#ffffff" />
-
-                <Button
-                    android:id="@+id/btn_vender_identifica_jogo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:backgroundTint="#00A6FF"
-                    android:text="Vender"
-                    android:textColor="#ffffff" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/lay_seek_preco"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <TextView
-                    android:id="@+id/txt_quanto_deseja_cobrar"
+                    android:id="@+id/txt_o_que_deseja_fazer_identifica_jogo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:padding="3dip"
-                    android:text="Quanto deseja cobrar na venda de seu jogo?" />
+                    android:text="O que deseja fazer?" />
 
-                <TextView
-                    android:id="@+id/txt_preco_venda_jogo"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/linear_layout_3_buttons"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:padding="3dip"
-                    android:text="R$ 60,00" />
+                    android:orientation="horizontal">
 
-                <SeekBar
-                    android:id="@+id/seek_bar_preco"
-                    android:layout_width="fill_parent"
+                    <Button
+                        android:id="@+id/btn_alugar_identifica_jogo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:backgroundTint="#00A6FF"
+                        android:text="Alugar"
+                        android:textColor="#ffffff" />
+
+                    <Button
+                        android:id="@+id/btn_alugar_e_vender_identifica_jogo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:backgroundTint="#976DD0"
+                        android:text="Alugar/Vender"
+                        android:textColor="#ffffff" />
+
+                    <Button
+                        android:id="@+id/btn_vender_identifica_jogo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:backgroundTint="#00A6FF"
+                        android:text="Vender"
+                        android:textColor="#ffffff" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lay_seek_preco"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:max="360"
-                    android:progress="60" />
+                    android:orientation="vertical">
 
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/txt_quanto_deseja_cobrar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="3dip"
+                        android:text="Quanto deseja cobrar na venda de seu jogo?" />
 
-            <LinearLayout
-                android:id="@+id/lay_seek_aluguel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/txt_preco_venda_jogo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="3dip"
+                        android:text="R$ 60,00" />
 
-                <TextView
-                    android:id="@+id/txt_por_quanto_deseja_alugar"
-                    android:layout_width="wrap_content"
+                    <SeekBar
+                        android:id="@+id/seek_bar_preco"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:max="360"
+                        android:progress="60" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lay_seek_aluguel"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:padding="3dip"
-                    android:text="Por quanto as pessoas poderão alugar este jogo?" />
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/txt_preco_aluguel_jogo"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/txt_por_quanto_deseja_alugar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="3dip"
+                        android:text="Por quanto as pessoas poderão alugar este jogo?" />
+
+                    <TextView
+                        android:id="@+id/txt_preco_aluguel_jogo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="3dip"
+                        android:text="R$ 20,00" />
+
+                    <SeekBar
+                        android:id="@+id/seek_bar_aluguel"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:max="110"
+                        android:progress="20" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:padding="3dip"
-                    android:text="R$ 20,00" />
+                    android:orientation="vertical">
 
-                <SeekBar
-                    android:id="@+id/seek_bar_aluguel"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:max="110"
-                    android:progress="20" />
+                    <TextView
+                        android:id="@+id/txt_dias_da_semana_deseja_entregar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="3dip"
+                        android:text="Em quais dias da semana você deseja entregar?" />
 
-            </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                        <Button
+                            android:id="@+id/btn_domingo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="2dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/round_button_azul"
+                            android:text="D"
+                            android:textColor="#ffffff"
+                            android:textSize="30sp" />
 
-                <TextView
-                    android:id="@+id/txt_dias_da_semana_deseja_entregar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:padding="3dip"
-                    android:text="Em quais dias da semana você deseja entregar?" />
+                        <Button
+                            android:id="@+id/btn_segunda"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="2dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/round_button_azul"
+                            android:text="S"
+                            android:textColor="#ffffff"
+                            android:textSize="30sp" />
+
+                        <Button
+                            android:id="@+id/btn_terca"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="2dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/round_button_azul"
+                            android:text="T"
+                            android:textColor="#ffffff"
+                            android:textSize="30sp" />
+
+                        <Button
+                            android:id="@+id/btn_quarta"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="2dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/round_button_azul"
+                            android:text="Q"
+                            android:textColor="#ffffff"
+                            android:textSize="30sp" />
+
+                        <Button
+                            android:id="@+id/btn_quinta"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="2dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/round_button_azul"
+                            android:text="Q"
+                            android:textColor="#ffffff"
+                            android:textSize="30sp" />
+
+                        <Button
+                            android:id="@+id/btn_sexta"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="2dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/round_button_azul"
+                            android:text="S"
+                            android:textColor="#ffffff"
+                            android:textSize="30sp" />
+
+                        <Button
+                            android:id="@+id/btn_sabado"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="2dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/round_button_azul"
+                            android:text="S"
+                            android:textColor="#ffffff"
+                            android:textSize="30sp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
-                    <Button
-                        android:id="@+id/btn_domingo"
+                    <TextView
+                        android:id="@+id/txt_horarios_deseja_entregar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="2dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/round_button_azul"
-                        android:text="D"
-                        android:textColor="#ffffff"
-                        android:textSize="30sp" />
+                        android:layout_gravity="center"
+                        android:padding="3dip"
+                        android:text="Em quais horários você gostaria de entregar?" />
 
-                    <Button
-                        android:id="@+id/btn_segunda"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/lay_horarios_1"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="2dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/round_button_azul"
-                        android:text="S"
-                        android:textColor="#ffffff"
-                        android:textSize="30sp" />
+                        android:orientation="horizontal">
 
-                    <Button
-                        android:id="@+id/btn_terca"
-                        android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                            <CheckBox
+                                android:id="@+id/check_hora1_identifica_jogo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/txt_hora1_identifica_jogo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="9:30 - 10:30" />
+
+                        <TextView
+                            android:id="@+id/txt_excluir_hora1_identifica_jogo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="X"
+                            android:textColor="#FF0000"
+                            android:textSize="15dp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/lay_horarios_2"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="2dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/round_button_azul"
-                        android:text="T"
-                        android:textColor="#ffffff"
-                        android:textSize="30sp" />
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
-                    <Button
-                        android:id="@+id/btn_quarta"
-                        android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                            <CheckBox
+                                android:id="@+id/check_hora2_identifica_jogo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/txt_hora2_identifica_jogo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="9:30 - 10:30" />
+
+                        <TextView
+                            android:id="@+id/txt_excluir_hora2_identifica_jogo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="X"
+                            android:textColor="#FF0000"
+                            android:textSize="15dp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/lay_horarios_3"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="2dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/round_button_azul"
-                        android:text="Q"
-                        android:textColor="#ffffff"
-                        android:textSize="30sp" />
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
-                    <Button
-                        android:id="@+id/btn_quinta"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="2dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/round_button_azul"
-                        android:text="Q"
-                        android:textColor="#ffffff"
-                        android:textSize="30sp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center">
 
-                    <Button
-                        android:id="@+id/btn_sexta"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="2dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/round_button_azul"
-                        android:text="S"
-                        android:textColor="#ffffff"
-                        android:textSize="30sp" />
+                            <CheckBox
+                                android:id="@+id/check_hora3_identifica_jogo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
 
-                    <Button
-                        android:id="@+id/btn_sabado"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="2dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/round_button_azul"
-                        android:text="S"
-                        android:textColor="#ffffff"
-                        android:textSize="30sp" />
+                        </LinearLayout>
 
-                </LinearLayout>
+                        <TextView
+                            android:id="@+id/txt_hora3_identifica_jogo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="9:30 - 10:30" />
 
-            </LinearLayout>
+                        <TextView
+                            android:id="@+id/txt_excluir_hora3_identifica_jogo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="X"
+                            android:textColor="#FF0000"
+                            android:textSize="15dp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical">
+                    </LinearLayout>
 
-                <TextView
-                    android:id="@+id/txt_horarios_deseja_entregar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:padding="3dip"
-                    android:text="Em quais horários você gostaria de entregar?" />
-
-                <LinearLayout
-                    android:id="@+id/lay_horarios_1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center">
+                        android:layout_marginTop="-30dp"
+                        android:orientation="horizontal">
 
-                        <CheckBox
-                            android:id="@+id/check_hora1_identifica_jogo"
+                        <TimePicker
+                            android:id="@+id/horario_identifica_jogo"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:timePickerMode="spinner" />
+
+                        <TextView
+                            android:layout_width="35dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:text="até" />
+
+                        <TimePicker
+                            android:id="@+id/horario_2_identifica_jogo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:timePickerMode="spinner" />
+
 
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/txt_hora1_identifica_jogo"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="9:30 - 10:30" />
-
-                    <TextView
-                        android:id="@+id/txt_excluir_hora1_identifica_jogo"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="X"
-                        android:textColor="#FF0000"
-                        android:textSize="15dp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/lay_horarios_2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center">
-
-                        <CheckBox
-                            android:id="@+id/check_hora2_identifica_jogo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/txt_hora2_identifica_jogo"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="9:30 - 10:30" />
-
-                    <TextView
-                        android:id="@+id/txt_excluir_hora2_identifica_jogo"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="X"
-                        android:textColor="#FF0000"
-                        android:textSize="15dp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/lay_horarios_3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center">
-
-                        <CheckBox
-                            android:id="@+id/check_hora3_identifica_jogo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/txt_hora3_identifica_jogo"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="9:30 - 10:30" />
-
-                    <TextView
-                        android:id="@+id/txt_excluir_hora3_identifica_jogo"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="X"
-                        android:textColor="#FF0000"
-                        android:textSize="15dp" />
-
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-30dp"
-                    android:orientation="horizontal">
-
-                    <TimePicker
-                        android:id="@+id/horario_identifica_jogo"
+                    <Button
+                        android:id="@+id/btn_adicionar_horario_identifica_jogo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:timePickerMode="spinner" />
-
-                    <TextView
-                        android:layout_width="35dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:text="até" />
-
-                    <TimePicker
-                        android:id="@+id/horario_2_identifica_jogo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:timePickerMode="spinner" />
-
+                        android:layout_gravity="center"
+                        android:layout_marginTop="-30dp"
+                        android:backgroundTint="#28DE00"
+                        android:text="ADICIONAR HORÁRIO"
+                        android:textColor="#ffffff" />
 
                 </LinearLayout>
-
-                <Button
-                    android:id="@+id/btn_adicionar_horario_identifica_jogo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="-30dp"
-                    android:backgroundTint="#28DE00"
-                    android:text="ADICIONAR HORÁRIO"
-                    android:textColor="#ffffff" />
-
-            </LinearLayout>
 
             </LinearLayout>
 
@@ -553,6 +567,34 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.85" />
+
+    <TextView
+        android:id="@+id/txt_selecione_uma_capa_identifica_jogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Selecione alguma capa para o seu jogo!"
+        android:textSize="20sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txt_obs_selecione_uma_capa_identifica_jogo"
+        android:layout_width="332dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="center"
+        android:text="Obs: As imagens abaixo representam a pesquisa do google para o respectivo código de barras"
+        android:textColor="#FF001E"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_selecione_uma_capa_identifica_jogo" />
 
 
 </android.support.constraint.ConstraintLayout>

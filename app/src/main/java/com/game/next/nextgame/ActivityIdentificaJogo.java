@@ -12,12 +12,14 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -58,6 +60,7 @@ import java.util.List;
 public class ActivityIdentificaJogo extends AppCompatActivity {
 
     private TextView txtCodIdentificado, txtCodigoDeBarras, txtPrecoVendaJogo, txtPrecoAluguelJogo;
+    private TextView txtSelecioneUmaCapaIdentificaJogo, txtObsSelecioneUmaCapaIdentificaJogo;
     private ImageView imgCodIdentificado;
     private Button btnAdicionarJogoManualmente, btnAdicionarJogoSucesso, btnAdicionarHorarioIdentificaJogo;
     private ArrayList<Jogo> jogosPS4 = new ArrayList<>();
@@ -76,6 +79,8 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
     private Button btnAlugar, btnAlugarEVender, btnVender, btnNaoAcheiOJogo;
 
     private ScrollView scrollIdentificaJogo;
+
+    private EditText edtDigiteONomeDeSeuJogoAqui;
 
     private boolean domingoSelecionado = false;
     private boolean segundaSelecionado = false;
@@ -109,6 +114,8 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
     private int minuto2 = 30;
 
     private int quantidadeMaxDeHorarios = 1;
+
+    private List<String> resultUrls = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +154,8 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
         autoCompletePesquisar = (AutoCompleteTextView) findViewById(R.id.pesquisarAutoComplete);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view_identifica_jogo);
+        txtSelecioneUmaCapaIdentificaJogo = (TextView) findViewById(R.id.txt_selecione_uma_capa_identifica_jogo);
+        txtObsSelecioneUmaCapaIdentificaJogo = (TextView) findViewById(R.id.txt_obs_selecione_uma_capa_identifica_jogo);
 
         btnAdicionarHorarioIdentificaJogo = (Button) findViewById(R.id.btn_adicionar_horario_identifica_jogo);
         layHorarios1 = (LinearLayout) findViewById(R.id.lay_horarios_1);
@@ -162,7 +171,9 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
         txtExcluirHora2 = (TextView) findViewById(R.id.txt_excluir_hora2_identifica_jogo);
         txtExcluirHora3 = (TextView) findViewById(R.id.txt_excluir_hora3_identifica_jogo);
 
-        
+        edtDigiteONomeDeSeuJogoAqui = (EditText) findViewById(R.id.edt_digite_o_nome_de_seu_jogo_aqui);
+
+
 
         btnAlugar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -582,15 +593,15 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 scrollIdentificaJogo.setVisibility(View.GONE);
+                txtSelecioneUmaCapaIdentificaJogo.setVisibility(View.VISIBLE);
+                txtObsSelecioneUmaCapaIdentificaJogo.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.VISIBLE);
 
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
 
-                        final List<String> resultUrls = new ArrayList<String>();
 
-                        //final String url;
                         try {
                             Document doc = Jsoup.connect("https://www.google.com.br/search?tbm=isch&sa=1&ei=xTIUW5nGJYSPwwSZspqACg&q=" + finalCodigoDeBarras + "&oq=" + finalCodigoDeBarras + "&gs_l=img.3...4944.4944.0.5656.1.1.0.0.0.0.116.116.0j1.1.0....0...1c.1.64.img..0.0.0....0.AuKFroOBgdI#imgrc=_").get();
 
@@ -631,8 +642,10 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
                             public void run() {
 
                                 //mAdapter = new MyAdapterImgGoogle(resultUrls, recyclerView);
-                                mAdapter = new MyAdapterImgGoogle(resultUrls);
+                                mAdapter = new MyAdapterImgGoogle(resultUrls, ActivityIdentificaJogo.this);
                                 recyclerView.setAdapter(mAdapter);
+
+
 
                                 //Picasso.get().load(url).into(imageView);
                                 //txtCodBar.setText(nomeProduto);
@@ -692,5 +705,31 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
 
         }
         //======================================================================================================
+    }
+
+    public void capturaCapa(int posicao){
+
+
+        Picasso.get().load(resultUrls.get(posicao)).into(imgCodIdentificado, new Callback() {
+            @Override
+            public void onSuccess() {
+                scrollIdentificaJogo.setVisibility(View.VISIBLE);
+                txtCodIdentificado.setVisibility(View.GONE);
+                edtDigiteONomeDeSeuJogoAqui.setVisibility(View.VISIBLE);
+                txtSelecioneUmaCapaIdentificaJogo.setVisibility(View.GONE);
+                txtObsSelecioneUmaCapaIdentificaJogo.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.GONE);
+                btnAdicionarJogoSucesso.setVisibility(View.VISIBLE);
+                imgCodIdentificado.setVisibility(View.VISIBLE);
+                layAchouJogo.setVisibility(View.VISIBLE);
+                layNaoAchouJogo.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
+
     }
 }
