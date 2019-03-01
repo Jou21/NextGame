@@ -1,21 +1,22 @@
 package com.game.next.nextgame;
 
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
+
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import android.support.annotation.DrawableRes;
+
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
+
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.MotionEvent;
+
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -29,11 +30,10 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.game.next.nextgame.adapters.MyAdapter;
+
 import com.game.next.nextgame.adapters.MyAdapterImgGoogle;
 import com.game.next.nextgame.adapters.MyAdapterListJogos;
-import com.game.next.nextgame.adapters.MyAdapterMeusJogos;
-import com.game.next.nextgame.adapters.MyAdapterTitulos;
+
 import com.game.next.nextgame.entidades.Jogo;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -83,18 +83,25 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
 
     private EditText edtDigiteONomeDeSeuJogoAqui;
 
-    private boolean domingoSelecionado = false;
-    private boolean segundaSelecionado = false;
-    private boolean tercaSelecionado = false;
-    private boolean quartaSelecionado = false;
-    private boolean quintaSelecionado = false;
-    private boolean sextaSelecionado = false;
-    private boolean sabadoSelecionado = false;
+    private String domingoSelecionado = "N";
+    private String segundaSelecionado = "N";
+    private String tercaSelecionado = "N";
+    private String quartaSelecionado = "N";
+    private String quintaSelecionado = "N";
+    private String sextaSelecionado = "N";
+    private String sabadoSelecionado = "N";
+
+    private String codigoDeBarras = "";
+
+    private String aluga = "S";
+    private String vende = "S";
 
     private TimePicker horarioIdentificaJogo;
     private TimePicker horarioIdentificaJogo2;
 
     private Jogo jogoIdentificado = new Jogo();
+
+    private boolean achouJogoPeloCodBar = false;
 
     private DatabaseReference reference;
     private FirebaseUser user;
@@ -105,14 +112,16 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
 
     private SeekBar seekBarPreco, seekBarAluguel;
 
-    private int progressChangedValuePreco = 0;
-    private int progressChangedValueAluguel = 0;
+    private int progressChangedValuePreco = 60;
+    private int progressChangedValueAluguel = 20;
 
     private int hora = 9;
     private int minuto = 30;
 
     private int hora2 = 10;
     private int minuto2 = 30;
+
+    private int urlPosition = 0;
 
     private int quantidadeMaxDeHorarios = 1;
 
@@ -178,8 +187,6 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
 
         edtDigiteONomeDeSeuJogoAqui = (EditText) findViewById(R.id.edt_digite_o_nome_de_seu_jogo_aqui);
 
-
-
         btnAlugar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -189,6 +196,9 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
                 btnAlugar.getBackground().setColorFilter(ContextCompat.getColor(ActivityIdentificaJogo.this, R.color.corRoxo), PorterDuff.Mode.MULTIPLY);
                 btnAlugarEVender.getBackground().setColorFilter(ContextCompat.getColor(ActivityIdentificaJogo.this, R.color.corAzul), PorterDuff.Mode.MULTIPLY);
                 btnVender.getBackground().setColorFilter(ContextCompat.getColor(ActivityIdentificaJogo.this, R.color.corAzul), PorterDuff.Mode.MULTIPLY);
+
+                aluga = "S";
+                vende = "N";
 
             }
         });
@@ -202,6 +212,9 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
                 btnAlugar.getBackground().setColorFilter(ContextCompat.getColor(ActivityIdentificaJogo.this, R.color.corAzul), PorterDuff.Mode.MULTIPLY);
                 btnAlugarEVender.getBackground().setColorFilter(ContextCompat.getColor(ActivityIdentificaJogo.this, R.color.corRoxo), PorterDuff.Mode.MULTIPLY);
                 btnVender.getBackground().setColorFilter(ContextCompat.getColor(ActivityIdentificaJogo.this, R.color.corAzul), PorterDuff.Mode.MULTIPLY);
+
+                aluga = "S";
+                vende = "S";
             }
         });
 
@@ -214,6 +227,9 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
                 btnAlugar.getBackground().setColorFilter(ContextCompat.getColor(ActivityIdentificaJogo.this, R.color.corAzul), PorterDuff.Mode.MULTIPLY);
                 btnAlugarEVender.getBackground().setColorFilter(ContextCompat.getColor(ActivityIdentificaJogo.this, R.color.corAzul), PorterDuff.Mode.MULTIPLY);
                 btnVender.getBackground().setColorFilter(ContextCompat.getColor(ActivityIdentificaJogo.this, R.color.corRoxo), PorterDuff.Mode.MULTIPLY);
+
+                aluga = "N";
+                vende = "S";
             }
         });
 
@@ -277,6 +293,7 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
         txtExcluirHora1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                checkHora1.setChecked(false);
                 layHorarios1.setVisibility(View.GONE);
                 quantidadeMaxDeHorarios--;
             }
@@ -285,6 +302,7 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
         txtExcluirHora2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                checkHora2.setChecked(false);
                 layHorarios2.setVisibility(View.GONE);
                 quantidadeMaxDeHorarios--;
             }
@@ -293,6 +311,7 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
         txtExcluirHora3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                checkHora3.setChecked(false);
                 layHorarios3.setVisibility(View.GONE);
                 quantidadeMaxDeHorarios--;
             }
@@ -304,13 +323,13 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
             @Override
             public void onClick(View arg0) {
             // TODO Auto-generated method stub
-                if(domingoSelecionado == false) {
+                if(domingoSelecionado.equals("N")) {
                     btnDomingo.setBackground(getResources().getDrawable(R.drawable.round_button_roxo));
-                    Toast.makeText(ActivityIdentificaJogo.this,"Domingo Adicionado!",Toast.LENGTH_LONG).show();
-                    domingoSelecionado = true;
+                    Toast.makeText(ActivityIdentificaJogo.this,"Domingo Adicionado!",Toast.LENGTH_SHORT).show();
+                    domingoSelecionado = "S";
                 }else{
                     btnDomingo.setBackground(getResources().getDrawable(R.drawable.round_button_azul));
-                    domingoSelecionado = false;
+                    domingoSelecionado = "N";
                 }
             }
         });
@@ -319,13 +338,13 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
             @Override
             public void onClick(View arg0) {
                 // TODO Auto-generated method stub
-                if(segundaSelecionado == false) {
+                if(segundaSelecionado.equals("N")) {
                     btnSegunda.setBackground(getResources().getDrawable(R.drawable.round_button_roxo));
-                    Toast.makeText(ActivityIdentificaJogo.this,"Segunda-feira Adicionado!",Toast.LENGTH_LONG).show();
-                    segundaSelecionado = true;
+                    Toast.makeText(ActivityIdentificaJogo.this,"Segunda-feira Adicionado!",Toast.LENGTH_SHORT).show();
+                    segundaSelecionado = "S";
                 }else{
                     btnSegunda.setBackground(getResources().getDrawable(R.drawable.round_button_azul));
-                    segundaSelecionado = false;
+                    segundaSelecionado = "N";
                 }
             }
         });
@@ -334,13 +353,13 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
             @Override
             public void onClick(View arg0) {
                 // TODO Auto-generated method stub
-                if(tercaSelecionado == false) {
+                if(tercaSelecionado.equals("N")) {
                     btnTerca.setBackground(getResources().getDrawable(R.drawable.round_button_roxo));
-                    Toast.makeText(ActivityIdentificaJogo.this,"Terça-feira Adicionado!",Toast.LENGTH_LONG).show();
-                    tercaSelecionado = true;
+                    Toast.makeText(ActivityIdentificaJogo.this,"Terça-feira Adicionado!",Toast.LENGTH_SHORT).show();
+                    tercaSelecionado = "S";
                 }else{
                     btnTerca.setBackground(getResources().getDrawable(R.drawable.round_button_azul));
-                    tercaSelecionado = false;
+                    tercaSelecionado = "N";
                 }
             }
         });
@@ -349,13 +368,13 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
             @Override
             public void onClick(View arg0) {
                 // TODO Auto-generated method stub
-                if(quartaSelecionado == false) {
+                if(quartaSelecionado.equals("N")) {
                     btnQuarta.setBackground(getResources().getDrawable(R.drawable.round_button_roxo));
-                    Toast.makeText(ActivityIdentificaJogo.this,"Quarta-feira Adicionado!",Toast.LENGTH_LONG).show();
-                    quartaSelecionado = true;
+                    Toast.makeText(ActivityIdentificaJogo.this,"Quarta-feira Adicionado!",Toast.LENGTH_SHORT).show();
+                    quartaSelecionado = "S";
                 }else{
                     btnQuarta.setBackground(getResources().getDrawable(R.drawable.round_button_azul));
-                    quartaSelecionado = false;
+                    quartaSelecionado = "N";
                 }
             }
         });
@@ -364,13 +383,13 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
             @Override
             public void onClick(View arg0) {
                 // TODO Auto-generated method stub
-                if(quintaSelecionado == false) {
+                if(quintaSelecionado.equals("N")) {
                     btnQuinta.setBackground(getResources().getDrawable(R.drawable.round_button_roxo));
-                    Toast.makeText(ActivityIdentificaJogo.this,"Quinta-feira Adicionado!",Toast.LENGTH_LONG).show();
-                    quintaSelecionado = true;
+                    Toast.makeText(ActivityIdentificaJogo.this,"Quinta-feira Adicionado!",Toast.LENGTH_SHORT).show();
+                    quintaSelecionado = "S";
                 }else{
                     btnQuinta.setBackground(getResources().getDrawable(R.drawable.round_button_azul));
-                    quintaSelecionado = false;
+                    quintaSelecionado = "N";
                 }
             }
         });
@@ -379,13 +398,13 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
             @Override
             public void onClick(View arg0) {
                 // TODO Auto-generated method stub
-                if(sextaSelecionado == false) {
+                if(sextaSelecionado.equals("N")) {
                     btnSexta.setBackground(getResources().getDrawable(R.drawable.round_button_roxo));
-                    Toast.makeText(ActivityIdentificaJogo.this,"Sexta-feira Adicionado!",Toast.LENGTH_LONG).show();
-                    sextaSelecionado = true;
+                    Toast.makeText(ActivityIdentificaJogo.this,"Sexta-feira Adicionado!",Toast.LENGTH_SHORT).show();
+                    sextaSelecionado = "S";
                 }else{
                     btnSexta.setBackground(getResources().getDrawable(R.drawable.round_button_azul));
-                    sextaSelecionado = false;
+                    sextaSelecionado = "N";
                 }
             }
         });
@@ -394,13 +413,13 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
             @Override
             public void onClick(View arg0) {
                 // TODO Auto-generated method stub
-                if(sabadoSelecionado == false) {
+                if(sabadoSelecionado.equals("N")) {
                     btnSabado.setBackground(getResources().getDrawable(R.drawable.round_button_roxo));
-                    Toast.makeText(ActivityIdentificaJogo.this,"Sábado Adicionado!",Toast.LENGTH_LONG).show();
-                    sabadoSelecionado = true;
+                    Toast.makeText(ActivityIdentificaJogo.this,"Sábado Adicionado!",Toast.LENGTH_SHORT).show();
+                    sabadoSelecionado = "S";
                 }else{
                     btnSabado.setBackground(getResources().getDrawable(R.drawable.round_button_azul));
-                    sabadoSelecionado = false;
+                    sabadoSelecionado = "N";
                 }
             }
         });
@@ -442,25 +461,195 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
         btnAdicionarJogoSucesso.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                reference = FirebaseDatabase.getInstance().getReference();
-                user = FirebaseAuth.getInstance().getCurrentUser();
+                if(((checkHora1.isChecked() == true) || (checkHora2.isChecked() == true) || (checkHora3.isChecked() == true)) &&
+                        ((domingoSelecionado == "S") || (segundaSelecionado == "S") || (tercaSelecionado == "S") ||
+                                (quartaSelecionado == "S") || (quintaSelecionado == "S") || (sextaSelecionado == "S") || (sabadoSelecionado == "S"))){
 
-                HashMap<String, Object> hashMap = new HashMap<>();
-                hashMap.put("userId", user.getUid());
-                hashMap.put("jogoId", jogoIdentificado.getCodigoDeBarra());
-                hashMap.put("imgJogo", jogoIdentificado.getUrlImgJogo());
-                hashMap.put("nomeJogo", jogoIdentificado.getNome());
+                    reference = FirebaseDatabase.getInstance().getReference();
+                    user = FirebaseAuth.getInstance().getCurrentUser();
 
-                reference.child("UserGame").child(user.getUid()).push().setValue(hashMap);
-                btnAdicionarJogoSucesso.setVisibility(View.GONE);
-                Intent telaMeusJogos = new Intent(ActivityIdentificaJogo.this, ActivityMeusJogos.class);
-                startActivity(telaMeusJogos);
-                finish();
+                    HashMap<String, Object> hashMap = new HashMap<>();
+                    hashMap.put("userId", user.getUid());
+                    hashMap.put("jogoId", codigoDeBarras);
+
+                    if (achouJogoPeloCodBar == true) {
+                        hashMap.put("imgJogo", jogoIdentificado.getUrlImgJogo());
+                        hashMap.put("nomeJogo", jogoIdentificado.getNome());
+
+                        hashMap.put("addManual", "N");
+                        hashMap.put("aluga", aluga);
+                        hashMap.put("vende", vende);
+
+                        if(aluga == "S"){
+                            hashMap.put("precoAluga", String.valueOf(progressChangedValueAluguel));
+                        }else{
+                            hashMap.put("precoAluga", "N");
+                        }
+
+                        if(vende == "S"){
+                            hashMap.put("precoVenda", String.valueOf(progressChangedValuePreco));
+                        }else{
+                            hashMap.put("precoVenda", "N");
+                        }
+
+                        hashMap.put("domingo", domingoSelecionado);
+                        hashMap.put("segunda", segundaSelecionado);
+                        hashMap.put("terca", tercaSelecionado);
+                        hashMap.put("quarta", quartaSelecionado);
+                        hashMap.put("quinta", quintaSelecionado);
+                        hashMap.put("sexta", sextaSelecionado);
+                        hashMap.put("sabado", sabadoSelecionado);
+
+                        if (checkHora1.isChecked() == true) {
+                            hashMap.put("hora1", txtHora1.getText().toString());
+                        } else {
+                            hashMap.put("hora1", "N");
+                        }
+
+                        if (checkHora2.isChecked() == true) {
+                            hashMap.put("hora2", txtHora2.getText().toString());
+                        } else {
+                            hashMap.put("hora2", "N");
+                        }
+
+                        if (checkHora3.isChecked() == true) {
+                            hashMap.put("hora3", txtHora3.getText().toString());
+                        } else {
+                            hashMap.put("hora3", "N");
+                        }
+
+                        reference.child("UserGame").child(user.getUid()).push().setValue(hashMap);
+                        btnAdicionarJogoSucesso.setVisibility(View.GONE);
+                        Intent telaMeusJogos = new Intent(ActivityIdentificaJogo.this, ActivityMeusJogos.class);
+                        startActivity(telaMeusJogos);
+                        finish();
+
+                    }else if(edtDigiteONomeDeSeuJogoAqui.getVisibility() == View.VISIBLE && achouJogoPeloCodBar == false){
+
+                        if(edtDigiteONomeDeSeuJogoAqui.getText().length() != 0){
+                            hashMap.put("imgJogo", resultUrls.get(urlPosition));
+                            hashMap.put("nomeJogo", edtDigiteONomeDeSeuJogoAqui.getText().toString());
+
+                            hashMap.put("addManual", "S");
+                            hashMap.put("aluga", aluga);
+                            hashMap.put("vende", vende);
+
+                            if(aluga == "S"){
+                                hashMap.put("precoAluga", String.valueOf(progressChangedValueAluguel));
+                            }else{
+                                hashMap.put("precoAluga", "N");
+                            }
+
+                            if(vende == "S"){
+                                hashMap.put("precoVenda", String.valueOf(progressChangedValuePreco));
+                            }else{
+                                hashMap.put("precoVenda", "N");
+                            }
+
+                            hashMap.put("domingo", domingoSelecionado);
+                            hashMap.put("segunda", segundaSelecionado);
+                            hashMap.put("terca", tercaSelecionado);
+                            hashMap.put("quarta", quartaSelecionado);
+                            hashMap.put("quinta", quintaSelecionado);
+                            hashMap.put("sexta", sextaSelecionado);
+                            hashMap.put("sabado", sabadoSelecionado);
+
+                            if (checkHora1.isChecked() == true) {
+                                hashMap.put("hora1", txtHora1.getText().toString());
+                            } else {
+                                hashMap.put("hora1", "N");
+                            }
+
+                            if (checkHora2.isChecked() == true) {
+                                hashMap.put("hora2", txtHora2.getText().toString());
+                            } else {
+                                hashMap.put("hora2", "N");
+                            }
+
+                            if (checkHora3.isChecked() == true) {
+                                hashMap.put("hora3", txtHora3.getText().toString());
+                            } else {
+                                hashMap.put("hora3", "N");
+                            }
+
+                            reference.child("UserGame").child(user.getUid()).push().setValue(hashMap);
+                            btnAdicionarJogoSucesso.setVisibility(View.GONE);
+                            Intent telaMeusJogos = new Intent(ActivityIdentificaJogo.this, ActivityMeusJogos.class);
+                            startActivity(telaMeusJogos);
+                            finish();
+
+                        }else{
+                            Toast.makeText(ActivityIdentificaJogo.this,
+                                    "É necessário digitar o nome do jogo!",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                    }else{
+
+                        hashMap.put("imgJogo", jogoIdentificado.getUrlImgJogo());
+                        hashMap.put("nomeJogo", jogoIdentificado.getNome());
+
+                        hashMap.put("addManual", "N");
+                        hashMap.put("aluga", aluga);
+                        hashMap.put("vende", vende);
+
+                        if(aluga == "S"){
+                            hashMap.put("precoAluga", String.valueOf(progressChangedValueAluguel));
+                        }else{
+                            hashMap.put("precoAluga", "N");
+                        }
+
+                        if(vende == "S"){
+                            hashMap.put("precoVenda", String.valueOf(progressChangedValuePreco));
+                        }else{
+                            hashMap.put("precoVenda", "N");
+                        }
+
+                        hashMap.put("domingo", domingoSelecionado);
+                        hashMap.put("segunda", segundaSelecionado);
+                        hashMap.put("terca", tercaSelecionado);
+                        hashMap.put("quarta", quartaSelecionado);
+                        hashMap.put("quinta", quintaSelecionado);
+                        hashMap.put("sexta", sextaSelecionado);
+                        hashMap.put("sabado", sabadoSelecionado);
+
+                        if (checkHora1.isChecked() == true) {
+                            hashMap.put("hora1", txtHora1.getText().toString());
+                        } else {
+                            hashMap.put("hora1", "N");
+                        }
+
+                        if (checkHora2.isChecked() == true) {
+                            hashMap.put("hora2", txtHora2.getText().toString());
+                        } else {
+                            hashMap.put("hora2", "N");
+                        }
+
+                        if (checkHora3.isChecked() == true) {
+                            hashMap.put("hora3", txtHora3.getText().toString());
+                        } else {
+                            hashMap.put("hora3", "N");
+                        }
+
+                        reference.child("UserGame").child(user.getUid()).push().setValue(hashMap);
+                        btnAdicionarJogoSucesso.setVisibility(View.GONE);
+                        Intent telaMeusJogos = new Intent(ActivityIdentificaJogo.this, ActivityMeusJogos.class);
+                        startActivity(telaMeusJogos);
+                        finish();
+
+                    }
+
+
+                }else {
+                    Toast.makeText(ActivityIdentificaJogo.this,
+                            "É necessário que ao menos 1 dia da semana esteja selecionado e pelo menos 1 horário esteja checado",
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         Bundle b = getIntent().getExtras();
-        String codigoDeBarras = "";
+
         if(b != null) {
             codigoDeBarras = b.getString("CODBAR");
             final String finalCodigoDeBarras = codigoDeBarras;
@@ -508,6 +697,7 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
 
                                 }
                             });
+                            achouJogoPeloCodBar = true;
                             jogoIdentificado = j;
                             txtCodigoDeBarras.setText(finalCodigoDeBarras);
                             jogoPS4Encontrado[0] = true;
@@ -578,6 +768,7 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
 
                                 }
                             });
+                            achouJogoPeloCodBar = true;
                             jogoIdentificado = j;
                             txtCodigoDeBarras.setText(finalCodigoDeBarras);
                             jogoXboxEncontrado[0] = true;
@@ -720,14 +911,32 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
             autoCompletePesquisar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    /*
-                    String selection = (String) parent.getItemAtPosition(position);
-                    for (int j = 0; j < listTodosJogos.size(); j++) {
-                        if (selection.equals(listTodosJogos.get(j).getNome())) {
+
+                    final Jogo selection = (Jogo) parent.getItemAtPosition(position);
+
+                    jogoIdentificado = selection;
+
+                    Picasso.get().load(selection.getUrlImgJogo()).into(imgCodIdentificado, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            txtCodIdentificado.setVisibility(View.VISIBLE);
+                            txtCodIdentificado.setText(selection.getNome());
+                            scrollIdentificaJogo.setVisibility(View.VISIBLE);
+                            //btnAdicionarJogoManualmente.setVisibility(View.GONE);
+                            btnAdicionarJogoSucesso.setVisibility(View.VISIBLE);
+                            imgCodIdentificado.setVisibility(View.VISIBLE);
+                            layAchouJogo.setVisibility(View.VISIBLE);
+                            layNaoAchouJogo.setVisibility(View.GONE);
+                            hideKeyboard(ActivityIdentificaJogo.this,autoCompletePesquisar);
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
 
                         }
-                    }
-                    */
+                    });
+
+
 
                 }
             });
@@ -738,6 +947,7 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
 
     public void capturaCapa(int posicao){
 
+        urlPosition = posicao;
 
         Picasso.get().load(resultUrls.get(posicao)).into(imgCodIdentificado, new Callback() {
             @Override
@@ -764,5 +974,10 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
 
     private void exibirProgress(boolean exibir) {
         mProgressBar.setVisibility(exibir ? View.VISIBLE : View.GONE);
+    }
+
+    public static void hideKeyboard(Context context, View editText) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
     }
 }
