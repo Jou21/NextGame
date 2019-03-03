@@ -1,5 +1,6 @@
 package com.game.next.nextgame.adapters;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.support.annotation.NonNull;
@@ -25,9 +26,14 @@ import com.squareup.picasso.Picasso;
 
 public class MyAdapterMeusJogos extends RecyclerView.Adapter<MyAdapterMeusJogos.ViewHolder> {
     private List<UserGame> userGames;
+    private ArrayList<UserGame> userGamesNova;
     private DatabaseReference reference;
     private RecyclerView.Adapter adapter;
     private ActivityMeusJogos activityMeusJogos;
+
+    private int posicao = 0;
+
+    boolean acabou = false;
 
     private int entrou = -1;
 
@@ -95,34 +101,42 @@ public class MyAdapterMeusJogos extends RecyclerView.Adapter<MyAdapterMeusJogos.
             @Override
             public void onClick(View v) {
 
+                final String time = userGames.get(position).getTime();
 
-                //final View view = v;
                 reference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                        userGames.clear();
+
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                             UserGame userGame = snapshot.getValue(UserGame.class);
 
-                            //notifyItemRemoved(position);
-                            //activityMeusJogos.notificaLista();
-                            if(userGames.get(position).getTime() == userGame.getTime() && position != entrou){
-
-                                //userGames.remove(position);
-                                //notifyItemRemoved(position);
-                                snapshot.getRef().removeValue();
-                                remove(position);
-
-                                //activityMeusJogos.notificaLista();
-                                Toast.makeText(holder.layout.getContext(),"Você excluiu um registro!",Toast.LENGTH_SHORT).show();
-                                entrou = position;
-
-                            }
-
-                            //notifyItemRemoved(position);
-                            //activityMeusJogos.notificaLista();
+                            userGames.add(userGame);
 
                         }
+
+                        acabou = true;
+
+                        if(acabou == true){
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                                UserGame userGame = snapshot.getValue(UserGame.class);
+
+                                if (time == userGame.getTime() && position != entrou) {
+
+                                    userGames.remove(position);
+                                    notifyItemRemoved(position);
+
+                                    snapshot.getRef().removeValue();
+                                    activityMeusJogos.notificaLista();
+
+                                    Toast.makeText(holder.layout.getContext(), "Você excluiu um registro!", Toast.LENGTH_SHORT).show();
+                                    entrou = position;
+
+                                }
+                            }
+                        }
+
 
                     }
 
@@ -153,9 +167,5 @@ public class MyAdapterMeusJogos extends RecyclerView.Adapter<MyAdapterMeusJogos.
         return userGames.size();
     }
 
-    public void remove(int position) {
-        userGames.remove(position);
-        notifyItemRemoved(position);
-        activityMeusJogos.notificaLista();
-    }
+
 }
