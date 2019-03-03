@@ -32,7 +32,7 @@ import java.util.ArrayList;
 public class ActivityMeusJogos extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.Adapter mAdapter2;
     private RecyclerView.LayoutManager layoutManager;
 
     private ProgressBar mProgressBar;
@@ -73,6 +73,7 @@ public class ActivityMeusJogos extends AppCompatActivity {
                 integrator.setBeepEnabled(true);
                 integrator.setCaptureActivity(CaptureActivityPortrait.class);
                 integrator.initiateScan();
+
             }
         });
 
@@ -95,11 +96,12 @@ public class ActivityMeusJogos extends AppCompatActivity {
                     userGames.add(userGame);
                 }
 
-                mAdapter = new MyAdapterMeusJogos(userGames);
+                //mAdapter = new MyAdapterMeusJogos(userGames, reference, mAdapter);
+                mAdapter2 = new MyAdapterMeusJogos(userGames, reference, ActivityMeusJogos.this);
 
                 exibirProgress(false);
 
-                recyclerView.setAdapter(mAdapter);
+                recyclerView.setAdapter(mAdapter2);
             }
 
             @Override
@@ -126,7 +128,7 @@ public class ActivityMeusJogos extends AppCompatActivity {
             Intent telaIdentificaJogo = new Intent(ActivityMeusJogos.this, ActivityIdentificaJogo.class);
             telaIdentificaJogo.putExtra("CODBAR",contents);
             startActivity(telaIdentificaJogo);
-
+            finish();
         }
 
         super.onActivityResult(requestCode, resultCode, intent);
@@ -147,5 +149,9 @@ public class ActivityMeusJogos extends AppCompatActivity {
     public void onBackPressed() {
         finish();
         super.onBackPressed();
+    }
+
+    public void notificaLista(){
+        mAdapter2.notifyDataSetChanged();
     }
 }

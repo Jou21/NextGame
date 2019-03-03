@@ -34,6 +34,7 @@ import android.widget.Toast;
 import com.game.next.nextgame.adapters.MyAdapterImgGoogle;
 import com.game.next.nextgame.adapters.MyAdapterListJogos;
 
+import com.game.next.nextgame.adapters.MyAdapterMeusJogos;
 import com.game.next.nextgame.entidades.Jogo;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -55,6 +56,8 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -128,6 +131,8 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
     private ProgressBar mProgressBar;
 
     private List<String> resultUrls = new ArrayList<String>();
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -518,8 +523,19 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
                             hashMap.put("hora3", "N");
                         }
 
+                        Calendar rightNow = Calendar.getInstance();
+                        int hour = rightNow.get(Calendar.HOUR_OF_DAY);
+                        int minute = rightNow.get(Calendar.MINUTE);
+                        int second = rightNow.get(Calendar.SECOND);
+                        int millisecond = rightNow.get(Calendar.MILLISECOND);
+
+                        String time = String.valueOf(hour) + String.valueOf(minute) + String.valueOf(second) + String.valueOf(millisecond);
+
+                        hashMap.put("time", time);
+
                         reference.child("UserGame").child(user.getUid()).push().setValue(hashMap);
                         btnAdicionarJogoSucesso.setVisibility(View.GONE);
+
                         Intent telaMeusJogos = new Intent(ActivityIdentificaJogo.this, ActivityMeusJogos.class);
                         startActivity(telaMeusJogos);
                         finish();
@@ -572,8 +588,19 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
                                 hashMap.put("hora3", "N");
                             }
 
+                            Calendar rightNow = Calendar.getInstance();
+                            int hour = rightNow.get(Calendar.HOUR_OF_DAY);
+                            int minute = rightNow.get(Calendar.MINUTE);
+                            int second = rightNow.get(Calendar.SECOND);
+                            int millisecond = rightNow.get(Calendar.MILLISECOND);
+
+                            String time = String.valueOf(hour) + String.valueOf(minute) + String.valueOf(second) + String.valueOf(millisecond);
+
+                            hashMap.put("time", time);
+
                             reference.child("UserGame").child(user.getUid()).push().setValue(hashMap);
                             btnAdicionarJogoSucesso.setVisibility(View.GONE);
+
                             Intent telaMeusJogos = new Intent(ActivityIdentificaJogo.this, ActivityMeusJogos.class);
                             startActivity(telaMeusJogos);
                             finish();
@@ -631,8 +658,19 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
                             hashMap.put("hora3", "N");
                         }
 
+                        Calendar rightNow = Calendar.getInstance();
+                        int hour = rightNow.get(Calendar.HOUR_OF_DAY);
+                        int minute = rightNow.get(Calendar.MINUTE);
+                        int second = rightNow.get(Calendar.SECOND);
+                        int millisecond = rightNow.get(Calendar.MILLISECOND);
+
+                        String time = String.valueOf(hour) + String.valueOf(minute) + String.valueOf(second) + String.valueOf(millisecond);
+
+                        hashMap.put("time", time);
+
                         reference.child("UserGame").child(user.getUid()).push().setValue(hashMap);
                         btnAdicionarJogoSucesso.setVisibility(View.GONE);
+
                         Intent telaMeusJogos = new Intent(ActivityIdentificaJogo.this, ActivityMeusJogos.class);
                         startActivity(telaMeusJogos);
                         finish();

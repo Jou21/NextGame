@@ -21,6 +21,8 @@ public class UserGame {
     private String hora1;
     private String hora2;
     private String hora3;
+    private String time;
+
 
     public String getUserId() {
         return userId;
@@ -172,5 +174,13 @@ public class UserGame {
 
     public void setHora3(String hora3) {
         this.hora3 = hora3;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }
