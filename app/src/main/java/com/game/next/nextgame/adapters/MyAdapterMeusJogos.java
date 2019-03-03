@@ -112,30 +112,17 @@ public class MyAdapterMeusJogos extends RecyclerView.Adapter<MyAdapterMeusJogos.
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                             UserGame userGame = snapshot.getValue(UserGame.class);
 
-                            userGames.add(userGame);
-
-                        }
-
-                        acabou = true;
-
-                        if(acabou == true){
-                            for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                                UserGame userGame = snapshot.getValue(UserGame.class);
-
-                                if (time == userGame.getTime() && position != entrou) {
-
-                                    userGames.remove(position);
-                                    notifyItemRemoved(position);
-
-                                    snapshot.getRef().removeValue();
-                                    activityMeusJogos.notificaLista();
-
-                                    Toast.makeText(holder.layout.getContext(), "Você excluiu um registro!", Toast.LENGTH_SHORT).show();
-                                    entrou = position;
-
-                                }
+                            if (time == userGame.getTime() && position != entrou) {
+                                snapshot.getRef().removeValue();
+                                entrou = position;
+                                Toast.makeText(holder.layout.getContext(), "Você excluiu um registro!", Toast.LENGTH_SHORT).show();
                             }
+                            else{
+                                userGames.add(userGame);
+                            }
+                            
                         }
+                        activityMeusJogos.notificaLista();
 
 
                     }
