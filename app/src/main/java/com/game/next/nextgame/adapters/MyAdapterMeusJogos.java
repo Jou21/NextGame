@@ -120,7 +120,7 @@ public class MyAdapterMeusJogos extends RecyclerView.Adapter<MyAdapterMeusJogos.
                             else{
                                 userGames.add(userGame);
                             }
-                            
+
                         }
                         activityMeusJogos.notificaLista();
 
