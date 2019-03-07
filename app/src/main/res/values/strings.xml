@@ -27,5 +27,6 @@
     <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
     <string name="facebook_app_id">338901533369067</string>
     <string name="fb_login_protocol_scheme">fb338901533369067</string>
+    <string name="title_activity_maps">Map</string>
 
 </resources>
