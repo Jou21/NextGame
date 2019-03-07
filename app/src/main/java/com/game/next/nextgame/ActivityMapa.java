@@ -21,6 +21,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.game.next.nextgame.entidades.LocationData;
@@ -54,7 +57,9 @@ public class ActivityMapa extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
 
-    private Marker currentLocationMaker;
+    private ProgressBar mProgressBar;
+
+    private Marker currentLocationMaker, markerEncontro;
     private LatLng currentLocationLatLong;
     private DatabaseReference reference;
     private FirebaseUser user;
@@ -68,6 +73,12 @@ public class ActivityMapa extends FragmentActivity implements OnMapReadyCallback
 
     private MarkerOptions marker;
 
+    private Button btnMapsConfirmarLocal;
+
+    private HashMap<String, Object> model;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,11 +89,29 @@ public class ActivityMapa extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBarMaps);
+        btnMapsConfirmarLocal = (Button) findViewById(R.id.btn_maps_confirmar_local);
+
+        exibirProgress(true);
+
+        Toast.makeText(this, "Estamos localizando seu atual local de entrega...", Toast.LENGTH_LONG).show();
+
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference();
 
+        model = (HashMap<String, Object>) getIntent().getSerializableExtra("HASHMAP");
 
+        btnMapsConfirmarLocal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reference.child("UserGame").child(user.getUid()).push().setValue(model);
 
+                Intent telaMeusJogos = new Intent(ActivityMapa.this, ActivityMeusJogos.class);
+                startActivity(telaMeusJogos);
+                finish();
+            }
+        });
 
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -95,7 +124,7 @@ public class ActivityMapa extends FragmentActivity implements OnMapReadyCallback
             mGoogleApiClient.connect();
         }
 
-        getLocation();
+        //getLocation();
         startGettingLocations();
 
     }
@@ -283,9 +312,23 @@ public class ActivityMapa extends FragmentActivity implements OnMapReadyCallback
                                 Log.d("ENTROU1", "ENTROU1");
                                 localDeEncontro = currentLocationLatLong;
 
-                                marker = new MarkerOptions().position(localDeEncontro).title("Seu local de entrega dos jogos!").snippet("Obs: Segure e arraste para mover").draggable(true);
+                                if (markerEncontro != null) {
+                                    markerEncontro.remove();
+                                }
 
-                                mMap.addMarker(marker).showInfoWindow();
+                                marker = new MarkerOptions().position(localDeEncontro).title("Seu local de entrega dos jogos!").snippet("Obs: Segure e arraste para mover").draggable(true);
+                                markerEncontro = mMap.addMarker(marker);
+                                markerEncontro.showInfoWindow();
+
+                                exibirProgress(false);
+
+                                if(model == null){
+                                    btnMapsConfirmarLocal.setVisibility(View.GONE);
+                                }else{
+                                    btnMapsConfirmarLocal.setVisibility(View.VISIBLE);
+                                }
+
+                                Toast.makeText(ActivityMapa.this, "Localização atualizada", Toast.LENGTH_SHORT).show();
 
                                 //Add to firebase
                                 HashMap<String, Object> hashMap = new HashMap<>();
@@ -338,9 +381,23 @@ public class ActivityMapa extends FragmentActivity implements OnMapReadyCallback
 
                                 localDeEncontro = new LatLng(Double.parseDouble(entregaLatitude), Double.parseDouble(entregaLongitude));
 
-                                marker = new MarkerOptions().position(localDeEncontro).title("Seu local de entrega dos jogos!").snippet("Obs: Segure e arraste para mover").draggable(true);
+                                if (markerEncontro != null) {
+                                    markerEncontro.remove();
+                                }
 
-                                mMap.addMarker(marker).showInfoWindow();
+                                marker = new MarkerOptions().position(localDeEncontro).title("Seu local de entrega dos jogos!").snippet("Obs: Segure e arraste para mover").draggable(true);
+                                markerEncontro = mMap.addMarker(marker);
+                                markerEncontro.showInfoWindow();
+
+                                exibirProgress(false);
+
+                                if(model == null){
+                                    btnMapsConfirmarLocal.setVisibility(View.GONE);
+                                }else{
+                                    btnMapsConfirmarLocal.setVisibility(View.VISIBLE);
+                                }
+
+                                Toast.makeText(ActivityMapa.this, "Localização atualizada", Toast.LENGTH_SHORT).show();
 
                                 if ((Double.parseDouble(entregaLatitude) != currentLocationLatLong.latitude) || (Double.parseDouble(entregaLongitude) != currentLocationLatLong.longitude)) {
                                     //Add to firebase
@@ -450,8 +507,6 @@ public class ActivityMapa extends FragmentActivity implements OnMapReadyCallback
             currentLocationExiste = true;
 
             getLocation();
-
-            Toast.makeText(this, "Localização atualizada", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -468,5 +523,9 @@ public class ActivityMapa extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
+    }
+
+    private void exibirProgress(boolean exibir) {
+        mProgressBar.setVisibility(exibir ? View.VISIBLE : View.GONE);
     }
 }

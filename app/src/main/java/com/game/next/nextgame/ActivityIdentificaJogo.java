@@ -533,11 +533,15 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
 
                         hashMap.put("time", time);
 
-                        reference.child("UserGame").child(user.getUid()).push().setValue(hashMap);
+                        //reference.child("UserGame").child(user.getUid()).push().setValue(hashMap);
                         btnAdicionarJogoSucesso.setVisibility(View.GONE);
 
-                        Intent telaMeusJogos = new Intent(ActivityIdentificaJogo.this, ActivityMeusJogos.class);
-                        startActivity(telaMeusJogos);
+                        //Intent telaMeusJogos = new Intent(ActivityIdentificaJogo.this, ActivityMeusJogos.class);
+                        //startActivity(telaMeusJogos);
+
+                        Intent telaMapa = new Intent(ActivityIdentificaJogo.this, ActivityMapa.class);
+                        telaMapa.putExtra("HASHMAP",hashMap);
+                        startActivity(telaMapa);
                         finish();
 
                     }else if(edtDigiteONomeDeSeuJogoAqui.getVisibility() == View.VISIBLE && achouJogoPeloCodBar == false){
@@ -598,11 +602,15 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
 
                             hashMap.put("time", time);
 
-                            reference.child("UserGame").child(user.getUid()).push().setValue(hashMap);
+                            //reference.child("UserGame").child(user.getUid()).push().setValue(hashMap);
                             btnAdicionarJogoSucesso.setVisibility(View.GONE);
 
-                            Intent telaMeusJogos = new Intent(ActivityIdentificaJogo.this, ActivityMeusJogos.class);
-                            startActivity(telaMeusJogos);
+                            //Intent telaMeusJogos = new Intent(ActivityIdentificaJogo.this, ActivityMeusJogos.class);
+                            //startActivity(telaMeusJogos);
+
+                            Intent telaMapa = new Intent(ActivityIdentificaJogo.this, ActivityMapa.class);
+                            telaMapa.putExtra("HASHMAP",hashMap);
+                            startActivity(telaMapa);
                             finish();
 
                         }else{
@@ -668,11 +676,15 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
 
                         hashMap.put("time", time);
 
-                        reference.child("UserGame").child(user.getUid()).push().setValue(hashMap);
+                        //reference.child("UserGame").child(user.getUid()).push().setValue(hashMap);
                         btnAdicionarJogoSucesso.setVisibility(View.GONE);
 
-                        Intent telaMeusJogos = new Intent(ActivityIdentificaJogo.this, ActivityMeusJogos.class);
-                        startActivity(telaMeusJogos);
+                        //Intent telaMeusJogos = new Intent(ActivityIdentificaJogo.this, ActivityMeusJogos.class);
+                        //startActivity(telaMeusJogos);
+
+                        Intent telaMapa = new Intent(ActivityIdentificaJogo.this, ActivityMapa.class);
+                        telaMapa.putExtra("HASHMAP",hashMap);
+                        startActivity(telaMapa);
                         finish();
 
                     }
