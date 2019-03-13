@@ -1,5 +1,6 @@
 package com.game.next.nextgame.adapters;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.game.next.nextgame.ActivityQuemTemOJogo;
 import com.game.next.nextgame.R;
 import com.game.next.nextgame.entidades.Jogo;
 import com.squareup.picasso.Callback;
@@ -73,12 +75,19 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
-        holder.txtHeader.setText(jogos.get(position).getNome());
-        holder.txtFooter.setText(jogos.get(position).getDataLancamento());
+        holder.txtHeader.setText(jogos.get(position).getNome()); //Está GONE na view
+        holder.txtFooter.setText(jogos.get(position).getDataLancamento()); //Está GONE na view
         Picasso.get().load(jogos.get(position).getUrlImgJogo()).into(holder.imgCapa, new Callback() {
             @Override
             public void onSuccess() {
-
+                holder.imgCapa.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent quemTemOJogo = new Intent(holder.layout.getContext(), ActivityQuemTemOJogo.class);
+                        quemTemOJogo.putExtra("JOGO",jogos.get(position));
+                        holder.layout.getContext().startActivity(quemTemOJogo);
+                    }
+                });
             }
 
             @Override

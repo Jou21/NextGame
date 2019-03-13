@@ -1,7 +1,9 @@
 
 package com.game.next.nextgame.entidades;
 
-public class Jogo {
+import java.io.Serializable;
+
+public class Jogo implements Serializable {
     private String categoria;
     private String codigoDeBarra;
     private String codigoDeBarra1;
@@ -30,10 +32,40 @@ public class Jogo {
     private String urlImgJogo;
     private String urlVideo;
 
+    public Jogo(String categoria, String codigoDeBarra, String codigoDeBarra1, String codigoDeBarra10, String codigoDeBarra2, String codigoDeBarra3, String codigoDeBarra4, String codigoDeBarra5, String codigoDeBarra6, String codigoDeBarra7, String codigoDeBarra8, String codigoDeBarra9, String dataLancamento, String descricao, String faixaEtaria, String multiplayer, String nome, String preco, String rating, String sku, String urlImgComplementar1, String urlImgComplementar2, String urlImgComplementar3, String urlImgComplementar4, String urlImgComplementar5, String urlImgJogo, String urlVideo) {
+        this.categoria = categoria;
+        this.codigoDeBarra = codigoDeBarra;
+        this.codigoDeBarra1 = codigoDeBarra1;
+        this.codigoDeBarra10 = codigoDeBarra10;
+        this.codigoDeBarra2 = codigoDeBarra2;
+        this.codigoDeBarra3 = codigoDeBarra3;
+        this.codigoDeBarra4 = codigoDeBarra4;
+        this.codigoDeBarra5 = codigoDeBarra5;
+        this.codigoDeBarra6 = codigoDeBarra6;
+        this.codigoDeBarra7 = codigoDeBarra7;
+        this.codigoDeBarra8 = codigoDeBarra8;
+        this.codigoDeBarra9 = codigoDeBarra9;
+        this.dataLancamento = dataLancamento;
+        this.descricao = descricao;
+        this.faixaEtaria = faixaEtaria;
+        this.multiplayer = multiplayer;
+        this.nome = nome;
+        this.preco = preco;
+        this.rating = rating;
+        this.sku = sku;
+        this.urlImgComplementar1 = urlImgComplementar1;
+        this.urlImgComplementar2 = urlImgComplementar2;
+        this.urlImgComplementar3 = urlImgComplementar3;
+        this.urlImgComplementar4 = urlImgComplementar4;
+        this.urlImgComplementar5 = urlImgComplementar5;
+        this.urlImgJogo = urlImgJogo;
+        this.urlVideo = urlVideo;
+    }
+
     public Jogo(String nome, String preco, String urlImgJogo, String descricao,
-            String rating, String categoria, String faixaEtaria, String multiplayer, String dataLancamento,
-            String sku, String urlImgComplementar1, String urlImgComplementar2, String urlImgComplementar3,
-            String urlImgComplementar4, String urlImgComplementar5, String urlVideo) {
+                String rating, String categoria, String faixaEtaria, String multiplayer, String dataLancamento,
+                String sku, String urlImgComplementar1, String urlImgComplementar2, String urlImgComplementar3,
+                String urlImgComplementar4, String urlImgComplementar5, String urlVideo) {
         this.nome = nome;
         this.preco = preco;
         this.urlImgJogo = urlImgJogo;
