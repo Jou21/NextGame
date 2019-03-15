@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:orientation="horizontal"
+    android:padding="6dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/icon_quem_tem_o_jogo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:src="@mipmap/ic_launcher" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="4dp"
+        android:layout_weight="0.5"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+
+        <TextView
+        android:id="@+id/firstLine_quem_tem_o_jogo"
+        android:layout_marginTop="-10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/secondLine_quem_tem_o_jogo"
+            android:layout_marginTop="-10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.9"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txt_aluguel_quem_tem_o_jogo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginBottom="1dp"
+            android:textStyle="bold"
+            android:background="@drawable/shape_btn_arredondado_roxo"
+            android:gravity="center"
+            android:textColor="#ffffff"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/txt_preco_quem_tem_o_jogo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginTop="1dp"
+            android:textStyle="bold"
+            android:background="@drawable/shape_btn_arredondado_verde"
+            android:gravity="center"
+            android:textColor="#ffffff"
+            android:textSize="17sp" />
+
+
+
+    </LinearLayout>
+
+</LinearLayout>
