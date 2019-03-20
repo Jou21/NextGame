@@ -1,5 +1,6 @@
 package com.game.next.nextgame;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,7 +27,7 @@ public class ActivityQuemTemOJogo extends AppCompatActivity {
 
     private Jogo model;
     private DatabaseReference reference;
-    //private FirebaseUser user;
+    private FirebaseUser user;
 
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
@@ -47,7 +48,7 @@ public class ActivityQuemTemOJogo extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        //user = FirebaseAuth.getInstance().getCurrentUser();
+        user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference();
 
         model = (Jogo) getIntent().getSerializableExtra("JOGO");
@@ -67,8 +68,10 @@ public class ActivityQuemTemOJogo extends AppCompatActivity {
                         if(userGame.getJogoId().equals(model.getCodigoDeBarra())){
                             //txtQuemTemOJogo.setText(userGame.getJogoId());
                             //Toast.makeText(ActivityQuemTemOJogo.this, "Tem pelo menos 1 pessoa com esse jogo disponível!!!", Toast.LENGTH_LONG).show();
+                            if(!userGame.getUserId().equals(user.getUid())){
+                                listaUserGames.add(userGame);
+                            }
 
-                            listaUserGames.add(userGame);
                         }
 
                     }
@@ -83,5 +86,13 @@ public class ActivityQuemTemOJogo extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        //Intent mainActivity = new Intent(ActivityQuemTemOJogo.this, MainActivity.class);
+        //startActivity(mainActivity);
+        finish();
+        super.onBackPressed();
     }
 }

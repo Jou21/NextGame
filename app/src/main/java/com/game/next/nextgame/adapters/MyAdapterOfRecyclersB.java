@@ -1,6 +1,7 @@
 package com.game.next.nextgame.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,7 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 
+import com.game.next.nextgame.ActivityQuemTemOJogo;
 import com.game.next.nextgame.R;
 import com.game.next.nextgame.entidades.Jogo;
 import com.game.next.nextgame.fragments.FragmentB;
@@ -28,6 +32,9 @@ public class MyAdapterOfRecyclersB extends RecyclerView.Adapter<MyAdapterOfRecyc
     private LinearLayoutManager layoutManager;
     private MyAdapterTitulos[] myAdapterTitulos = new MyAdapterTitulos[8];
     private MyAdapter[] myAdapter = new MyAdapter[8];
+
+    private MyAdapterListJogos adapter = null;
+    private AutoCompleteTextView autoCompletePesquisar;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -66,6 +73,8 @@ public class MyAdapterOfRecyclersB extends RecyclerView.Adapter<MyAdapterOfRecyc
                     Jogo jogo = snapshot.getValue(Jogo.class);
                     jogosPS4.add(jogo);
                 }
+
+                acionaDrop(fragmentB, jogosPS4);
 
                 for(Jogo j : jogosPS4){
                     if(j.getCategoria().equals("Ação e Aventura")){
@@ -239,6 +248,35 @@ public class MyAdapterOfRecyclersB extends RecyclerView.Adapter<MyAdapterOfRecyc
     @Override
     public int getItemCount() {
         return 16;
+    }
+
+    private void acionaDrop(final FragmentB fragmentB, ArrayList<Jogo> listTodosJogosPS4){
+        //====================Auto Complete Pesquisar========================================================
+        if(listTodosJogosPS4.isEmpty() == false) {
+
+            autoCompletePesquisar = (AutoCompleteTextView) fragmentB.getActivity().findViewById(R.id.pesquisarAutoCompleteFragmentB);
+
+            adapter = new MyAdapterListJogos(fragmentB.getContext(), listTodosJogosPS4);
+            autoCompletePesquisar.setAdapter(adapter);
+
+            autoCompletePesquisar.setThreshold(2);//Começa a procurar do segundo caractere
+
+            autoCompletePesquisar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    final Jogo jogoSelecionado = (Jogo) parent.getItemAtPosition(position);
+
+                    Intent quemTemOJogo = new Intent(fragmentB.getContext(), ActivityQuemTemOJogo.class);
+                    quemTemOJogo.putExtra("JOGO",jogoSelecionado);
+                    fragmentB.getContext().startActivity(quemTemOJogo);
+                    //fragmentB.getActivity().finish();
+
+                }
+            });
+
+        }
+        //======================================================================================================
     }
 
 }

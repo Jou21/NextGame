@@ -528,4 +528,10 @@ public class ActivityMapa extends FragmentActivity implements OnMapReadyCallback
     private void exibirProgress(boolean exibir) {
         mProgressBar.setVisibility(exibir ? View.VISIBLE : View.GONE);
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+    }
 }

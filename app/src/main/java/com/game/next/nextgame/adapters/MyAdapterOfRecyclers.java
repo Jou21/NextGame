@@ -1,12 +1,16 @@
 package com.game.next.nextgame.adapters;
 
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 
+import com.game.next.nextgame.ActivityQuemTemOJogo;
 import com.game.next.nextgame.R;
 import com.game.next.nextgame.entidades.Jogo;
 import com.game.next.nextgame.fragments.FragmentA;
@@ -24,6 +28,9 @@ public class MyAdapterOfRecyclers extends RecyclerView.Adapter<MyAdapterOfRecycl
     private LinearLayoutManager layoutManager;
     private MyAdapterTitulos[] myAdapterTitulos = new MyAdapterTitulos[8];
     private MyAdapter[] myAdapter = new MyAdapter[8];
+
+    private MyAdapterListJogos adapter = null;
+    private AutoCompleteTextView autoCompletePesquisar;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -62,6 +69,8 @@ public class MyAdapterOfRecyclers extends RecyclerView.Adapter<MyAdapterOfRecycl
                     Jogo jogo = snapshot.getValue(Jogo.class);
                     jogosXbox.add(jogo);
                 }
+
+                acionaDrop(fragmentA, jogosXbox);
 
                 for(Jogo j : jogosXbox){
                     if (j.getCategoria().equals("Ação e Aventura")) {
@@ -238,6 +247,35 @@ public class MyAdapterOfRecyclers extends RecyclerView.Adapter<MyAdapterOfRecycl
     @Override
     public int getItemCount() {
         return 16;
+    }
+
+    private void acionaDrop(final FragmentA fragmentA, ArrayList<Jogo> listTodosJogosXbox){
+        //====================Auto Complete Pesquisar========================================================
+        if(listTodosJogosXbox.isEmpty() == false) {
+
+            autoCompletePesquisar = (AutoCompleteTextView) fragmentA.getActivity().findViewById(R.id.pesquisarAutoCompleteFragmentA);
+
+            adapter = new MyAdapterListJogos(fragmentA.getContext(), listTodosJogosXbox);
+            autoCompletePesquisar.setAdapter(adapter);
+
+            autoCompletePesquisar.setThreshold(2);//Começa a procurar do segundo caractere
+
+            autoCompletePesquisar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    final Jogo jogoSelecionado = (Jogo) parent.getItemAtPosition(position);
+
+                    Intent quemTemOJogo = new Intent(fragmentA.getContext(), ActivityQuemTemOJogo.class);
+                    quemTemOJogo.putExtra("JOGO",jogoSelecionado);
+                    fragmentA.getContext().startActivity(quemTemOJogo);
+                    //fragmentA.getActivity().finish();
+
+                }
+            });
+
+        }
+        //======================================================================================================
     }
 
 }

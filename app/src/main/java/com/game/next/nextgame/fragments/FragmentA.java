@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -18,17 +19,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.game.next.nextgame.ActivityCarteira;
 import com.game.next.nextgame.ActivityChat;
+import com.game.next.nextgame.ActivityIdentificaJogo;
 import com.game.next.nextgame.ActivityMapa;
 import com.game.next.nextgame.ActivityMeusJogos;
 import com.game.next.nextgame.MainActivity;
 import com.game.next.nextgame.R;
+import com.game.next.nextgame.adapters.MyAdapterListJogos;
 import com.game.next.nextgame.adapters.MyAdapterOfRecyclers;
+import com.game.next.nextgame.entidades.Jogo;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 public class FragmentA extends Fragment {
 
@@ -46,6 +58,8 @@ public class FragmentA extends Fragment {
     private RecyclerView recyclerViewOfRecyclers;
     private RecyclerView.Adapter mAdapterOfRecyclers;
     private RecyclerView.LayoutManager layoutManagerOfRecyclers;
+
+    private AutoCompleteTextView autoCompletePesquisar;
 
     private Button btnMyGames, btnChat, btnCarteira, btnMapa;
 
@@ -91,6 +105,8 @@ public class FragmentA extends Fragment {
         btnChat = (Button) view.findViewById(R.id.chat_xbox);
         btnCarteira = (Button) view.findViewById(R.id.carteira_xbox);
         btnMapa = (Button) view.findViewById(R.id.mapa_xbox);
+
+        autoCompletePesquisar = (AutoCompleteTextView) view.findViewById(R.id.pesquisarAutoCompleteFragmentA);
 
         btnMyGames.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,6 +155,8 @@ public class FragmentA extends Fragment {
     private void openSearch() {
 
         if (!isOpen) {
+
+            autoCompletePesquisar.setText("");
 
             posicaoXInicialPesquisar = fab.getX();
             posicaoYInicialPesquisar = fab.getY();
@@ -203,6 +221,9 @@ public class FragmentA extends Fragment {
     private void closeSearch() {
         if (isOpen) {
 
+            ((InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(
+                    autoCompletePesquisar.getWindowToken(), 0);
+
             int x = layoutButtons.getLeft();
             int y = layoutButtons.getMeasuredHeight() / 2;
 
@@ -257,5 +278,7 @@ public class FragmentA extends Fragment {
             isOpen = false;
         }
     }
+
+
 
 }

@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -18,6 +19,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -45,6 +49,8 @@ public class FragmentB extends Fragment {
     private RecyclerView recyclerViewOfRecyclers;
     private RecyclerView.Adapter mAdapterOfRecyclers;
     private RecyclerView.LayoutManager layoutManagerOfRecyclers;
+
+    private AutoCompleteTextView autoCompletePesquisar;
 
     private Button btnMyGames, btnChat, btnCarteira, btnMapa;
 
@@ -90,6 +96,8 @@ public class FragmentB extends Fragment {
         btnChat = (Button) view.findViewById(R.id.chat_ps4);
         btnCarteira = (Button) view.findViewById(R.id.carteira_ps4);
         btnMapa = (Button) view.findViewById(R.id.mapa_ps4);
+
+        autoCompletePesquisar = (AutoCompleteTextView) view.findViewById(R.id.pesquisarAutoCompleteFragmentB);
 
         btnMyGames.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,6 +146,8 @@ public class FragmentB extends Fragment {
 
         if (!isOpen) {
 
+            autoCompletePesquisar.setText("");
+
             posicaoXInicialPesquisar = fabB.getX();
             posicaoYInicialPesquisar = fabB.getY();
 
@@ -151,7 +161,6 @@ public class FragmentB extends Fragment {
             fabB.setImageResource(R.drawable.ic_close_grey);
 
             Animator anim = ViewAnimationUtils.createCircularReveal(layoutButtonsB, x, y, startRadius, endRadius);
-
 
             layoutEscuroB.setVisibility(View.VISIBLE);
 
@@ -202,6 +211,9 @@ public class FragmentB extends Fragment {
     }
     private void closeSearch() {
         if (isOpen) {
+
+            ((InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(
+                    autoCompletePesquisar.getWindowToken(), 0);
 
             int x = layoutButtonsB.getRight();
             int y = layoutButtonsB.getMeasuredHeight() / 2;

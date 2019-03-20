@@ -102,9 +102,11 @@ public class MyAdapterListJogos extends ArrayAdapter<Jogo> {
             ArrayList<Jogo> jogos = (ArrayList<Jogo>) results.values;
             if (results != null && results.count > 0) {
                 clear();
-                for (Jogo jogo : jogos) {
-                    add(jogo);
-                    notifyDataSetChanged();
+                if(!jogos.isEmpty()){
+                    for (Jogo jogo : jogos) {
+                        add(jogo);
+                        notifyDataSetChanged();
+                    }
                 }
             }
         }

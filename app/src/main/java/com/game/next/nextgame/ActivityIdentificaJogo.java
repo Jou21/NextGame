@@ -956,7 +956,7 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
             adapter = new MyAdapterListJogos(ActivityIdentificaJogo.this, listTodosJogos);
             autoCompletePesquisar.setAdapter(adapter);
 
-            autoCompletePesquisar.setThreshold(1);//Começa a procurar do primeiro caractere
+            autoCompletePesquisar.setThreshold(2);//Começa a procurar do segundo caractere
 
             autoCompletePesquisar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override

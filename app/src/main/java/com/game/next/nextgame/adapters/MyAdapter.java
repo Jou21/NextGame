@@ -1,5 +1,6 @@
 package com.game.next.nextgame.adapters;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
@@ -86,6 +87,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                         Intent quemTemOJogo = new Intent(holder.layout.getContext(), ActivityQuemTemOJogo.class);
                         quemTemOJogo.putExtra("JOGO",jogos.get(position));
                         holder.layout.getContext().startActivity(quemTemOJogo);
+                        //((Activity)holder.layout.getContext()).finish();
                     }
                 });
             }

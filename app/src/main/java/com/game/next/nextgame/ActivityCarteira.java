@@ -27,4 +27,10 @@ public class ActivityCarteira extends AppCompatActivity {
         finish();
         return true;
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+    }
 }

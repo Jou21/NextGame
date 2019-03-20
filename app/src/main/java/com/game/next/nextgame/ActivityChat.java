@@ -197,6 +197,9 @@ public class ActivityChat extends AppCompatActivity {
         status("offline");
     }
 
-
-
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+    }
 }
