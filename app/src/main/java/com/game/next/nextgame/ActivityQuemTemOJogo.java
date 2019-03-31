@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,41 +52,48 @@ public class ActivityQuemTemOJogo extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference();
 
-        model = (Jogo) getIntent().getSerializableExtra("JOGO");
+        if (getIntent().hasExtra("JOGO")) {
+            model = (Jogo) getIntent().getSerializableExtra("JOGO");
 
-        reference.child("UserGame").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            reference.child("UserGame").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                //String jogoId = reference.child("UserGame").child(userId).child(key).child("jogoId");
+                    //String jogoId = reference.child("UserGame").child(userId).child(key).child("jogoId");
 
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
 
-                    for (DataSnapshot postSnapshot2 : postSnapshot.getChildren()){
-                        UserGame userGame = postSnapshot2.getValue(UserGame.class);
-                        //userGames.add(userGame);
+                        for (DataSnapshot postSnapshot2 : postSnapshot.getChildren()){
+                            UserGame userGame = postSnapshot2.getValue(UserGame.class);
+                            //userGames.add(userGame);
 
-                        if(userGame.getJogoId().equals(model.getCodigoDeBarra())){
-                            //txtQuemTemOJogo.setText(userGame.getJogoId());
-                            //Toast.makeText(ActivityQuemTemOJogo.this, "Tem pelo menos 1 pessoa com esse jogo disponível!!!", Toast.LENGTH_LONG).show();
-                            if(!userGame.getUserId().equals(user.getUid())){
-                                listaUserGames.add(userGame);
+                            if(userGame.getJogoId().equals(model.getCodigoDeBarra())){
+                                //txtQuemTemOJogo.setText(userGame.getJogoId());
+                                //Toast.makeText(ActivityQuemTemOJogo.this, "Tem pelo menos 1 pessoa com esse jogo disponível!!!", Toast.LENGTH_LONG).show();
+                                if(!userGame.getUserId().equals(user.getUid())){
+                                    listaUserGames.add(userGame);
+                                }
+
                             }
 
                         }
 
                     }
+                    mAdapter = new MyAdapterQuemTemOJogo(listaUserGames, model);
+                    recyclerView.setAdapter(mAdapter);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 }
-                mAdapter = new MyAdapterQuemTemOJogo(listaUserGames);
-                recyclerView.setAdapter(mAdapter);
-            }
+            });
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+        } else {
+            Toast.makeText(ActivityQuemTemOJogo.this,"Activity cannot find  extras " + "JOGO",Toast.LENGTH_SHORT).show();
+            Log.d("EXTRASJOGO","Activity cannot find  extras " + "JOGO");
+        }
 
-            }
-        });
     }
 
     @Override

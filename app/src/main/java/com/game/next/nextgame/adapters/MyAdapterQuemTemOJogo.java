@@ -1,5 +1,6 @@
 package com.game.next.nextgame.adapters;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.game.next.nextgame.ActivityQuemTemOJogo;
+import com.game.next.nextgame.JogoDoUsuarioActivity;
 import com.game.next.nextgame.R;
 import com.game.next.nextgame.entidades.Jogo;
 import com.game.next.nextgame.entidades.LocationData;
@@ -38,6 +41,19 @@ public class MyAdapterQuemTemOJogo extends RecyclerView.Adapter<MyAdapterQuemTem
     private ArrayList<UserGame> listaUserGames;
     private DatabaseReference reference;
     private FirebaseUser user;
+    private Jogo jogo;
+
+    private String nomeOtherUser = "";
+    private String imgOtherUserURL = "default";
+
+    private String precoAluguel = "";
+    private String precoVenda = "";
+
+    private String latCurrentUser = "";
+    private String longCurrentUser = "";
+
+    private String latOtherUser = "";
+    private String longOtherUser = "";
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -57,9 +73,9 @@ public class MyAdapterQuemTemOJogo extends RecyclerView.Adapter<MyAdapterQuemTem
         }
     }
 
-    public MyAdapterQuemTemOJogo(ArrayList<UserGame> myDataset) {
+    public MyAdapterQuemTemOJogo(ArrayList<UserGame> myDataset, Jogo jogo) {
         listaUserGames = myDataset;
-
+        this.jogo = jogo;
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference();
     }
@@ -83,26 +99,10 @@ public class MyAdapterQuemTemOJogo extends RecyclerView.Adapter<MyAdapterQuemTem
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                //Log.d("ENTROUX","ENTROUX");
-
-                String nomeOtherUser = "";
-                String imgOtherUserURL = "default";
-
-                String precoAluguel = "";
-                String precoVenda = "";
-
-                final boolean[] entrou = {false};
-
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     User user = postSnapshot.getValue(User.class);
 
-                    //Log.d("ENTROUY","ENTROUY");
-
-                    //Log.d("ENTROUY","1 - " + user.getId() + " 2 - " + listaUserGames.get(position).getUserId());
-
                     if(user.getId().equals(listaUserGames.get(position).getUserId())){
-
-                        //Log.d("ENTROUZ","ENTROUZ");
 
                         nomeOtherUser = user.getUsername();
                         imgOtherUserURL = user.getImageURL();
@@ -147,11 +147,7 @@ public class MyAdapterQuemTemOJogo extends RecyclerView.Adapter<MyAdapterQuemTem
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                String latCurrentUser = "";
-                String longCurrentUser = "";
 
-                String latOtherUser = "";
-                String longOtherUser = "";
 
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     LocationData locationUser = postSnapshot.getValue(LocationData.class);
@@ -175,6 +171,7 @@ public class MyAdapterQuemTemOJogo extends RecyclerView.Adapter<MyAdapterQuemTem
                     double distance = SphericalUtil.computeDistanceBetween(posicaoInicial, posicaoFinal);
 
                     holder.secondLine.setText("Está a " + formatNumber(distance) + " de você");
+
                 }
 
             }
@@ -185,7 +182,19 @@ public class MyAdapterQuemTemOJogo extends RecyclerView.Adapter<MyAdapterQuemTem
             }
         });
 
-
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent jogoDoUsuarioIntent = new Intent(holder.layout.getContext(), JogoDoUsuarioActivity.class);
+                jogoDoUsuarioIntent.putExtra("JOGOUSER",jogo);
+                jogoDoUsuarioIntent.putExtra("IMAGEMUSER",imgOtherUserURL);
+                jogoDoUsuarioIntent.putExtra("NOMEUSER",nomeOtherUser);
+                jogoDoUsuarioIntent.putExtra("PRECOALUGUEL",precoAluguel);
+                jogoDoUsuarioIntent.putExtra("PRECOVENDA",precoVenda);
+                holder.layout.getContext().startActivity(jogoDoUsuarioIntent);
+                ((ActivityQuemTemOJogo)holder.layout.getContext()).finish();
+            }
+        });
 
     }
 

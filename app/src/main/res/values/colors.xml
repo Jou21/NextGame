@@ -8,4 +8,7 @@
     <color name="odd">#eee</color>
     <color name="even">#fff</color>
     <color name="devider">#ccc</color>
+    <color name="gold">#FFBF00</color>
+    <color name="amarelo">#FFDD00</color>
+    <color name="cinza">#D8D6D1</color>
 </resources>
