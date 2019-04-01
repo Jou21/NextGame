@@ -45,6 +45,11 @@ public class ActivityChat extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private DatabaseReference reference;
 
+    private Toolbar toolbar;
+
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,12 +57,14 @@ public class ActivityChat extends AppCompatActivity {
 
         getWindow().setStatusBarColor(Color.parseColor("#FFA900"));
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar_chat);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
 
-        profile_image = findViewById(R.id.profile_image);
-        username = findViewById(R.id.username);
+        tabLayout = findViewById(R.id.tab_layout_chat);
+        viewPager = findViewById(R.id.view_pager_chat);
+        profile_image = findViewById(R.id.profile_image_chat);
+        username = findViewById(R.id.username_chat);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
@@ -69,7 +76,9 @@ public class ActivityChat extends AppCompatActivity {
                 username.setText(user.getUsername());
                 if (!user.getImageURL().equals("default")){
                     //change this
-                    Glide.with(getApplicationContext()).load(user.getImageURL()).into(profile_image);
+                    if( getApplicationContext() != null && ActivityChat.this != null) {
+                        Glide.with(getApplicationContext()).load(user.getImageURL()).into(profile_image);
+                    }
                 } else {
 
                     profile_image.setImageResource(R.mipmap.ic_launcher);
@@ -81,10 +90,6 @@ public class ActivityChat extends AppCompatActivity {
 
             }
         });
-
-        final TabLayout tabLayout = findViewById(R.id.tab_layout);
-        final ViewPager viewPager = findViewById(R.id.view_pager);
-
 
         reference = FirebaseDatabase.getInstance().getReference("Chats");
         reference.addValueEventListener(new ValueEventListener() {
@@ -109,7 +114,6 @@ public class ActivityChat extends AppCompatActivity {
                 viewPagerAdapter.addFragment(new ProfileFragment(), "Profile");
 
                 viewPager.setAdapter(viewPagerAdapter);
-
                 tabLayout.setupWithViewPager(viewPager);
 
             }

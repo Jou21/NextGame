@@ -69,6 +69,11 @@ public class MyAdapterMeusJogos extends RecyclerView.Adapter<MyAdapterMeusJogos.
         this.activityMeusJogos = activityMeusJogos;
     }
 
+    public MyAdapterMeusJogos(List<UserGame> myDataset, DatabaseReference reference) {
+        userGames = myDataset;
+        this.reference = reference;
+    }
+
     @Override
     public MyAdapterMeusJogos.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -122,7 +127,8 @@ public class MyAdapterMeusJogos extends RecyclerView.Adapter<MyAdapterMeusJogos.
                             }
 
                         }
-                        activityMeusJogos.notificaLista();
+                        notifyDataSetChanged();
+                        //activityMeusJogos.notificaLista();
 
 
                     }

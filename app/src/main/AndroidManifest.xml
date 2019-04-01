@@ -50,7 +50,7 @@
         </activity>
         <activity
             android:name=".ActivityMeusJogos"
-            android:theme="@style/MyTheme" />
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".CaptureActivityPortrait"
             android:screenOrientation="portrait"
@@ -58,9 +58,9 @@
             android:theme="@style/zxing_CaptureTheme"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".ActivityChat" />
-        <activity
-            android:name=".ActivityCarteira"
-            android:theme="@style/MyTheme" />
+        <!--activity
+            android:name=".FragmentCarteira"
+            android:theme="@style/MyTheme" /-->
         <activity android:name=".ActivityMapa" />
         <activity android:name=".ActivityLogin">
             <intent-filter>

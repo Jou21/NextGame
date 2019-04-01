@@ -19,14 +19,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
-import com.game.next.nextgame.ActivityCarteira;
 import com.game.next.nextgame.ActivityChat;
 import com.game.next.nextgame.ActivityMapa;
 import com.game.next.nextgame.ActivityMeusJogos;
@@ -52,7 +50,7 @@ public class FragmentB extends Fragment {
 
     private AutoCompleteTextView autoCompletePesquisar;
 
-    private Button btnMyGames, btnChat, btnCarteira, btnMapa;
+    private Button btnMyGames, btnChat, btnScan, btnMapa;
 
     @SuppressLint("RestrictedApi")
     @Nullable
@@ -94,7 +92,7 @@ public class FragmentB extends Fragment {
 
         btnMyGames = (Button) view.findViewById(R.id.my_games_ps4);
         btnChat = (Button) view.findViewById(R.id.chat_ps4);
-        btnCarteira = (Button) view.findViewById(R.id.carteira_ps4);
+        btnScan = (Button) view.findViewById(R.id.scan_ps4);
         btnMapa = (Button) view.findViewById(R.id.mapa_ps4);
 
         autoCompletePesquisar = (AutoCompleteTextView) view.findViewById(R.id.pesquisarAutoCompleteFragmentB);
@@ -115,10 +113,10 @@ public class FragmentB extends Fragment {
             }
         });
 
-        btnCarteira.setOnClickListener(new View.OnClickListener() {
+        btnScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent telaMeusJogos = new Intent(view.getContext(), ActivityCarteira.class);
+                Intent telaMeusJogos = new Intent(view.getContext(), FragmentCarteira.class);
                 startActivity(telaMeusJogos);
             }
         });

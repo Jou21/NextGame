@@ -3,6 +3,8 @@ package com.game.next.nextgame.fragments;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,11 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import com.game.next.nextgame.ActivityMeusJogos;
 import com.game.next.nextgame.R;
 import com.game.next.nextgame.entidades.User;
 import com.google.android.gms.tasks.Continuation;
@@ -55,6 +59,9 @@ public class ProfileFragment extends Fragment {
     private Uri imageUri;
     private StorageTask uploadTask;
 
+    private RatingBar ratingBarProfile;
+    private LayerDrawable starsUser;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,6 +71,16 @@ public class ProfileFragment extends Fragment {
 
         image_profile = view.findViewById(R.id.profile_image);
         username = view.findViewById(R.id.username);
+        ratingBarProfile = view.findViewById(R.id.rating_bar_profile);
+
+        starsUser = (LayerDrawable) ratingBarProfile.getProgressDrawable();
+        starsUser.getDrawable(2).setColorFilter(getResources().getColor(R.color.amarelo), PorterDuff.Mode.SRC_ATOP); // for filled stars
+        starsUser.getDrawable(1).setColorFilter(getResources().getColor(R.color.gold),PorterDuff.Mode.SRC_ATOP); // for half filled stars
+        starsUser.getDrawable(0).setColorFilter(getResources().getColor(R.color.cinza),PorterDuff.Mode.SRC_ATOP); // for empty stars
+
+        ratingBarProfile.setMax(5);
+        ratingBarProfile.setRating(5);
+        ratingBarProfile.setIsIndicator(true);
 
         storageReference = FirebaseStorage.getInstance().getReference("uploads");
 
@@ -78,7 +95,9 @@ public class ProfileFragment extends Fragment {
                 if (user.getImageURL().equals("default")){
                     image_profile.setImageResource(R.mipmap.ic_launcher);
                 } else {
-                    Glide.with(getContext()).load(user.getImageURL()).into(image_profile);
+                    if( getActivity() != null && ProfileFragment.this != null) {
+                        Glide.with(getContext()).load(user.getImageURL()).into(image_profile);
+                    }
                 }
             }
 

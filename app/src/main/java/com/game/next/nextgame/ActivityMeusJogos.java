@@ -4,19 +4,35 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.game.next.nextgame.adapters.MyAdapterMeusJogos;
 import com.game.next.nextgame.entidades.Jogo;
+import com.game.next.nextgame.entidades.User;
 import com.game.next.nextgame.entidades.UserGame;
+import com.game.next.nextgame.fragments.FragmentCarteira;
+import com.game.next.nextgame.fragments.FragmentMeusJogos;
+import com.game.next.nextgame.fragments.ProfileFragment;
+import com.game.next.nextgame.fragments.UsersFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -29,79 +45,56 @@ import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ActivityMeusJogos extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter mAdapter2;
-    private RecyclerView.LayoutManager layoutManager;
-
-    private ProgressBar mProgressBar;
-
-    private Button btn_meus_jogos_adicionar_jogo;
-
-    private DatabaseReference reference;
+    private DatabaseReference referenceUser;
     private FirebaseUser user;
 
-    private ArrayList<UserGame> userGames = new ArrayList<>();
+    private CircleImageView profile_image;
+    private TextView username;
 
-    private String contents;
-    //private String format;
+    private Toolbar toolbar;
+
+    private FragmentMeusJogos fragmentMeusJogos;
+
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meus_jogos);
 
-        ActionBar bar = getSupportActionBar();
-        bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFA900")));
-        bar.setTitle("Meus Jogos");
-
         getWindow().setStatusBarColor(Color.parseColor("#FFA900"));
 
-        bar.setDisplayHomeAsUpEnabled(true);
+        toolbar = findViewById(R.id.toolbar_meus_jogos);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("");
 
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBarMeusJogos);
-
-        btn_meus_jogos_adicionar_jogo = (Button) findViewById(R.id.btn_meus_jogos_adicionar_jogo);
-        btn_meus_jogos_adicionar_jogo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                IntentIntegrator integrator = new IntentIntegrator(ActivityMeusJogos.this);
-                integrator.setPrompt("Mantenha um palmo de distancia do código de barras");
-                integrator.setCameraId(0);  // Use a specific camera of the device
-                integrator.setOrientationLocked(true);
-                integrator.setBeepEnabled(true);
-                integrator.setCaptureActivity(CaptureActivityPortrait.class);
-                integrator.initiateScan();
-
-            }
-        });
-
-
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view_meus_jogos);
-        recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
-        exibirProgress(true);
+        tabLayout = findViewById(R.id.tab_layout_meus_jogos);
+        viewPager = findViewById(R.id.view_pager_meus_jogos);
+        profile_image = findViewById(R.id.profile_image_meus_jogos);
+        username = findViewById(R.id.username_meus_jogos);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
-        reference = FirebaseDatabase.getInstance().getReference("UserGame").child(user.getUid());
-        reference.addValueEventListener(new ValueEventListener() {
+        referenceUser = FirebaseDatabase.getInstance().getReference("Users").child(user.getUid());
+
+        referenceUser.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                username.setText(user.getUsername());
+                if (!user.getImageURL().equals("default")){
+                    //change this
+                    if( getApplicationContext() != null && ActivityMeusJogos.this != null) {
+                        Glide.with(getApplicationContext()).load(user.getImageURL()).into(profile_image);
+                    }
+                } else {
 
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    UserGame userGame = snapshot.getValue(UserGame.class);
-                    userGames.add(userGame);
+                    profile_image.setImageResource(R.mipmap.ic_launcher);
                 }
-
-                //mAdapter = new MyAdapterMeusJogos(userGames, reference, mAdapter);
-                mAdapter2 = new MyAdapterMeusJogos(userGames, reference, ActivityMeusJogos.this);
-
-                exibirProgress(false);
-
-                recyclerView.setAdapter(mAdapter2);
             }
 
             @Override
@@ -112,37 +105,20 @@ public class ActivityMeusJogos extends AppCompatActivity {
 
 
 
-    }
+        fragmentMeusJogos = new FragmentMeusJogos();
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        ActivityMeusJogos.ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode,resultCode,intent);
+        viewPagerAdapter.addFragment(fragmentMeusJogos, "Meus Jogos");
+        viewPagerAdapter.addFragment(new FragmentCarteira(), "Carteira");
+        viewPagerAdapter.addFragment(new ProfileFragment(), "Profile");
 
-        if(scanningResult != null){
-            contents = intent.getStringExtra("SCAN_RESULT");
-            //format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+        viewPager.setAdapter(viewPagerAdapter);
 
-            //Log.d("CODBAR",""+contents);
-
-            Intent telaIdentificaJogo = new Intent(ActivityMeusJogos.this, ActivityIdentificaJogo.class);
-            telaIdentificaJogo.putExtra("CODBAR",contents);
-            startActivity(telaIdentificaJogo);
-            finish();
-        }
-
-        super.onActivityResult(requestCode, resultCode, intent);
-    }
+        tabLayout.setupWithViewPager(viewPager);
 
 
-    @Override
-    public boolean onSupportNavigateUp(){
-        finish();
-        return true;
-    }
 
-    private void exibirProgress(boolean exibir) {
-        mProgressBar.setVisibility(exibir ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -151,7 +127,66 @@ public class ActivityMeusJogos extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    public void notificaLista(){
-        mAdapter2.notifyDataSetChanged();
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+
+            case  R.id.logout:
+                FirebaseAuth.getInstance().signOut();
+                // change this code beacuse your app will crash
+                startActivity(new Intent(ActivityMeusJogos.this, ActivityLogin.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                return true;
+        }
+
+        return false;
+    }
+
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+
+        private ArrayList<Fragment> fragments;
+        private ArrayList<String> titles;
+
+        ViewPagerAdapter(FragmentManager fm){
+            super(fm);
+            this.fragments = new ArrayList<>();
+            this.titles = new ArrayList<>();
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return fragments.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return fragments.size();
+        }
+
+        public void addFragment(Fragment fragment, String title){
+            fragments.add(fragment);
+            titles.add(title);
+        }
+
+        @Nullable
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return titles.get(position);
+        }
+
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        Fragment fragment = fragmentMeusJogos;
+        if (fragment != null) {
+            fragment.onActivityResult(requestCode, resultCode, intent);
+        }
     }
 }

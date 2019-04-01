@@ -20,27 +20,16 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
-import com.game.next.nextgame.ActivityCarteira;
 import com.game.next.nextgame.ActivityChat;
-import com.game.next.nextgame.ActivityIdentificaJogo;
 import com.game.next.nextgame.ActivityMapa;
 import com.game.next.nextgame.ActivityMeusJogos;
-import com.game.next.nextgame.MainActivity;
 import com.game.next.nextgame.R;
-import com.game.next.nextgame.adapters.MyAdapterListJogos;
 import com.game.next.nextgame.adapters.MyAdapterOfRecyclers;
-import com.game.next.nextgame.entidades.Jogo;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
 
 public class FragmentA extends Fragment {
 
@@ -61,7 +50,7 @@ public class FragmentA extends Fragment {
 
     private AutoCompleteTextView autoCompletePesquisar;
 
-    private Button btnMyGames, btnChat, btnCarteira, btnMapa;
+    private Button btnMyGames, btnChat, btnScan, btnMapa;
 
     @SuppressLint("RestrictedApi")
     @Nullable
@@ -103,7 +92,7 @@ public class FragmentA extends Fragment {
 
         btnMyGames = (Button) view.findViewById(R.id.my_games_xbox);
         btnChat = (Button) view.findViewById(R.id.chat_xbox);
-        btnCarteira = (Button) view.findViewById(R.id.carteira_xbox);
+        btnScan = (Button) view.findViewById(R.id.scan_xbox);
         btnMapa = (Button) view.findViewById(R.id.mapa_xbox);
 
         autoCompletePesquisar = (AutoCompleteTextView) view.findViewById(R.id.pesquisarAutoCompleteFragmentA);
@@ -124,10 +113,10 @@ public class FragmentA extends Fragment {
             }
         });
 
-        btnCarteira.setOnClickListener(new View.OnClickListener() {
+        btnScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent telaMeusJogos = new Intent(view.getContext(), ActivityCarteira.class);
+                Intent telaMeusJogos = new Intent(view.getContext(), FragmentCarteira.class);
                 startActivity(telaMeusJogos);
             }
         });

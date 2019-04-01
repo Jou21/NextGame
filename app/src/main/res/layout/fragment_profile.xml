@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <RelativeLayout
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:padding="8dp"
             android:layout_height="wrap_content">
@@ -18,32 +19,42 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Profile"
+                android:text="Toque para alterar sua foto de perfil"
+                android:layout_gravity="center"
                 android:textColor="@color/colorPrimaryDark"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:id="@+id/profile_image"
+                android:layout_gravity="center"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="50dp"
                 android:src="@mipmap/ic_launcher"/>
 
             <TextView
+                android:id="@+id/username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="username"
                 android:layout_below="@id/profile_image"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="15dp"
+                android:layout_marginBottom="20dp"
+                android:layout_gravity="center"
+                android:text="username"
                 android:textColor="@color/colorPrimaryDark"
-                android:textStyle="bold"
-                android:id="@+id/username"
                 android:textSize="18sp"
-                android:layout_marginBottom="20dp"/>
+                android:textStyle="bold" />
 
-        </RelativeLayout>
+            <RatingBar
+                android:id="@+id/rating_bar_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                 />
+
+        </LinearLayout>
 
 
 

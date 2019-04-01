@@ -8,7 +8,7 @@ public class CaptureActivityPortrait extends CaptureActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(CaptureActivityPortrait.this,MainActivity.class);
+        Intent intent = new Intent(CaptureActivityPortrait.this,ActivityMeusJogos.class);
         startActivity(intent);
         finish();
     }
