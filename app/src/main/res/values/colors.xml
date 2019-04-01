@@ -11,4 +11,6 @@
     <color name="gold">#FFBF00</color>
     <color name="amarelo">#FFDD00</color>
     <color name="cinza">#D8D6D1</color>
+    <color name="branco">#fff</color>
+    <color name="laranja">#FF6F22</color>
 </resources>

@@ -1,11 +1,17 @@
 package com.game.next.nextgame;
 
+import android.app.Activity;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -47,10 +53,12 @@ public class JogoDoUsuarioActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_jogo_do_usuario);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            setSystemBarTheme(JogoDoUsuarioActivity.this,true,R.color.branco);
+        }
+
         viewPager = (LoopingViewPager) findViewById(R.id.viewpager);
         indicatorView = (PageIndicatorView) findViewById(R.id.indicator);
-
-        adapter = new MyViewPagerAdapter(this, createDummyItems(), true);
 
         ratingBarUser = (RatingBar) findViewById(R.id.rating_bar_user_jogo_do_usuario);
         ratingBarJogo = (RatingBar) findViewById(R.id.rating_bar_jogo_do_usuario);
@@ -78,9 +86,36 @@ public class JogoDoUsuarioActivity extends AppCompatActivity {
         ratingBarJogo.setMax(5);
         ratingBarJogo.setIsIndicator(true);
 
-
         if (getIntent().hasExtra("JOGOUSER")) {
             modelJodoDoUsuario = (Jogo) getIntent().getSerializableExtra("JOGOUSER");
+
+            int numeroDeViewsPager = 0;
+
+            if(modelJodoDoUsuario.getUrlImgJogo() != null){
+                numeroDeViewsPager += 1;
+            }
+
+            if(modelJodoDoUsuario.getUrlImgComplementar1() != null){
+                numeroDeViewsPager += 1;
+            }
+
+            if(modelJodoDoUsuario.getUrlImgComplementar2() != null){
+                numeroDeViewsPager += 1;
+            }
+
+            if(modelJodoDoUsuario.getUrlImgComplementar3() != null){
+                numeroDeViewsPager += 1;
+            }
+
+            if(modelJodoDoUsuario.getUrlImgComplementar4() != null){
+                numeroDeViewsPager += 1;
+            }
+
+            if(modelJodoDoUsuario.getUrlImgComplementar5() != null){
+                numeroDeViewsPager += 1;
+            }
+
+            adapter = new MyViewPagerAdapter(this, createDummyItems(numeroDeViewsPager), true);
 
             if(modelJodoDoUsuario.getNome().equals("") || modelJodoDoUsuario.getNome().isEmpty()){
 
@@ -187,10 +222,6 @@ public class JogoDoUsuarioActivity extends AppCompatActivity {
     }
 
 
-
-
-
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -203,17 +234,56 @@ public class JogoDoUsuarioActivity extends AppCompatActivity {
         super.onPause();
     }
 
-    private ArrayList<Integer> createDummyItems () {
+    private ArrayList<Integer> createDummyItems (int numViews) {
         ArrayList<Integer> items = new ArrayList<>();
-        items.add(0, 1);
-        items.add(1, 2);
-        items.add(2, 3);
-        items.add(3, 4);
-        items.add(4, 0);
-        //items.add(5, 0);
-        //items.add(6, 0);
+        if(numViews == 1){
+            items.add(0, 0);
+        }
+        if(numViews == 2){
+            items.add(0, 1);
+            items.add(1, 0);
+        }
+        if(numViews == 3){
+            items.add(0, 1);
+            items.add(1, 2);
+            items.add(2, 0);
+        }
+        if(numViews == 4){
+            items.add(0, 1);
+            items.add(1, 2);
+            items.add(2, 3);
+            items.add(3, 0);
+        }
+        if(numViews == 5){
+            items.add(0, 1);
+            items.add(1, 2);
+            items.add(2, 3);
+            items.add(3, 4);
+            items.add(4, 0);
+        }
+        if(numViews == 6){
+            items.add(0, 1);
+            items.add(1, 2);
+            items.add(2, 3);
+            items.add(3, 4);
+            items.add(4, 5);
+            items.add(5, 0);
+        }
+
         return items;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public static final void setSystemBarTheme(final Activity pActivity, final boolean textIsDark, int corStatusBar) {
 
+        Window window = pActivity.getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(ContextCompat.getColor(pActivity,corStatusBar));
+
+        // Fetch the current flags.
+        final int lFlags = window.getDecorView().getSystemUiVisibility();
+        // Update the SystemUiVisibility dependening on whether we want a Light or Dark theme.
+        pActivity.getWindow().getDecorView().setSystemUiVisibility(textIsDark ? (lFlags | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR) : (lFlags & ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR));
+    }
 }

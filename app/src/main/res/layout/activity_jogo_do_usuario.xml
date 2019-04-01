@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/branco"
     tools:context=".JogoDoUsuarioActivity">
 
     <ScrollView
@@ -78,9 +79,39 @@
                 android:id="@+id/linearLayout3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:orientation="vertical"
                 app:layout_constraintTop_toTopOf="parent">
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <com.asksira.loopingviewpager.LoopingViewPager
+                        android:id="@+id/viewpager"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:autoScroll="true"
+                        app:isInfinite="true"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:scrollInterval="3000"
+                        app:wrap_content="true" />
+
+                    <com.rd.PageIndicatorView
+                        android:id="@+id/indicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        app:layout_constraintBottom_toBottomOf="@id/viewpager"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:piv_animationDuration="200"
+                        app:piv_animationType="slide"
+                        app:piv_interactiveAnimation="true" />
+
+
+                </android.support.constraint.ConstraintLayout>
 
                 <TextView
                     android:id="@+id/txt_titulo_jogo_do_usuario"
@@ -91,38 +122,6 @@
                     android:textSize="20sp"
                     tools:layout_editor_absoluteX="138dp"
                     tools:layout_editor_absoluteY="191dp" />
-
-                <android.support.constraint.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <com.asksira.loopingviewpager.LoopingViewPager
-                        android:id="@+id/viewpager"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:isInfinite="true"
-                        app:autoScroll="true"
-                        app:scrollInterval="3000"
-                        app:wrap_content="true"/>
-
-                    <com.rd.PageIndicatorView
-                        android:id="@+id/indicator"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintBottom_toBottomOf="@id/viewpager"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        android:layout_marginBottom="8dp"
-                        app:piv_animationType="slide"
-                        app:piv_animationDuration="200"
-                        app:piv_interactiveAnimation="true"/>
-
-
-
-                </android.support.constraint.ConstraintLayout>
 
                 <RatingBar
                     android:id="@+id/rating_bar_jogo_do_usuario"
