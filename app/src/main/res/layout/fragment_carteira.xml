@@ -8,7 +8,7 @@
     tools:context=".fragments.FragmentCarteira">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/img_carteira"
         android:layout_width="240dp"
         android:layout_height="240dp"
         android:layout_marginStart="8dp"

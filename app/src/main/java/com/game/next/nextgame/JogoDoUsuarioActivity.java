@@ -1,6 +1,7 @@
 package com.game.next.nextgame;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
@@ -68,6 +69,15 @@ public class JogoDoUsuarioActivity extends AppCompatActivity {
         descricaoDoJogoDoUsuario = (TextView) findViewById(R.id.descricao_do_jogo_do_usuario);
         btnAlugarJogoDoUsuario = (Button) findViewById(R.id.btn_alugar_jogo_do_usuario);
         btnComprarJogoDoUsuario = (Button) findViewById(R.id.btn_comprar_jogo_do_usuario);
+
+        btnAlugarJogoDoUsuario.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent transacaoAlugarIntent = new Intent(JogoDoUsuarioActivity.this,TransacaoAlugarActivity.class);
+                startActivity(transacaoAlugarIntent);
+                finish();
+            }
+        });
 
         starsUser = (LayerDrawable) ratingBarUser.getProgressDrawable();
         starsUser.getDrawable(2).setColorFilter(getResources().getColor(R.color.amarelo),PorterDuff.Mode.SRC_ATOP); // for filled stars
