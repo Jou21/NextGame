@@ -1,7 +1,9 @@
 package com.game.next.nextgame;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +18,13 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
 
+    private LinearLayout tabXbox;
+    private LinearLayout item1;
+    private LinearLayout tabPS4;
+    private LinearLayout item2;
+
+    private MyFragmentPagerAdapter myFragmentPagerAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,8 +33,9 @@ public class MainActivity extends AppCompatActivity {
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
 
-        mViewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(),
-                getResources().getStringArray(R.array.titles_tab)));
+        myFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(),getResources().getStringArray(R.array.titles_tab));
+
+        mViewPager.setAdapter(myFragmentPagerAdapter);
 
         mTabLayout.setupWithViewPager(mViewPager);
 
@@ -35,13 +45,25 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        LinearLayout tabXbox = (LinearLayout) mTabLayout.getChildAt(0);
-        LinearLayout item1 = (LinearLayout) tabXbox.getChildAt(0);
+        tabXbox = (LinearLayout) mTabLayout.getChildAt(0);
+        item1 = (LinearLayout) tabXbox.getChildAt(0);
         item1.setBackgroundColor(Color.parseColor("#28DE00"));
 
-        LinearLayout tabPS4 = (LinearLayout) mTabLayout.getChildAt(0);
-        LinearLayout item2 = (LinearLayout) tabPS4.getChildAt(1);
+        tabPS4 = (LinearLayout) mTabLayout.getChildAt(0);
+        item2 = (LinearLayout) tabPS4.getChildAt(1);
         item2.setBackgroundColor(Color.parseColor("#0065DE"));
 
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+
+        if (myFragmentPagerAdapter.getItem(0) != null) {
+            myFragmentPagerAdapter.getItem(0).onActivityResult(requestCode, resultCode, intent);
+        }
+
+        if (myFragmentPagerAdapter.getItem(1) != null) {
+            myFragmentPagerAdapter.getItem(1).onActivityResult(requestCode, resultCode, intent);
+        }
     }
 }

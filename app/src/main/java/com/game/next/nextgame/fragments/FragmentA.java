@@ -15,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -26,10 +27,14 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.game.next.nextgame.ActivityChat;
+import com.game.next.nextgame.ActivityIdentificaJogo;
 import com.game.next.nextgame.ActivityMapa;
 import com.game.next.nextgame.ActivityMeusJogos;
+import com.game.next.nextgame.CaptureActivityPortrait;
 import com.game.next.nextgame.R;
 import com.game.next.nextgame.adapters.MyAdapterOfRecyclers;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 public class FragmentA extends Fragment {
 
@@ -51,6 +56,8 @@ public class FragmentA extends Fragment {
     private AutoCompleteTextView autoCompletePesquisar;
 
     private Button btnMyGames, btnChat, btnScan, btnMapa;
+
+    private String contents;
 
     @SuppressLint("RestrictedApi")
     @Nullable
@@ -116,8 +123,16 @@ public class FragmentA extends Fragment {
         btnScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent telaMeusJogos = new Intent(view.getContext(), FragmentCarteira.class);
-                startActivity(telaMeusJogos);
+                //Intent telaMeusJogos = new Intent(view.getContext(), FragmentCarteira.class);
+                //startActivity(telaMeusJogos);
+
+                IntentIntegrator integrator = new IntentIntegrator(getActivity());
+                integrator.setPrompt("Mantenha um palmo de distancia do código de barras");
+                integrator.setCameraId(0);  // Use a specific camera of the device
+                integrator.setOrientationLocked(true);
+                integrator.setBeepEnabled(true);
+                integrator.setCaptureActivity(CaptureActivityPortrait.class);
+                integrator.initiateScan();
             }
         });
 
@@ -269,5 +284,24 @@ public class FragmentA extends Fragment {
     }
 
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+
+        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode,resultCode,intent);
+
+        if(scanningResult != null){
+            contents = intent.getStringExtra("SCAN_RESULT");
+            //format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+
+            Log.d("CODBAR2",""+contents);
+
+            //Intent telaIdentificaJogo = new Intent(getActivity(), ActivityIdentificaJogo.class);
+            //telaIdentificaJogo.putExtra("CODBAR",contents);
+            //startActivity(telaIdentificaJogo);
+            //getActivity().finish();
+        }
+
+        super.onActivityResult(requestCode, resultCode, intent);
+    }
 
 }
