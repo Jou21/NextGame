@@ -70,15 +70,6 @@ public class JogoDoUsuarioActivity extends AppCompatActivity {
         btnAlugarJogoDoUsuario = (Button) findViewById(R.id.btn_alugar_jogo_do_usuario);
         btnComprarJogoDoUsuario = (Button) findViewById(R.id.btn_comprar_jogo_do_usuario);
 
-        btnAlugarJogoDoUsuario.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent transacaoAlugarIntent = new Intent(JogoDoUsuarioActivity.this,TransacaoAlugarActivity.class);
-                startActivity(transacaoAlugarIntent);
-                finish();
-            }
-        });
-
         starsUser = (LayerDrawable) ratingBarUser.getProgressDrawable();
         starsUser.getDrawable(2).setColorFilter(getResources().getColor(R.color.amarelo),PorterDuff.Mode.SRC_ATOP); // for filled stars
         starsUser.getDrawable(1).setColorFilter(getResources().getColor(R.color.gold),PorterDuff.Mode.SRC_ATOP); // for half filled stars
@@ -169,7 +160,7 @@ public class JogoDoUsuarioActivity extends AppCompatActivity {
                 }
 
             } else {
-                Toast.makeText(JogoDoUsuarioActivity.this,"Activity cannot find  extras " + "JOGO",Toast.LENGTH_SHORT).show();
+                Toast.makeText(JogoDoUsuarioActivity.this,"Activity cannot find  extras " + "IMAGEMUSER",Toast.LENGTH_SHORT).show();
                 Log.d("EXTRASJOGO","Activity cannot find  extras " + "IMAGEMUSER");
             }
 
@@ -181,7 +172,7 @@ public class JogoDoUsuarioActivity extends AppCompatActivity {
                 txtNomeUserJogoDoUsuario.setText(nomeOtherUser);
 
             } else {
-                Toast.makeText(JogoDoUsuarioActivity.this,"Activity cannot find  extras " + "JOGO",Toast.LENGTH_SHORT).show();
+                Toast.makeText(JogoDoUsuarioActivity.this,"Activity cannot find  extras " + "NOMEUSER",Toast.LENGTH_SHORT).show();
                 Log.d("EXTRASJOGO","Activity cannot find  extras " + "NOMEUSER");
             }
 
@@ -192,7 +183,7 @@ public class JogoDoUsuarioActivity extends AppCompatActivity {
 
                 btnAlugarJogoDoUsuario.setText("R$" + precoAluguel + ",00" + "\nALUGAR");
             } else {
-                Toast.makeText(JogoDoUsuarioActivity.this,"Activity cannot find  extras " + "JOGO",Toast.LENGTH_SHORT).show();
+                Toast.makeText(JogoDoUsuarioActivity.this,"Activity cannot find  extras " + "PRECOALUGUEL",Toast.LENGTH_SHORT).show();
                 Log.d("EXTRASJOGO","Activity cannot find  extras " + "PRECOALUGUEL");
             }
 
@@ -203,14 +194,14 @@ public class JogoDoUsuarioActivity extends AppCompatActivity {
 
                 btnComprarJogoDoUsuario.setText("R$" + precoVenda + ",00" + "\nCOMPRAR");
             } else {
-                Toast.makeText(JogoDoUsuarioActivity.this,"Activity cannot find  extras " + "JOGO",Toast.LENGTH_SHORT).show();
+                Toast.makeText(JogoDoUsuarioActivity.this,"Activity cannot find  extras " + "PRECOVENDA",Toast.LENGTH_SHORT).show();
                 Log.d("EXTRASJOGO","Activity cannot find  extras " + "PRECOVENDA");
             }
 
             //=============================================================================================================================================
 
         } else {
-            Toast.makeText(JogoDoUsuarioActivity.this,"Activity cannot find  extras " + "JOGO",Toast.LENGTH_SHORT).show();
+            Toast.makeText(JogoDoUsuarioActivity.this,"Activity cannot find  extras " + "JOGOUSER",Toast.LENGTH_SHORT).show();
             Log.d("EXTRASJOGO","Activity cannot find  extras " + "JOGOUSER");
         }
 
@@ -227,6 +218,18 @@ public class JogoDoUsuarioActivity extends AppCompatActivity {
             @Override
             public void onIndicatorPageChange(int newIndicatorPosition) {
 //                indicatorView.setSelection(newIndicatorPosition);
+            }
+        });
+
+        btnAlugarJogoDoUsuario.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent transacaoAlugarIntent = new Intent(JogoDoUsuarioActivity.this,TransacaoAlugarActivity.class);
+                transacaoAlugarIntent.putExtra("JOGODOUSUARIO",modelJodoDoUsuario);
+                transacaoAlugarIntent.putExtra("ALUGUELJOGODOUSUARIO",precoAluguel);
+                transacaoAlugarIntent.putExtra("PRECOJOGODOUSUARIO",precoVenda);
+                startActivity(transacaoAlugarIntent);
+                finish();
             }
         });
     }

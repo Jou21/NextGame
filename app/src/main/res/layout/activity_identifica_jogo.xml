@@ -277,7 +277,7 @@
                         android:padding="3dip"
                         android:textStyle="bold"
                         android:textSize="20sp"
-                        android:text="Por quanto as pessoas poderão alugar este jogo?" />
+                        android:text="Quanto as pessoas pagarão por semana para alugar este jogo?" />
 
                     <TextView
                         android:id="@+id/txt_preco_aluguel_jogo"
