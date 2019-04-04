@@ -96,16 +96,17 @@
                 android:id="@+id/edt_digite_o_nome_de_seu_jogo_aqui"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Digite o nome do seu jogo aqui..."
                 android:gravity="center"
+                android:hint="Digite o nome do seu jogo aqui..."
                 android:textSize="20sp"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/txt_cod_identificado"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:textStyle="bold"
                 android:text="Procurando jogo..."
                 android:textSize="20sp" />
 
@@ -114,8 +115,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:textColor="@color/vermelho"
                 android:text=""
-                android:textSize="20sp" />
+                android:textSize="15sp" />
 
             <LinearLayout
                 android:id="@+id/lay_nao_achou_jogo"
@@ -175,6 +177,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
                     android:text="O que deseja fazer?" />
 
                 <LinearLayout
@@ -222,9 +226,22 @@
                         android:id="@+id/txt_quanto_deseja_cobrar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:gravity="center"
                         android:padding="3dip"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
                         android:text="Quanto deseja cobrar na venda de seu jogo?" />
+
+                    <TextView
+                        android:id="@+id/txt_quanto_deseja_cobrar_caucao"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:textStyle="bold"
+                        android:textSize="15sp"
+                        android:textColor="@color/vermelho"
+                        android:text="(Obs: Esse valor será usado como caução em caso de não devolução de seu jogo)" />
 
                     <TextView
                         android:id="@+id/txt_preco_venda_jogo"
@@ -232,7 +249,9 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:padding="3dip"
-                        android:text="R$ 60,00" />
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:text="R$ 70,00" />
 
                     <SeekBar
                         android:id="@+id/seek_bar_preco"
@@ -240,7 +259,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:max="360"
-                        android:progress="60" />
+                        android:progress="70" />
 
                 </LinearLayout>
 
@@ -254,8 +273,10 @@
                         android:id="@+id/txt_por_quanto_deseja_alugar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:gravity="center"
                         android:padding="3dip"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
                         android:text="Por quanto as pessoas poderão alugar este jogo?" />
 
                     <TextView
@@ -264,7 +285,9 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:padding="3dip"
-                        android:text="R$ 20,00" />
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:text="R$ 30,00" />
 
                     <SeekBar
                         android:id="@+id/seek_bar_aluguel"
@@ -272,14 +295,15 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:max="110"
-                        android:progress="20" />
+                        android:progress="30" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/txt_dias_da_semana_deseja_entregar"
@@ -376,11 +400,13 @@
 
                 </LinearLayout>
 
+                <!--Tirar o gone-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/txt_horarios_deseja_entregar"

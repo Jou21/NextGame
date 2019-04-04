@@ -65,6 +65,7 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
 
     private TextView txtCodIdentificado, txtCodigoDeBarras, txtPrecoVendaJogo, txtPrecoAluguelJogo;
     private TextView txtSelecioneUmaCapaIdentificaJogo, txtObsSelecioneUmaCapaIdentificaJogo;
+    private TextView txtQuantoDesejaCobrar, txtQuantoDesejaCobrarCaucao;
     private ImageView imgCodIdentificado;
     private Button btnAdicionarJogoManualmente, btnAdicionarJogoSucesso, btnAdicionarHorarioIdentificaJogo;
     private ArrayList<Jogo> jogosPS4 = new ArrayList<>();
@@ -141,6 +142,8 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBarIdentificaJogo);
 
+        txtQuantoDesejaCobrar = (TextView) findViewById(R.id.txt_quanto_deseja_cobrar);
+        txtQuantoDesejaCobrarCaucao = (TextView) findViewById(R.id.txt_quanto_deseja_cobrar_caucao);
         txtPrecoAluguelJogo = (TextView) findViewById(R.id.txt_preco_aluguel_jogo);
         txtPrecoVendaJogo = (TextView) findViewById(R.id.txt_preco_venda_jogo);
         txtCodIdentificado = (TextView) findViewById(R.id.txt_cod_identificado);
@@ -196,7 +199,10 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 laySeekAlugar.setVisibility(View.VISIBLE);
-                laySeekPreco.setVisibility(View.GONE);
+                laySeekPreco.setVisibility(View.VISIBLE);
+
+                txtQuantoDesejaCobrar.setText("Quanto deseja cobrar como caução em caso de não devolução de seu jogo?");
+                txtQuantoDesejaCobrarCaucao.setVisibility(View.GONE);
 
                 btnAlugar.getBackground().setColorFilter(ContextCompat.getColor(ActivityIdentificaJogo.this, R.color.corRoxo), PorterDuff.Mode.MULTIPLY);
                 btnAlugarEVender.getBackground().setColorFilter(ContextCompat.getColor(ActivityIdentificaJogo.this, R.color.corAzul), PorterDuff.Mode.MULTIPLY);
@@ -214,6 +220,9 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
                 laySeekAlugar.setVisibility(View.VISIBLE);
                 laySeekPreco.setVisibility(View.VISIBLE);
 
+                txtQuantoDesejaCobrar.setText("Quanto deseja cobrar na venda de seu jogo?");
+                txtQuantoDesejaCobrarCaucao.setVisibility(View.VISIBLE);
+
                 btnAlugar.getBackground().setColorFilter(ContextCompat.getColor(ActivityIdentificaJogo.this, R.color.corAzul), PorterDuff.Mode.MULTIPLY);
                 btnAlugarEVender.getBackground().setColorFilter(ContextCompat.getColor(ActivityIdentificaJogo.this, R.color.corRoxo), PorterDuff.Mode.MULTIPLY);
                 btnVender.getBackground().setColorFilter(ContextCompat.getColor(ActivityIdentificaJogo.this, R.color.corAzul), PorterDuff.Mode.MULTIPLY);
@@ -228,6 +237,9 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
             public void onClick(View v) {
                 laySeekAlugar.setVisibility(View.GONE);
                 laySeekPreco.setVisibility(View.VISIBLE);
+
+                txtQuantoDesejaCobrar.setText("Quanto deseja cobrar na venda de seu jogo?");
+                txtQuantoDesejaCobrarCaucao.setVisibility(View.GONE);
 
                 btnAlugar.getBackground().setColorFilter(ContextCompat.getColor(ActivityIdentificaJogo.this, R.color.corAzul), PorterDuff.Mode.MULTIPLY);
                 btnAlugarEVender.getBackground().setColorFilter(ContextCompat.getColor(ActivityIdentificaJogo.this, R.color.corAzul), PorterDuff.Mode.MULTIPLY);
@@ -466,9 +478,9 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
         btnAdicionarJogoSucesso.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(((checkHora1.isChecked() == true) || (checkHora2.isChecked() == true) || (checkHora3.isChecked() == true)) &&
-                        ((domingoSelecionado == "S") || (segundaSelecionado == "S") || (tercaSelecionado == "S") ||
-                                (quartaSelecionado == "S") || (quintaSelecionado == "S") || (sextaSelecionado == "S") || (sabadoSelecionado == "S"))){
+                //if(((checkHora1.isChecked() == true) || (checkHora2.isChecked() == true) || (checkHora3.isChecked() == true)) &&
+                //        ((domingoSelecionado == "S") || (segundaSelecionado == "S") || (tercaSelecionado == "S") ||
+                //                (quartaSelecionado == "S") || (quintaSelecionado == "S") || (sextaSelecionado == "S") || (sabadoSelecionado == "S"))){
 
                     reference = FirebaseDatabase.getInstance().getReference();
                     user = FirebaseAuth.getInstance().getCurrentUser();
@@ -690,11 +702,11 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
                     }
 
 
-                }else {
-                    Toast.makeText(ActivityIdentificaJogo.this,
-                            "É necessário que ao menos 1 dia da semana esteja selecionado e pelo menos 1 horário esteja checado",
-                            Toast.LENGTH_SHORT).show();
-                }
+                //}else {
+                //    Toast.makeText(ActivityIdentificaJogo.this,
+                //            "É necessário que ao menos 1 dia da semana esteja selecionado e pelo menos 1 horário esteja checado",
+                //            Toast.LENGTH_SHORT).show();
+                //}
             }
         });
 
@@ -749,7 +761,7 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
                             });
                             achouJogoPeloCodBar = true;
                             jogoIdentificado = j;
-                            txtCodigoDeBarras.setText(finalCodigoDeBarras);
+                            txtCodigoDeBarras.setText("(Cod. de barras: "+finalCodigoDeBarras+")");
                             jogoPS4Encontrado[0] = true;
                             //btnAdicionarJogoManualmente.setVisibility(View.GONE);
                             btnAdicionarJogoSucesso.setVisibility(View.VISIBLE);
@@ -762,7 +774,7 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
 
                         }else if (j == jogosPS4.get(jogosPS4.size()-1) && jogoXboxEncontrado[0] == false && jogoPS4Encontrado[0] == false && pesquisouJogosXbox[0] == true && pesquisouJogosPS4[0] == true) {
                             txtCodIdentificado.setText("Nenhum jogo encontrado");
-                            txtCodigoDeBarras.setText(finalCodigoDeBarras);
+                            txtCodigoDeBarras.setText("(Cod. de barras: "+finalCodigoDeBarras+")");
                             //btnAdicionarJogoManualmente.setVisibility(View.VISIBLE);
                             layNaoAchouJogo.setVisibility(View.VISIBLE);
                             btnAdicionarJogoSucesso.setVisibility(View.GONE);
@@ -820,7 +832,7 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
                             });
                             achouJogoPeloCodBar = true;
                             jogoIdentificado = j;
-                            txtCodigoDeBarras.setText(finalCodigoDeBarras);
+                            txtCodigoDeBarras.setText("(Cod. de barras: "+finalCodigoDeBarras+")");
                             jogoXboxEncontrado[0] = true;
                             //btnAdicionarJogoManualmente.setVisibility(View.GONE);
                             btnAdicionarJogoSucesso.setVisibility(View.VISIBLE);
@@ -832,7 +844,7 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
 
                         }else if (j == jogosXbox.get(jogosXbox.size()-1) && jogoXboxEncontrado[0] == false && jogoPS4Encontrado[0] == false && pesquisouJogosXbox[0] == true && pesquisouJogosPS4[0] == true) {
                             txtCodIdentificado.setText("Nenhum jogo encontrado");
-                            txtCodigoDeBarras.setText(finalCodigoDeBarras);
+                            txtCodigoDeBarras.setText("(Cod. de barras: "+finalCodigoDeBarras+")");
                             //btnAdicionarJogoManualmente.setVisibility(View.VISIBLE);
                             btnAdicionarJogoSucesso.setVisibility(View.GONE);
                             layAchouJogo.setVisibility(View.GONE);

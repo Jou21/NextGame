@@ -209,6 +209,7 @@
             android:id="@+id/txt_transacao_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
             android:text="Li e aceito os termos e condições deste contrato."
             android:textAlignment="center" />
 
@@ -245,6 +246,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:textStyle="bold"
             android:text="R$ 23,70"
             android:textSize="20sp" />
 
