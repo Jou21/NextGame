@@ -1,6 +1,5 @@
 package com.game.next.nextgame;
 
-
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -35,7 +34,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.Arrays;
 import java.util.HashMap;
-
 
 public class ActivityLogin extends AppCompatActivity{
 
@@ -171,8 +169,6 @@ public class ActivityLogin extends AppCompatActivity{
                 LoginManager.getInstance().logInWithReadPermissions(ActivityLogin.this, Arrays.asList("public_profile", "email", "user_birthday"));
             }
         });
-
-
     }
 
     private void handleFacebookAccessToken(AccessToken token) {
@@ -212,9 +208,7 @@ public class ActivityLogin extends AppCompatActivity{
 
                         } else {
                             // If sign in fails, display a message to the user.
-
                             Toast.makeText(ActivityLogin.this, "Falha na autenticação!", Toast.LENGTH_SHORT).show();
-
                         }
 
                     }
@@ -226,8 +220,6 @@ public class ActivityLogin extends AppCompatActivity{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
-
-
     }
 
 }
