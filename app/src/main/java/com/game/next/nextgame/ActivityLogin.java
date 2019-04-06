@@ -1,25 +1,17 @@
 package com.game.next.nextgame;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
+
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-
 import android.os.Bundle;
-
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
-
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -39,10 +31,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -68,12 +58,6 @@ public class ActivityLogin extends AppCompatActivity{
         AppEventsLogger.activateApp(this);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        //getSupportActionBar().hide();
-
-        //cria uma appbar com um layout customizado > menu_layout
-        //getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        //getSupportActionBar().setCustomView(R.layout.menu_layout);
 
         edtEmail = (EditText) findViewById(R.id.edt_login_email);
         edtSenha = (EditText) findViewById(R.id.edt_login_senha);
@@ -244,16 +228,6 @@ public class ActivityLogin extends AppCompatActivity{
         super.onActivityResult(requestCode, resultCode, data);
 
 
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        //if(mAuth.getCurrentUser() != null) {
-        // Check if user is signed in (non-null) and update UI accordingly.
-        //FirebaseUser currentUser = mAuth.getCurrentUser(); //currentUser tem informações do usuário
-        //updateUI(currentUser);
-        //}
     }
 
 }
