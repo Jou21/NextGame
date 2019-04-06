@@ -8,25 +8,13 @@ import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.app.LoaderManager.LoaderCallbacks;
 
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.AsyncTask;
-
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.text.TextUtils;
-import android.view.KeyEvent;
+
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
+
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -55,13 +43,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
-import static android.Manifest.permission.READ_CONTACTS;
 
 public class ActivityLogin extends AppCompatActivity{
 
@@ -75,7 +59,6 @@ public class ActivityLogin extends AppCompatActivity{
     String imageURL = "";
     String username = "";
 
-    private static final int RC_SIGN_IN = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
