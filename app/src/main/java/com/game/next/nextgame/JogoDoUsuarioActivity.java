@@ -39,6 +39,7 @@ public class JogoDoUsuarioActivity extends AppCompatActivity {
 
     public static Jogo modelJodoDoUsuario;
     private String imgOtherUserURL;
+    private String userId;
     private String nomeOtherUser;
     private String precoAluguel;
     private String precoVenda;
@@ -163,6 +164,15 @@ public class JogoDoUsuarioActivity extends AppCompatActivity {
                 Toast.makeText(JogoDoUsuarioActivity.this,"Activity cannot find  extras " + "IMAGEMUSER",Toast.LENGTH_SHORT).show();
                 Log.d("EXTRASJOGO","Activity cannot find  extras " + "IMAGEMUSER");
             }
+            //=============================================================================================================================================
+
+            if (getIntent().hasExtra("USERID")) {
+                userId = getIntent().getStringExtra("USERID");
+
+            } else {
+                Toast.makeText(JogoDoUsuarioActivity.this,"Activity cannot find  extras " + "USERID",Toast.LENGTH_SHORT).show();
+                Log.d("EXTRASJOGO","Activity cannot find  extras " + "USERID");
+            }
 
             //=============================================================================================================================================
 
@@ -225,6 +235,7 @@ public class JogoDoUsuarioActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent transacaoAlugarIntent = new Intent(JogoDoUsuarioActivity.this,TransacaoAlugarActivity.class);
+                transacaoAlugarIntent.putExtra("USUARIOID",userId);
                 transacaoAlugarIntent.putExtra("JOGODOUSUARIO",modelJodoDoUsuario);
                 transacaoAlugarIntent.putExtra("ALUGUELJOGODOUSUARIO",precoAluguel);
                 transacaoAlugarIntent.putExtra("PRECOJOGODOUSUARIO",precoVenda);

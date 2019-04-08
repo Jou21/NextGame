@@ -43,6 +43,7 @@ public class MyAdapterQuemTemOJogo extends RecyclerView.Adapter<MyAdapterQuemTem
     private FirebaseUser user;
     private Jogo jogo;
 
+    private String userId = "";
     private String nomeOtherUser = "";
     private String imgOtherUserURL = "default";
 
@@ -104,6 +105,7 @@ public class MyAdapterQuemTemOJogo extends RecyclerView.Adapter<MyAdapterQuemTem
 
                     if(user.getId().equals(listaUserGames.get(position).getUserId())){
 
+                        userId = user.getId();
                         nomeOtherUser = user.getUsername();
                         imgOtherUserURL = user.getImageURL();
 
@@ -147,8 +149,6 @@ public class MyAdapterQuemTemOJogo extends RecyclerView.Adapter<MyAdapterQuemTem
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-
-
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     LocationData locationUser = postSnapshot.getValue(LocationData.class);
 
@@ -186,6 +186,7 @@ public class MyAdapterQuemTemOJogo extends RecyclerView.Adapter<MyAdapterQuemTem
             @Override
             public void onClick(View v) {
                 Intent jogoDoUsuarioIntent = new Intent(holder.layout.getContext(), JogoDoUsuarioActivity.class);
+                jogoDoUsuarioIntent.putExtra("USERID",userId);
                 jogoDoUsuarioIntent.putExtra("JOGOUSER",jogo);
                 jogoDoUsuarioIntent.putExtra("IMAGEMUSER",imgOtherUserURL);
                 jogoDoUsuarioIntent.putExtra("NOMEUSER",nomeOtherUser);
@@ -203,11 +204,6 @@ public class MyAdapterQuemTemOJogo extends RecyclerView.Adapter<MyAdapterQuemTem
         return listaUserGames.size();
     }
 
-    public void removeAt(int position) {
-        listaUserGames.remove(position);
-        notifyItemRemoved(position);
-        notifyItemRangeChanged(position, listaUserGames.size());
-    }
 
     private String formatNumber(double distance) {
         String unit = " m";
