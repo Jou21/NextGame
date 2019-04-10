@@ -80,24 +80,28 @@ public class ActivityLogin extends AppCompatActivity{
             @Override
             public void onClick(View v) {
 
-                mAuth.signInWithEmailAndPassword(edtEmail.getText().toString(), edtSenha.getText().toString())
-                        .addOnCompleteListener(ActivityLogin.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                    Intent it = new Intent(ActivityLogin.this, MainActivity.class);
-                                    it.putExtra("EMAIL", user.getEmail());
-                                    startActivity(it);
-                                    finish();
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    Toast.makeText(ActivityLogin.this, "Erro: " + task.getException(), Toast.LENGTH_SHORT).show();
-                                }
+                if(!edtEmail.getText().toString().isEmpty() || !edtSenha.getText().toString().isEmpty()){
+                    mAuth.signInWithEmailAndPassword(edtEmail.getText().toString(), edtSenha.getText().toString())
+                            .addOnCompleteListener(ActivityLogin.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        // Sign in success, update UI with the signed-in user's information
+                                        FirebaseUser user = mAuth.getCurrentUser();
+                                        Intent it = new Intent(ActivityLogin.this, MainActivity.class);
+                                        it.putExtra("EMAIL", user.getEmail());
+                                        startActivity(it);
+                                        finish();
+                                    } else {
+                                        // If sign in fails, display a message to the user.
+                                        Toast.makeText(ActivityLogin.this, "Erro: " + task.getException(), Toast.LENGTH_SHORT).show();
+                                    }
 
-                            }
-                        });
+                                }
+                            });
+                }else {
+                    Toast.makeText(ActivityLogin.this, "Você precisa preencher o e-mail e a senha!", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
