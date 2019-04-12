@@ -23,6 +23,7 @@ import com.cooltechworks.creditcarddesign.CreditCardUtils;
 import com.game.next.nextgame.adapters.MyAdapterCreditCards;
 import com.game.next.nextgame.adapters.RecyclerItemTouchHelper;
 import com.game.next.nextgame.entidades.CartaoUser;
+import com.game.next.nextgame.entidades.Carteira;
 import com.game.next.nextgame.entidades.CreditCard;
 import com.game.next.nextgame.entidades.TransacaoUser;
 import com.game.next.nextgame.entidades.User;
@@ -51,16 +52,17 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
     private ArrayList<View> creditCardList;
     private Button btnAddCard;
 
-    private DatabaseReference referenceCartaoUser,referenceTransacaoUser;
+    private DatabaseReference referenceCartaoUser, referenceTransacaoUser, referenceCarteiraUser;
     private FirebaseUser user;
+
+    private boolean entrou = false;
 
     private String name = "";
     private String cvv = "";
     private String expiry = "";
     private String cardNumber = "";
 
-    private String precoAluguelJogo, precoJogo;
-    private String fornecedorId;
+    private String saldoParaAddCarteira;
 
     private RecyclerView recyclerView;
     private MyAdapterCreditCards mAdapter;
@@ -71,31 +73,18 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pagamento);
 
+        entrou = false;
+
         user = FirebaseAuth.getInstance().getCurrentUser();
         referenceCartaoUser = FirebaseDatabase.getInstance().getReference("UsersCards").child(user.getUid());
         referenceTransacaoUser = FirebaseDatabase.getInstance().getReference("Transacoes").child(user.getUid());
+        referenceCarteiraUser = FirebaseDatabase.getInstance().getReference("CarteiraUsers").child(user.getUid());
 
-        if (getIntent().hasExtra("USUARIOID")) {
-            fornecedorId =  getIntent().getStringExtra("USUARIOID");
-        } else {
-            Toast.makeText(PagamentoActivity.this,"Activity cannot find  extras " + "USUARIOID",Toast.LENGTH_SHORT).show();
-            Log.d("EXTRASJOGO","Activity cannot find  extras " + "USUARIOID");
-        }
-
-        if (getIntent().hasExtra("ALUGUELJOGODOUSUARIO")) {
-            precoAluguelJogo = getIntent().getStringExtra("ALUGUELJOGODOUSUARIO");
-
-        } else {
-            Toast.makeText(PagamentoActivity.this,"Activity cannot find  extras " + "ALUGUELJOGODOUSUARIO",Toast.LENGTH_SHORT).show();
-            Log.d("EXTRASJOGO","Activity cannot find  extras " + "ALUGUELJOGODOUSUARIO");
-        }
-
-        if (getIntent().hasExtra("PRECOJOGODOUSUARIO")) {
-            precoJogo = getIntent().getStringExtra("PRECOJOGODOUSUARIO");
-
-        } else {
-            Toast.makeText(PagamentoActivity.this,"Activity cannot find  extras " + "PRECOJOGODOUSUARIO",Toast.LENGTH_SHORT).show();
-            Log.d("EXTRASJOGO","Activity cannot find  extras " + "PRECOJOGODOUSUARIO");
+        if(getIntent().hasExtra("ADICIONARSALDO")){
+            saldoParaAddCarteira = getIntent().getStringExtra("ADICIONARSALDO");
+        }else {
+            Toast.makeText(PagamentoActivity.this, "Activity cannot find  extras " + "ADICIONARSALDO", Toast.LENGTH_SHORT).show();
+            Log.d("EXTRASJOGO", "Activity cannot find  extras " + "ADICIONARSALDO");
         }
 
         btnAddCard = (Button) findViewById(R.id.btn_add_card);
@@ -207,28 +196,7 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
 
                 referenceCartaoUser.push().setValue(hashMap);
 
-
-
                 populate();
-                //CreditCard creditCardView = new CreditCard(this);
-
-                //creditCardView.setCVV(cvv);
-                //creditCardView.setCardHolderName(name);
-                //creditCardView.setCardExpiry(expiry);
-                //creditCardView.setCardNumber(cardNumber);
-
-                //cardContainer.addView(creditCardView);
-                //int index = cardContainer.getChildCount() - 1;
-                //addCardListener(index, creditCardView);
-
-            } else {
-
-                //CreditCard creditCardView = (CreditCard) cardContainer.getChildAt(reqCode);
-
-                //creditCardView.setCardExpiry(expiry);
-                //creditCardView.setCardNumber(cardNumber);
-                //creditCardView.setCardHolderName(name);
-                //creditCardView.setCVV(cvv);
 
             }
         }
@@ -243,92 +211,45 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
                 CreditCard creditCard = (CreditCard) v;
                 pagarComCartao(creditCard);
 
-                //String cardNumber = creditCard.getCardNumber();
-                //String expiry = creditCard.getExpiry();
-                //String cardHolderName = creditCard.getCardHolderName();
-                //String cvv = creditCard.getCVV();
-
-
-                /*
-                Intent intent = new Intent(MainActivity.this, CardEditActivity.class);
-                intent.putExtra(CreditCardUtils.EXTRA_CARD_HOLDER_NAME, cardHolderName);
-                intent.putExtra(CreditCardUtils.EXTRA_CARD_NUMBER, cardNumber);
-                intent.putExtra(CreditCardUtils.EXTRA_CARD_EXPIRY, expiry);
-                intent.putExtra(CreditCardUtils.EXTRA_CARD_SHOW_CARD_SIDE, CreditCardUtils.CARD_SIDE_BACK);
-                intent.putExtra(CreditCardUtils.EXTRA_VALIDATE_EXPIRY_DATE, false);
-
-                // start at the CVV activity to edit it as it is not being passed
-                intent.putExtra(CreditCardUtils.EXTRA_ENTRY_START_PAGE, CreditCardUtils.CARD_CVV_PAGE);
-                startActivityForResult(intent, index);
-                */
             }
         });
     }
 
     private void pagarComCartao( CreditCard creditCard ){
 
-
-
         //Inicialização a lib com parametros necessarios
         PSCheckoutConfig psCheckoutConfig = new PSCheckoutConfig();
         psCheckoutConfig.setSellerEmail("jvsb21@gmail.com");
         psCheckoutConfig.setSellerToken("4E3C345F7A124E149704B4BE2CC7DB01");
-        //Informe o fragment container
-        //psCheckoutConfig.setContainer(R.id.card_container);
 
         //Inicializa apenas os recursos de pagamento transparente e boleto
         PSCheckout.initTransparent(PagamentoActivity.this, psCheckoutConfig);
 
-        //Caso queira inicializar todos os recursos da lib
-        //PSCheckout.init(getActivity(), psCheckoutConfig);
-
-
-        /*
-        PSInstallmentsListener psInstallmentsListener = new PSInstallmentsListener() {
-            @Override
-            public void onSuccess(PSInstallmentsResponse responseVO) {
-                //responseVO objeto com a lista de parcelas
-                // Item da lista de parcelas InstallmentVO:
-                // (String) installmentVO.getCardBrand() - Bandeira do cartão;
-                // (int) - installmentVO.getQuantity() - quantidade da parcela;
-                // (Double) - installmentVO.getAmount() - valor da parcela;
-                // (Double) - installmentVO.getTotalAmount() - Valor total da transação parcelada;
-            }
-
-            @Override
-            public void onFailure(String message) {
-                // falha na requisicao
-                Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
-            }
-        };
-
-        PSCheckout.getInstallments("4111111111111111", "2", psInstallmentsListener);
-        */
-
         PSTransparentDefaultRequest psTransparentDefaultRequest = new PSTransparentDefaultRequest();
-        psTransparentDefaultRequest
-                .setDocumentNumber("99404021040")
-                .setName(creditCard.getCardHolderName())
-                .setEmail(user.getEmail())
-                .setAreaCode("34")
-                .setPhoneNumber("999508523")
-                .setStreet("Rua Tapajos")
-                .setAddressComplement("")
-                .setAddressNumber("23")
-                .setDistrict("Saraiva")
-                .setCity("Uberlândia")
-                .setState("MG")
-                .setCountry("BRA")
-                .setPostalCode("38408414")
-                .setTotalValue(precoJogo)
-                .setAmount(precoJogo)
-                .setDescriptionPayment("Pagamento do teste de integração")
-                .setQuantity(1)
-                .setCreditCard(creditCard.getCardNumber())
-                .setCvv(creditCard.getCVV())
-                .setExpMonth(creditCard.getmMes())
-                .setExpYear(creditCard.getmAno())
-                .setBirthDate("04/05/1988");
+
+            psTransparentDefaultRequest
+                    .setDocumentNumber("99404021040")
+                    .setName(creditCard.getCardHolderName())
+                    .setEmail(user.getEmail())
+                    .setAreaCode("34")
+                    .setPhoneNumber("999508523")
+                    .setStreet("Rua Tapajos")
+                    .setAddressComplement("")
+                    .setAddressNumber("23")
+                    .setDistrict("Saraiva")
+                    .setCity("Uberlândia")
+                    .setState("MG")
+                    .setCountry("BRA")
+                    .setPostalCode("38408414")
+                    .setTotalValue(saldoParaAddCarteira)
+                    .setAmount(saldoParaAddCarteira)
+                    .setDescriptionPayment("Pagamento do teste de integração")
+                    .setQuantity(1)
+                    .setCreditCard(creditCard.getCardNumber())
+                    .setCvv(creditCard.getCVV())
+                    .setExpMonth(creditCard.getmMes())
+                    .setExpYear(creditCard.getmAno())
+                    .setBirthDate("04/05/1988");
 
 
         Log.d("DADOSCARTAO","NOME: " + creditCard.getCardHolderName() +
@@ -337,8 +258,6 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
                 "\nMES: " + creditCard.getmMes() +
                 "\nANO: " + creditCard.getmAno());
 
-        //.setInstallments((InstallmentVO) psInstallmentsListener);
-        //PSCheckout.payTransparentDefault(psTransparentDefaultRequest, this, appCompatActivity);
 
         PSCheckoutListener psCheckoutListener = new PSCheckoutListener() {
             @Override
@@ -365,24 +284,60 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
 
             @Override
             public void onFailure(PSCheckoutResponse responseVO) {
-                Toast.makeText(PagamentoActivity.this, "Fail: "+responseVO.getMessage(), Toast.LENGTH_LONG).show();
-                Log.d("ERRO1","ERRO: " + responseVO.getCode());
+
 
                 //TODO DESATIVAR QUANDO TIVER EM PRODUÇÃO
-                HashMap<String, Object> hashMap = new HashMap<>();
-                hashMap.put("userId", user.getUid());
-                hashMap.put("fornecedorId", fornecedorId);
-                hashMap.put("valorAluguel", precoAluguelJogo);
-                hashMap.put("valorCaucao", precoJogo);
 
-                referenceTransacaoUser.push().setValue(hashMap);
+                referenceCarteiraUser.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists() && entrou == false){
+                            Carteira userCarteira = dataSnapshot.getValue(Carteira.class);
+                            String saldoTotal = String.valueOf(Integer.parseInt(userCarteira.getSaldo()) + Integer.parseInt(saldoParaAddCarteira));
 
+                            HashMap<String, String> hashMap = new HashMap<>();
+                            hashMap.put("id", user.getUid());
+                            hashMap.put("saldo", saldoTotal);
 
+                            referenceCarteiraUser.setValue(hashMap);
+
+                            //Intent mainIntent = new Intent(PagamentoActivity.this, MainActivity.class);
+                            //startActivity(mainIntent);
+                            Toast.makeText(PagamentoActivity.this, "Parabéns, você adicionou saldo a sua carteira!", Toast.LENGTH_LONG).show();
+
+                            entrou = true;
+                            finish();
+                        }else if(!dataSnapshot.exists()){
+                            HashMap<String, String> hashMap = new HashMap<>();
+                            hashMap.put("id", user.getUid());
+                            hashMap.put("saldo", saldoParaAddCarteira);
+
+                            referenceCarteiraUser.setValue(hashMap);
+
+                            //Intent mainIntent = new Intent(PagamentoActivity.this, MainActivity.class);
+                            //startActivity(mainIntent);
+                            Toast.makeText(PagamentoActivity.this, "Parabéns, você adicionou saldo a sua carteira!", Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+                Toast.makeText(PagamentoActivity.this, "Fail: "+responseVO.getMessage(), Toast.LENGTH_LONG).show();
+                Log.d("ERRO1","ERRO: " + responseVO.getCode());
 
             }
 
             @Override
             public void onProcessing() {
+
+
+
+
                 Toast.makeText(PagamentoActivity.this, "Processing...", Toast.LENGTH_LONG).show();
                 Log.d("PROCESS1","PROCESS: " + "Processing");
             }

@@ -15,14 +15,14 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/txt_carteira_1"
+        app:layout_constraintBottom_toTopOf="@+id/txt_carteira_seu_saldo_e"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_carteira" />
 
     <TextView
-        android:id="@+id/txt_carteira_1"
+        android:id="@+id/txt_carteira_seu_saldo_e"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -34,12 +34,12 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/txt_carteira_2"
+        android:id="@+id/txt_carteira_saldo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:text="R$ 23,70"
+        android:text="R$ 00,00"
         android:textSize="40sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -58,7 +58,7 @@
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_carteira_2" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_carteira_saldo" />
 
     <Button
         android:id="@+id/btn_carteira_sacar"

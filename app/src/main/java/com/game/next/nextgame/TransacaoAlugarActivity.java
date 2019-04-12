@@ -1,6 +1,7 @@
 package com.game.next.nextgame;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,17 +10,28 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.game.next.nextgame.entidades.Carteira;
 import com.game.next.nextgame.entidades.Jogo;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class TransacaoAlugarActivity extends AppCompatActivity {
 
-    private TextView txtTransacaoValorAluguel, txtTransacaoValorCaucao;
+    private TextView txtTransacaoValorAluguel, txtTransacaoValorCaucao, txtTransacaoValorNaCarteira;
 
     private Jogo model;
 
     private String precoAluguelJogo, precoJogo, userId;
 
-    private Button btnTransacaoAlugar;
+    private Button btnTransacaoAlugar, btnAdicionarSaldo;
+
+    private DatabaseReference reference;
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +41,27 @@ public class TransacaoAlugarActivity extends AppCompatActivity {
         txtTransacaoValorAluguel = (TextView) findViewById(R.id.txt_transacao_valor_aluguel);
         txtTransacaoValorCaucao = (TextView) findViewById(R.id.txt_transacao_valor_caucao);
         btnTransacaoAlugar = (Button) findViewById(R.id.btn_transacao_alugar);
+        txtTransacaoValorNaCarteira = (TextView) findViewById(R.id.txt_transacao_valor_na_carteira);
+        btnAdicionarSaldo = (Button) findViewById(R.id.btn_transacao_adicionar);
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        reference = FirebaseDatabase.getInstance().getReference("CarteiraUsers").child(user.getUid());
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    Carteira userCarteira = dataSnapshot.getValue(Carteira.class);
+                    txtTransacaoValorNaCarteira.setText("R$ " + userCarteira.getSaldo() + ",00");
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("CARTEIRA","DEURUIM,");
+            }
+        });
 
         if (getIntent().hasExtra("USUARIOID")) {
             userId =  getIntent().getStringExtra("USUARIOID");
@@ -67,12 +100,40 @@ public class TransacaoAlugarActivity extends AppCompatActivity {
         btnTransacaoAlugar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent pagamentoIntent = new Intent(TransacaoAlugarActivity.this,PagamentoActivity.class);
-                pagamentoIntent.putExtra("USUARIOID",userId);
-                pagamentoIntent.putExtra("JOGODOUSUARIO",model);
-                pagamentoIntent.putExtra("ALUGUELJOGODOUSUARIO",precoAluguelJogo);
-                pagamentoIntent.putExtra("PRECOJOGODOUSUARIO",precoJogo);
-                startActivity(pagamentoIntent);
+                String valorNaCarteira = txtTransacaoValorNaCarteira.getText().toString();
+                String valorNaCarteiraNew = "";
+                String valorNaCarteiraNew2 = "";
+                String valorNaCarteiraNew3 = "";
+                valorNaCarteiraNew = valorNaCarteira.replace("R$ ","");
+                valorNaCarteiraNew2 = valorNaCarteiraNew.replace("R$","");
+                valorNaCarteiraNew3 = valorNaCarteiraNew2.replace(",00","");
+
+                String valorCaucao = txtTransacaoValorCaucao.getText().toString();
+                String valorCaucaoNew = "";
+                String valorCaucaoNew2 = "";
+                String valorCaucaoNew3 = "";
+                valorCaucaoNew = valorCaucao.replace("R$ ","");
+                valorCaucaoNew2 = valorCaucaoNew.replace("R$","");
+                valorCaucaoNew3 = valorCaucaoNew2.replace(",00","");
+
+                if(Integer.parseInt(valorNaCarteiraNew3) >= Integer.parseInt(valorCaucaoNew3)){
+                    Intent pagamentoIntent = new Intent(TransacaoAlugarActivity.this, ConfirmarComFornecedorActivity.class);
+                    pagamentoIntent.putExtra("USUARIOID", userId);
+                    pagamentoIntent.putExtra("JOGODOUSUARIO", model);
+                    pagamentoIntent.putExtra("ALUGUELJOGODOUSUARIO", precoAluguelJogo);
+                    pagamentoIntent.putExtra("PRECOJOGODOUSUARIO", precoJogo);
+                    startActivity(pagamentoIntent);
+                }else {
+                    Toast.makeText(TransacaoAlugarActivity.this,"Você não tem saldo suficiente! Adicione saldo para continuar.",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        btnAdicionarSaldo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent adicionarSaldoIntent = new Intent(TransacaoAlugarActivity.this, AdicionarSaldoActivity.class);
+                startActivity(adicionarSaldoIntent);
             }
         });
 

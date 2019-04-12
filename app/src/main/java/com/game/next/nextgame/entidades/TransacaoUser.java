@@ -6,6 +6,7 @@ public class TransacaoUser {
     private String fornecedorId;
     private String valorAluguel;
     private String valorCaucao;
+    private Jogo jogo;
 
     public String getUserId() {
         return userId;
@@ -37,5 +38,13 @@ public class TransacaoUser {
 
     public void setValorCaucao(String valorCaucao) {
         this.valorCaucao = valorCaucao;
+    }
+
+    public Jogo getJogo() {
+        return jogo;
+    }
+
+    public void setJogo(Jogo jogo) {
+        this.jogo = jogo;
     }
 }
