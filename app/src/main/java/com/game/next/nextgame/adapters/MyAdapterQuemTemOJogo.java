@@ -141,6 +141,7 @@ public class MyAdapterQuemTemOJogo extends RecyclerView.Adapter<MyAdapterQuemTem
                                 jogoDoUsuarioIntent.putExtra("NOMEUSER",user.getUsername());
                                 jogoDoUsuarioIntent.putExtra("PRECOALUGUEL",listaUserGames.get(position).getPrecoAluga());
                                 jogoDoUsuarioIntent.putExtra("PRECOVENDA",listaUserGames.get(position).getPrecoVenda());
+                                jogoDoUsuarioIntent.putExtra("TIME",listaUserGames.get(position).getTime());
                                 holder.layout.getContext().startActivity(jogoDoUsuarioIntent);
                                 ((ActivityQuemTemOJogo)holder.layout.getContext()).finish();
                             }

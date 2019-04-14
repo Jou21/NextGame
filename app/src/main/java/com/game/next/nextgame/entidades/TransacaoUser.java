@@ -7,6 +7,7 @@ public class TransacaoUser {
     private String valorAluguel;
     private String valorCaucao;
     private Jogo jogo;
+    private String time;
 
     public String getUserId() {
         return userId;
@@ -46,5 +47,13 @@ public class TransacaoUser {
 
     public void setJogo(Jogo jogo) {
         this.jogo = jogo;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }

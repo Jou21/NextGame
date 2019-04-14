@@ -43,6 +43,7 @@ public class JogoDoUsuarioActivity extends AppCompatActivity {
     private String nomeOtherUser;
     private String precoAluguel;
     private String precoVenda;
+    private String time;
 
     private LoopingViewPager viewPager;
     private MyViewPagerAdapter adapter;
@@ -210,6 +211,16 @@ public class JogoDoUsuarioActivity extends AppCompatActivity {
 
             //=============================================================================================================================================
 
+            if (getIntent().hasExtra("TIME")) {
+                time =  getIntent().getStringExtra("TIME");
+                //Toast.makeText(TransacaoAlugarActivity.this,""+fornecedorId,Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(JogoDoUsuarioActivity.this,"Activity cannot find  extras " + "TIME",Toast.LENGTH_SHORT).show();
+                Log.d("EXTRASJOGO","Activity cannot find  extras " + "TIME");
+            }
+
+            //=============================================================================================================================================
+
         } else {
             Toast.makeText(JogoDoUsuarioActivity.this,"Activity cannot find  extras " + "JOGOUSER",Toast.LENGTH_SHORT).show();
             Log.d("EXTRASJOGO","Activity cannot find  extras " + "JOGOUSER");
@@ -239,6 +250,7 @@ public class JogoDoUsuarioActivity extends AppCompatActivity {
                 transacaoAlugarIntent.putExtra("JOGODOUSUARIO",modelJodoDoUsuario);
                 transacaoAlugarIntent.putExtra("ALUGUELJOGODOUSUARIO",precoAluguel);
                 transacaoAlugarIntent.putExtra("PRECOJOGODOUSUARIO",precoVenda);
+                transacaoAlugarIntent.putExtra("TIME",time);
                 startActivity(transacaoAlugarIntent);
                 finish();
             }

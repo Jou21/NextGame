@@ -25,6 +25,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.game.next.nextgame.ActivityChat;
 import com.game.next.nextgame.ActivityIdentificaJogo;
@@ -289,16 +290,24 @@ public class FragmentA extends Fragment {
 
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode,resultCode,intent);
 
-        if(scanningResult != null){
-            contents = intent.getStringExtra("SCAN_RESULT");
-            //format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+        if(scanningResult != null) {
+            if(scanningResult.getContents() != null) {
+                if (intent.hasExtra("SCAN_RESULT")) {
+                    contents = intent.getStringExtra("SCAN_RESULT");
+                    //format = intent.getStringExtra("SCAN_RESULT_FORMAT");
 
-            Log.d("CODBAR2",""+contents);
+                    Log.d("CODBAR2", "" + contents);
 
-            //Intent telaIdentificaJogo = new Intent(getActivity(), ActivityIdentificaJogo.class);
-            //telaIdentificaJogo.putExtra("CODBAR",contents);
-            //startActivity(telaIdentificaJogo);
-            //getActivity().finish();
+                    //Intent telaIdentificaJogo = new Intent(getActivity(), ActivityIdentificaJogo.class);
+                    //telaIdentificaJogo.putExtra("CODBAR",contents);
+                    //startActivity(telaIdentificaJogo);
+                    //getActivity().finish();
+
+                } else {
+                    Toast.makeText(getActivity(), "Activity cannot find  extras " + "SCAN_RESULT", Toast.LENGTH_SHORT).show();
+                    Log.d("EXTRASJOGO", "Activity cannot find  extras " + "SCAN_RESULT");
+                }
+            }
         }
 
         super.onActivityResult(requestCode, resultCode, intent);

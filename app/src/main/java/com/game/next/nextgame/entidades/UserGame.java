@@ -23,7 +23,6 @@ public class UserGame {
     private String hora3;
     private String time;
 
-
     public String getUserId() {
         return userId;
     }
@@ -183,4 +182,5 @@ public class UserGame {
     public void setTime(String time) {
         this.time = time;
     }
+
 }

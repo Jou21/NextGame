@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.game.next.nextgame.ActivityIdentificaJogo;
 import com.game.next.nextgame.ActivityMeusJogos;
@@ -48,7 +49,7 @@ public class FragmentMeusJogos extends Fragment {
 
     private ArrayList<UserGame> userGames = new ArrayList<>();
 
-    private String contents;
+    private String contents = "";
 
 
     @Override
@@ -116,16 +117,29 @@ public class FragmentMeusJogos extends Fragment {
 
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode,resultCode,intent);
 
+        //Log.d("CODBAR",""+intent.getStringExtra("SCAN_RESULT"));
+
+        //Toast.makeText(getActivity(),"eae",Toast.LENGTH_LONG);
+
         if(scanningResult != null){
-            contents = intent.getStringExtra("SCAN_RESULT");
-            //format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+            if(scanningResult.getContents() != null) {
+                if (intent.hasExtra("SCAN_RESULT")) {
 
-            Log.d("CODBAR",""+contents);
+                    contents = intent.getStringExtra("SCAN_RESULT");
+                    //format = intent.getStringExtra("SCAN_RESULT_FORMAT");
 
-            Intent telaIdentificaJogo = new Intent(getActivity(), ActivityIdentificaJogo.class);
-            telaIdentificaJogo.putExtra("CODBAR",contents);
-            startActivity(telaIdentificaJogo);
-            //getActivity().finish();
+                    Log.d("CODBAR", "" + contents);
+
+                    Intent telaIdentificaJogo = new Intent(getActivity(), ActivityIdentificaJogo.class);
+                    telaIdentificaJogo.putExtra("CODBAR", contents);
+                    startActivity(telaIdentificaJogo);
+                    //getActivity().finish()
+
+                } else {
+                    Toast.makeText(getActivity(), "Activity cannot find  extras " + "SCAN_RESULT", Toast.LENGTH_SHORT).show();
+                    Log.d("EXTRASJOGO", "Activity cannot find  extras " + "SCAN_RESULT");
+                }
+            }
         }
 
         super.onActivityResult(requestCode, resultCode, intent);

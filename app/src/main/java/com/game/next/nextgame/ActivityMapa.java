@@ -100,11 +100,19 @@ public class ActivityMapa extends FragmentActivity implements OnMapReadyCallback
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference();
 
-        model = (HashMap<String, Object>) getIntent().getSerializableExtra("HASHMAP");
+        if (getIntent().hasExtra("HASHMAP")) {
+            model = (HashMap<String, Object>) getIntent().getSerializableExtra("HASHMAP");
+
+        } else {
+            Toast.makeText(ActivityMapa.this,"Activity cannot find  extras " + "HASHMAP",Toast.LENGTH_SHORT).show();
+            Log.d("EXTRASJOGO","Activity cannot find  extras " + "HASHMAP");
+        }
+
 
         btnMapsConfirmarLocal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 reference.child("UserGame").child(user.getUid()).push().setValue(model);
 
                 //Intent telaMeusJogos = new Intent(ActivityMapa.this, ActivityMeusJogos.class);

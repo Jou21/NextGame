@@ -32,7 +32,7 @@ public class TransacaoAlugarActivity extends AppCompatActivity {
 
     private Jogo model;
 
-    private String precoAluguelJogo, precoJogo, fornecedorId;
+    private String precoAluguelJogo, precoJogo, fornecedorId, time;
 
     private Button btnTransacaoAlugar, btnAdicionarSaldo;
 
@@ -69,6 +69,14 @@ public class TransacaoAlugarActivity extends AppCompatActivity {
                 Log.d("CARTEIRA","DEURUIM,");
             }
         });
+
+        if (getIntent().hasExtra("TIME")) {
+            time =  getIntent().getStringExtra("TIME");
+            //Toast.makeText(TransacaoAlugarActivity.this,""+fornecedorId,Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(TransacaoAlugarActivity.this,"Activity cannot find  extras " + "TIME",Toast.LENGTH_SHORT).show();
+            Log.d("EXTRASJOGO","Activity cannot find  extras " + "TIME");
+        }
 
         if (getIntent().hasExtra("USUARIOID")) {
             fornecedorId =  getIntent().getStringExtra("USUARIOID");
@@ -136,7 +144,7 @@ public class TransacaoAlugarActivity extends AppCompatActivity {
                                 TransacaoUser transacaoUser = snapshot.getValue(TransacaoUser.class);
                                 String key = snapshot.getKey();
 
-                                if(transacaoUser.getJogo().getCodigoDeBarra().equals(model.getCodigoDeBarra()) && transacaoUser.getFornecedorId().equals(fornecedorId)){ //mudar aqui
+                                if( (transacaoUser.getJogo().getCodigoDeBarra().equals(model.getCodigoDeBarra()) && transacaoUser.getFornecedorId().equals(fornecedorId)) && transacaoUser.getTime().equals(time) ){ //mudar aqui
 
                                     HashMap<String, Object> hashMap = new HashMap<>();
                                     hashMap.put("userId", user.getUid());
@@ -144,6 +152,7 @@ public class TransacaoAlugarActivity extends AppCompatActivity {
                                     hashMap.put("valorAluguel", precoAluguelJogo);
                                     hashMap.put("valorCaucao", precoJogo);
                                     hashMap.put("jogo",model);
+                                    hashMap.put("time",time);
 
                                     referenceTransacaoUser.child(key).setValue(hashMap);
 
@@ -160,6 +169,7 @@ public class TransacaoAlugarActivity extends AppCompatActivity {
                                 hashMap.put("valorAluguel", precoAluguelJogo);
                                 hashMap.put("valorCaucao", precoJogo);
                                 hashMap.put("jogo",model);
+                                hashMap.put("time",time);
 
                                 referenceTransacaoUser.push().setValue(hashMap);
                             }
