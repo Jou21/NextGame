@@ -1,11 +1,17 @@
 package com.game.next.nextgame;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowInsets;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -55,7 +61,9 @@ public class ActivityLogin extends AppCompatActivity{
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            setSystemBarTheme(ActivityLogin.this,true,R.color.branco);
+        }
 
         edtEmail = (EditText) findViewById(R.id.edt_login_email);
         edtSenha = (EditText) findViewById(R.id.edt_login_senha);
@@ -224,6 +232,20 @@ public class ActivityLogin extends AppCompatActivity{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public static final void setSystemBarTheme(final Activity pActivity, final boolean textIsDark, int corStatusBar) {
+
+        Window window = pActivity.getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(ContextCompat.getColor(pActivity,corStatusBar));
+
+        // Fetch the current flags.
+        final int lFlags = window.getDecorView().getSystemUiVisibility();
+        // Update the SystemUiVisibility dependening on whether we want a Light or Dark theme.
+        pActivity.getWindow().getDecorView().setSystemUiVisibility(textIsDark ? (lFlags | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR) : (lFlags & ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR));
     }
 
 }

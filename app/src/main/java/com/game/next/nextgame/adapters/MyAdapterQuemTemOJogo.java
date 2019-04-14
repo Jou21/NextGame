@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.game.next.nextgame.ActivityQuemTemOJogo;
@@ -101,41 +102,54 @@ public class MyAdapterQuemTemOJogo extends RecyclerView.Adapter<MyAdapterQuemTem
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    User user = postSnapshot.getValue(User.class);
+                    final User user = postSnapshot.getValue(User.class);
 
                     if(user.getId().equals(listaUserGames.get(position).getUserId())){
 
-                        userId = user.getId();
-                        nomeOtherUser = user.getUsername();
-                        imgOtherUserURL = user.getImageURL();
+                        holder.firstLine.setText(user.getUsername());
+                        holder.txtAluguel.setText("R$" + listaUserGames.get(position).getPrecoAluga() + ",00");
+                        holder.txtCompra.setText("R$" + listaUserGames.get(position).getPrecoVenda() + ",00");
 
-                        precoAluguel = listaUserGames.get(position).getPrecoAluga();
-                        precoVenda = listaUserGames.get(position).getPrecoVenda();
+                        if (!user.getImageURL().equals("default")){
+
+                            Picasso.get().load(user.getImageURL()).into(holder.imgUser, new Callback() {
+                                @Override
+                                public void onSuccess() {
+
+                                }
+
+                                @Override
+                                public void onError(Exception e) {
+
+                                }
+                            });
+
+                        } else {
+                            holder.imgUser.setImageResource(R.mipmap.ic_launcher);
+                        }
+
+                        holder.itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                //Log.d("USERIDS",listaUserGames.get(position).getPrecoAluga());
+
+                                Intent jogoDoUsuarioIntent = new Intent(holder.layout.getContext(), JogoDoUsuarioActivity.class);
+                                jogoDoUsuarioIntent.putExtra("USERID",listaUserGames.get(position).getUserId());
+                                jogoDoUsuarioIntent.putExtra("JOGOUSER",jogo);
+                                jogoDoUsuarioIntent.putExtra("IMAGEMUSER",user.getImageURL());
+                                jogoDoUsuarioIntent.putExtra("NOMEUSER",user.getUsername());
+                                jogoDoUsuarioIntent.putExtra("PRECOALUGUEL",listaUserGames.get(position).getPrecoAluga());
+                                jogoDoUsuarioIntent.putExtra("PRECOVENDA",listaUserGames.get(position).getPrecoVenda());
+                                holder.layout.getContext().startActivity(jogoDoUsuarioIntent);
+                                ((ActivityQuemTemOJogo)holder.layout.getContext()).finish();
+                            }
+                        });
                     }
 
                 }
 
-                holder.firstLine.setText(nomeOtherUser);
-                holder.txtAluguel.setText("R$" + precoAluguel + ",00");
-                holder.txtCompra.setText("R$" + precoVenda + ",00");
 
-                if (!imgOtherUserURL.equals("default")){
-
-                    Picasso.get().load(imgOtherUserURL).into(holder.imgUser, new Callback() {
-                        @Override
-                        public void onSuccess() {
-
-                        }
-
-                        @Override
-                        public void onError(Exception e) {
-
-                        }
-                    });
-
-                } else {
-                    holder.imgUser.setImageResource(R.mipmap.ic_launcher);
-                }
 
             }
 
@@ -182,20 +196,7 @@ public class MyAdapterQuemTemOJogo extends RecyclerView.Adapter<MyAdapterQuemTem
             }
         });
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent jogoDoUsuarioIntent = new Intent(holder.layout.getContext(), JogoDoUsuarioActivity.class);
-                jogoDoUsuarioIntent.putExtra("USERID",userId);
-                jogoDoUsuarioIntent.putExtra("JOGOUSER",jogo);
-                jogoDoUsuarioIntent.putExtra("IMAGEMUSER",imgOtherUserURL);
-                jogoDoUsuarioIntent.putExtra("NOMEUSER",nomeOtherUser);
-                jogoDoUsuarioIntent.putExtra("PRECOALUGUEL",precoAluguel);
-                jogoDoUsuarioIntent.putExtra("PRECOVENDA",precoVenda);
-                holder.layout.getContext().startActivity(jogoDoUsuarioIntent);
-                ((ActivityQuemTemOJogo)holder.layout.getContext()).finish();
-            }
-        });
+
 
     }
 

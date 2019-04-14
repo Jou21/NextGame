@@ -107,8 +107,8 @@ public class ActivityMapa extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View v) {
                 reference.child("UserGame").child(user.getUid()).push().setValue(model);
 
-                Intent telaMeusJogos = new Intent(ActivityMapa.this, ActivityMeusJogos.class);
-                startActivity(telaMeusJogos);
+                //Intent telaMeusJogos = new Intent(ActivityMapa.this, ActivityMeusJogos.class);
+                //startActivity(telaMeusJogos);
                 finish();
             }
         });

@@ -1,5 +1,7 @@
 package com.game.next.nextgame;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +14,8 @@ import android.widget.Toast;
 
 import com.game.next.nextgame.entidades.Carteira;
 import com.game.next.nextgame.entidades.Jogo;
+import com.game.next.nextgame.entidades.TransacaoUser;
+import com.game.next.nextgame.entidades.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -20,17 +24,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+
 public class TransacaoAlugarActivity extends AppCompatActivity {
 
     private TextView txtTransacaoValorAluguel, txtTransacaoValorCaucao, txtTransacaoValorNaCarteira;
 
     private Jogo model;
 
-    private String precoAluguelJogo, precoJogo, userId;
+    private String precoAluguelJogo, precoJogo, fornecedorId;
 
     private Button btnTransacaoAlugar, btnAdicionarSaldo;
 
-    private DatabaseReference reference;
+    private DatabaseReference reference, referenceTransacaoUser;
     private FirebaseUser user;
 
     @Override
@@ -46,6 +52,7 @@ public class TransacaoAlugarActivity extends AppCompatActivity {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("CarteiraUsers").child(user.getUid());
+        referenceTransacaoUser = FirebaseDatabase.getInstance().getReference("Transacoes").child(user.getUid());
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -64,7 +71,8 @@ public class TransacaoAlugarActivity extends AppCompatActivity {
         });
 
         if (getIntent().hasExtra("USUARIOID")) {
-            userId =  getIntent().getStringExtra("USUARIOID");
+            fornecedorId =  getIntent().getStringExtra("USUARIOID");
+            //Toast.makeText(TransacaoAlugarActivity.this,""+fornecedorId,Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(TransacaoAlugarActivity.this,"Activity cannot find  extras " + "USUARIOID",Toast.LENGTH_SHORT).show();
             Log.d("EXTRASJOGO","Activity cannot find  extras " + "USUARIOID");
@@ -117,12 +125,61 @@ public class TransacaoAlugarActivity extends AppCompatActivity {
                 valorCaucaoNew3 = valorCaucaoNew2.replace(",00","");
 
                 if(Integer.parseInt(valorNaCarteiraNew3) >= Integer.parseInt(valorCaucaoNew3)){
-                    Intent pagamentoIntent = new Intent(TransacaoAlugarActivity.this, ConfirmarComFornecedorActivity.class);
-                    pagamentoIntent.putExtra("USUARIOID", userId);
-                    pagamentoIntent.putExtra("JOGODOUSUARIO", model);
-                    pagamentoIntent.putExtra("ALUGUELJOGODOUSUARIO", precoAluguelJogo);
-                    pagamentoIntent.putExtra("PRECOJOGODOUSUARIO", precoJogo);
-                    startActivity(pagamentoIntent);
+
+                    referenceTransacaoUser.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                            boolean entrou = false;
+
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                                TransacaoUser transacaoUser = snapshot.getValue(TransacaoUser.class);
+                                String key = snapshot.getKey();
+
+                                if(transacaoUser.getJogo().getCodigoDeBarra().equals(model.getCodigoDeBarra()) && transacaoUser.getFornecedorId().equals(fornecedorId)){ //mudar aqui
+
+                                    HashMap<String, Object> hashMap = new HashMap<>();
+                                    hashMap.put("userId", user.getUid());
+                                    hashMap.put("fornecedorId", fornecedorId);
+                                    hashMap.put("valorAluguel", precoAluguelJogo);
+                                    hashMap.put("valorCaucao", precoJogo);
+                                    hashMap.put("jogo",model);
+
+                                    referenceTransacaoUser.child(key).setValue(hashMap);
+
+                                    entrou = true;
+                                    break;
+                                }
+                            }
+
+                            if(entrou == false){
+
+                                HashMap<String, Object> hashMap = new HashMap<>();
+                                hashMap.put("userId", user.getUid());
+                                hashMap.put("fornecedorId", fornecedorId);
+                                hashMap.put("valorAluguel", precoAluguelJogo);
+                                hashMap.put("valorCaucao", precoJogo);
+                                hashMap.put("jogo",model);
+
+                                referenceTransacaoUser.push().setValue(hashMap);
+                            }
+
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+                    Intent intent = new Intent(TransacaoAlugarActivity.this, MessageActivity.class);
+                    intent.putExtra("userid", fornecedorId);
+                    intent.putExtra("MOSTRADIALOG", "ALUGAR");
+                    intent.putExtra("JOGODOUSUARIO", model);
+                    startActivity(intent);
+                    finish();
+
                 }else {
                     Toast.makeText(TransacaoAlugarActivity.this,"Você não tem saldo suficiente! Adicione saldo para continuar.",Toast.LENGTH_SHORT).show();
                 }

@@ -307,7 +307,7 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
 
                             entrou = true;
                             finish();
-                        }else if(!dataSnapshot.exists()){
+                        }else if(!dataSnapshot.exists() && entrou == false){
                             HashMap<String, String> hashMap = new HashMap<>();
                             hashMap.put("id", user.getUid());
                             hashMap.put("saldo", saldoParaAddCarteira);
@@ -317,6 +317,8 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
                             //Intent mainIntent = new Intent(PagamentoActivity.this, MainActivity.class);
                             //startActivity(mainIntent);
                             Toast.makeText(PagamentoActivity.this, "Parabéns, você adicionou saldo a sua carteira!", Toast.LENGTH_LONG).show();
+                            entrou = true;
+                            finish();
                         }
 
                     }

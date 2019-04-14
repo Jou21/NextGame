@@ -1,5 +1,7 @@
 package com.game.next.nextgame;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
@@ -8,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -15,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.game.next.nextgame.entidades.Jogo;
 import com.game.next.nextgame.notifications.Client;
 import com.game.next.nextgame.notifications.Data;
 import com.game.next.nextgame.notifications.MyResponse;
@@ -68,10 +72,19 @@ public class MessageActivity extends AppCompatActivity {
 
     boolean notify = false;
 
+    private Jogo model;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
+
+        if (getIntent().hasExtra("JOGODOUSUARIO")) {
+            model = (Jogo) getIntent().getSerializableExtra("JOGODOUSUARIO");
+        } else {
+            //Toast.makeText(MessageActivity.this,"Activity cannot find  extras " + "JOGODOUSUARIO",Toast.LENGTH_SHORT).show();
+            //Log.d("EXTRASJOGO","Activity cannot find  extras " + "JOGODOUSUARIO");
+        }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -101,6 +114,39 @@ public class MessageActivity extends AppCompatActivity {
         intent = getIntent();
         userid = intent.getStringExtra("userid");
         fuser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (getIntent().hasExtra("MOSTRADIALOG")) {
+            String alugarOuComprar = getIntent().getStringExtra("MOSTRADIALOG");
+
+            // 1. Instantiate an AlertDialog.Builder with its constructor
+            AlertDialog.Builder builder = new AlertDialog.Builder(MessageActivity.this);
+
+            // 2. Chain together various setter methods to set the dialog characteristics
+            builder.setMessage("Para concluir o processo você precisa se encontrar com o dono do jogo. Converse com ele e marque um local de encontro!").setTitle("Parabéns você está quase lá!");
+
+            // Add the buttons
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // User clicked OK button
+                }
+            });
+
+            // 3. Get the AlertDialog from create()
+            AlertDialog dialog = builder.create();
+
+            dialog.show();
+
+            if(alugarOuComprar.equals("ALUGAR")){
+                sendMessage(fuser.getUid(), userid, "Olá, tudo jóia! Gostaria de alugar o jogo \'" + model.getNome() + "\' com você. Teria interesse?");
+            } else {
+                sendMessage(fuser.getUid(), userid, "Olá, tudo jóia! Gostaria de comprar o jogo \'" + model.getNome() + "\' com você. Teria interesse?");
+            }
+
+
+
+        } else {
+            //Toast.makeText(MessageActivity.this,"Activity cannot find  extras " + "MOSTRADIALOG",Toast.LENGTH_SHORT).show();
+        }
 
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
