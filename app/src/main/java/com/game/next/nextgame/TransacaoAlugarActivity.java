@@ -144,7 +144,7 @@ public class TransacaoAlugarActivity extends AppCompatActivity {
                                 TransacaoUser transacaoUser = snapshot.getValue(TransacaoUser.class);
                                 String key = snapshot.getKey();
 
-                                if( (transacaoUser.getJogo().getCodigoDeBarra().equals(model.getCodigoDeBarra()) && transacaoUser.getFornecedorId().equals(fornecedorId)) && transacaoUser.getTime().equals(time) ){ //mudar aqui
+                                if( (transacaoUser.getJogo().getCodigoDeBarra().equals(model.getCodigoDeBarra()) && transacaoUser.getFornecedorId().equals(fornecedorId)) && transacaoUser.getTime().equals(time) ){
 
                                     HashMap<String, Object> hashMap = new HashMap<>();
                                     hashMap.put("userId", user.getUid());
@@ -153,6 +153,7 @@ public class TransacaoAlugarActivity extends AppCompatActivity {
                                     hashMap.put("valorCaucao", precoJogo);
                                     hashMap.put("jogo",model);
                                     hashMap.put("time",time);
+                                    hashMap.put("status","INICIO");
 
                                     referenceTransacaoUser.child(key).setValue(hashMap);
 
@@ -170,6 +171,7 @@ public class TransacaoAlugarActivity extends AppCompatActivity {
                                 hashMap.put("valorCaucao", precoJogo);
                                 hashMap.put("jogo",model);
                                 hashMap.put("time",time);
+                                hashMap.put("status","INICIO");
 
                                 referenceTransacaoUser.push().setValue(hashMap);
                             }

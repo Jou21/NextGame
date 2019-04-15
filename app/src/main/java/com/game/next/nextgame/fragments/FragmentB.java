@@ -286,27 +286,7 @@ public class FragmentB extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 
-        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode,resultCode,intent);
 
-        if(scanningResult != null){
-            if(scanningResult.getContents() != null) {
-                if (intent.hasExtra("SCAN_RESULT")) {
-                    contents = intent.getStringExtra("SCAN_RESULT");
-                    //format = intent.getStringExtra("SCAN_RESULT_FORMAT");
-
-                    Log.d("CODBAR2", "" + contents);
-
-                    //Intent telaIdentificaJogo = new Intent(getActivity(), ActivityIdentificaJogo.class);
-                    //telaIdentificaJogo.putExtra("CODBAR",contents);
-                    //startActivity(telaIdentificaJogo);
-                    //getActivity().finish();
-
-                } else {
-                    Toast.makeText(getActivity(), "Activity cannot find  extras " + "SCAN_RESULT", Toast.LENGTH_SHORT).show();
-                    Log.d("EXTRASJOGO", "Activity cannot find  extras " + "SCAN_RESULT");
-                }
-            }
-        }
 
         super.onActivityResult(requestCode, resultCode, intent);
     }

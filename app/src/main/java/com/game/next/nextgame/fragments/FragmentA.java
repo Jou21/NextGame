@@ -4,7 +4,10 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -32,6 +35,8 @@ import com.game.next.nextgame.ActivityIdentificaJogo;
 import com.game.next.nextgame.ActivityMapa;
 import com.game.next.nextgame.ActivityMeusJogos;
 import com.game.next.nextgame.CaptureActivityPortrait;
+import com.game.next.nextgame.MainActivity;
+import com.game.next.nextgame.MessageActivity;
 import com.game.next.nextgame.R;
 import com.game.next.nextgame.adapters.MyAdapterOfRecyclers;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -57,8 +62,6 @@ public class FragmentA extends Fragment {
     private AutoCompleteTextView autoCompletePesquisar;
 
     private Button btnMyGames, btnChat, btnScan, btnMapa;
-
-    private String contents;
 
     @SuppressLint("RestrictedApi")
     @Nullable
@@ -144,6 +147,8 @@ public class FragmentA extends Fragment {
                 startActivity(telaMeusJogos);
             }
         });
+
+
 
         return view;
     }
@@ -287,29 +292,6 @@ public class FragmentA extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-
-        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode,resultCode,intent);
-
-        if(scanningResult != null) {
-            if(scanningResult.getContents() != null) {
-                if (intent.hasExtra("SCAN_RESULT")) {
-                    contents = intent.getStringExtra("SCAN_RESULT");
-                    //format = intent.getStringExtra("SCAN_RESULT_FORMAT");
-
-                    Log.d("CODBAR2", "" + contents);
-
-                    //Intent telaIdentificaJogo = new Intent(getActivity(), ActivityIdentificaJogo.class);
-                    //telaIdentificaJogo.putExtra("CODBAR",contents);
-                    //startActivity(telaIdentificaJogo);
-                    //getActivity().finish();
-
-                } else {
-                    Toast.makeText(getActivity(), "Activity cannot find  extras " + "SCAN_RESULT", Toast.LENGTH_SHORT).show();
-                    Log.d("EXTRASJOGO", "Activity cannot find  extras " + "SCAN_RESULT");
-                }
-            }
-        }
-
         super.onActivityResult(requestCode, resultCode, intent);
     }
 

@@ -8,6 +8,7 @@ public class TransacaoUser {
     private String valorCaucao;
     private Jogo jogo;
     private String time;
+    private String status;
 
     public String getUserId() {
         return userId;
@@ -55,5 +56,13 @@ public class TransacaoUser {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
