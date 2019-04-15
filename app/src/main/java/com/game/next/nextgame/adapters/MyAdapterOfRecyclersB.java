@@ -27,6 +27,7 @@ import java.util.Arrays;
 
 public class MyAdapterOfRecyclersB extends RecyclerView.Adapter<MyAdapterOfRecyclersB.ViewHolder> {
 
+    static final String PACKAGE_ID = "com.game.next.nextgame:id/";
 
     private FragmentB fragmentB;
     private LinearLayoutManager layoutManager;
@@ -254,26 +255,37 @@ public class MyAdapterOfRecyclersB extends RecyclerView.Adapter<MyAdapterOfRecyc
         //====================Auto Complete Pesquisar========================================================
         if(listTodosJogosPS4.isEmpty() == false) {
 
-            autoCompletePesquisar = (AutoCompleteTextView) fragmentB.getActivity().findViewById(R.id.pesquisarAutoCompleteFragmentB);
+            if(fragmentB != null){
 
-            adapter = new MyAdapterListJogos(fragmentB.getContext(), listTodosJogosPS4);
-            autoCompletePesquisar.setAdapter(adapter);
+                int id = R.id.pesquisarAutoCompleteFragmentA;
+                String name = fragmentB.getContext().getResources().getResourceName(id);
+                if (name == null || !name.startsWith(PACKAGE_ID)) {
 
-            autoCompletePesquisar.setThreshold(2);//Começa a procurar do segundo caractere
+                    autoCompletePesquisar = (AutoCompleteTextView) fragmentB.getActivity().findViewById(R.id.pesquisarAutoCompleteFragmentB);
 
-            autoCompletePesquisar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    adapter = new MyAdapterListJogos(fragmentB.getContext(), listTodosJogosPS4);
+                    autoCompletePesquisar.setAdapter(adapter);
 
-                    final Jogo jogoSelecionado = (Jogo) parent.getItemAtPosition(position);
+                    autoCompletePesquisar.setThreshold(2);//Começa a procurar do segundo caractere
 
-                    Intent quemTemOJogo = new Intent(fragmentB.getContext(), ActivityQuemTemOJogo.class);
-                    quemTemOJogo.putExtra("JOGO",jogoSelecionado);
-                    fragmentB.getContext().startActivity(quemTemOJogo);
-                    //fragmentB.getActivity().finish();
+                    autoCompletePesquisar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                            final Jogo jogoSelecionado = (Jogo) parent.getItemAtPosition(position);
+
+                            Intent quemTemOJogo = new Intent(fragmentB.getContext(), ActivityQuemTemOJogo.class);
+                            quemTemOJogo.putExtra("JOGO", jogoSelecionado);
+                            fragmentB.getContext().startActivity(quemTemOJogo);
+                            //fragmentB.getActivity().finish();
+
+                        }
+                    });
                 }
-            });
+
+            }
+
+
 
         }
         //======================================================================================================

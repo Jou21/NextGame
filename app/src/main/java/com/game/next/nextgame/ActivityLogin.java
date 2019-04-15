@@ -248,5 +248,37 @@ public class ActivityLogin extends AppCompatActivity{
         pActivity.getWindow().getDecorView().setSystemUiVisibility(textIsDark ? (lFlags | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR) : (lFlags & ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR));
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        verificarUsuarioLogado();
+    }
+
+    public void verificarUsuarioLogado(){
+        mAuth = getFirebaseAutenticacao();
+
+        if( mAuth.getCurrentUser() != null ){
+            Intent it = new Intent(ActivityLogin.this, MainActivity.class);
+            startActivity(it);
+            finish();
+        }
+    }
+
+    //retorna a instancia do FirebaseAuth
+    public FirebaseAuth getFirebaseAutenticacao(){
+        if( mAuth == null ){
+            mAuth = FirebaseAuth.getInstance();
+        }
+        return mAuth;
+
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        //finishAffinity();
+        super.onBackPressed();
+    }
 }
 

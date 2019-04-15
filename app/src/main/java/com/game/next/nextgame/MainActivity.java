@@ -1,8 +1,11 @@
 package com.game.next.nextgame;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -82,6 +85,23 @@ public class MainActivity extends AppCompatActivity {
         item2 = (LinearLayout) tabPS4.getChildAt(1);
         item2.setBackgroundColor(Color.parseColor("#0065DE"));
 
+        referenceTransacaoUser.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    //transacaoUser = snapshot.getValue(TransacaoUser.class);
+                    //String key = snapshot.getKey();
+                    //Toast.makeText(MainActivity.this,dataSnapshot.getKey(),Toast.LENGTH_LONG);
+                Log.d("ENTROUUU1","ENTROUUU1");
+                //}
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -109,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                                 transacaoUser = snapshot.getValue(TransacaoUser.class);
                                 String key = snapshot.getKey();
 
-                                if(transacaoUser.getJogo().getCodigoDeBarra().equals(contents) ){
+                                if(transacaoUser.getJogo().getCodigoDeBarra().equals(contents) && transacaoUser.getFornecedorId() != user.getUid() ){
 
                                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
@@ -151,4 +171,23 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /*
+    @Override
+    protected void onResume() {
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.package.ACTION_LOGOUT");
+        registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.d("onReceive","Logout in progress");
+                //At this point you should start the login activity and finish this one
+                finish();
+            }
+        }, intentFilter);
+
+
+        super.onResume();
+    }
+    */
 }

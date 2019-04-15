@@ -24,6 +24,8 @@ import java.util.ArrayList;
 
 public class MyAdapterOfRecyclers extends RecyclerView.Adapter<MyAdapterOfRecyclers.ViewHolder> {
 
+    static final String PACKAGE_ID = "com.game.next.nextgame:id/";
+
     private FragmentA fragmentA;
     private LinearLayoutManager layoutManager;
     private MyAdapterTitulos[] myAdapterTitulos = new MyAdapterTitulos[8];
@@ -253,26 +255,38 @@ public class MyAdapterOfRecyclers extends RecyclerView.Adapter<MyAdapterOfRecycl
         //====================Auto Complete Pesquisar========================================================
         if(listTodosJogosXbox.isEmpty() == false) {
 
-            autoCompletePesquisar = (AutoCompleteTextView) fragmentA.getActivity().findViewById(R.id.pesquisarAutoCompleteFragmentA);
+            if(fragmentA != null) {
 
-            adapter = new MyAdapterListJogos(fragmentA.getContext(), listTodosJogosXbox);
-            autoCompletePesquisar.setAdapter(adapter);
+                int id = R.id.pesquisarAutoCompleteFragmentA;
+                String name = fragmentA.getContext().getResources().getResourceName(id);
+                if (name == null || !name.startsWith(PACKAGE_ID)) {
+                    // id is not an id used by a layout element.
 
-            autoCompletePesquisar.setThreshold(2);//Começa a procurar do segundo caractere
+                autoCompletePesquisar = (AutoCompleteTextView) fragmentA.getActivity().findViewById(R.id.pesquisarAutoCompleteFragmentA);
 
-            autoCompletePesquisar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                adapter = new MyAdapterListJogos(fragmentA.getContext(), listTodosJogosXbox);
+                autoCompletePesquisar.setAdapter(adapter);
 
-                    final Jogo jogoSelecionado = (Jogo) parent.getItemAtPosition(position);
+                autoCompletePesquisar.setThreshold(2);//Começa a procurar do segundo caractere
 
-                    Intent quemTemOJogo = new Intent(fragmentA.getContext(), ActivityQuemTemOJogo.class);
-                    quemTemOJogo.putExtra("JOGO",jogoSelecionado);
-                    fragmentA.getContext().startActivity(quemTemOJogo);
-                    //fragmentA.getActivity().finish();
+                autoCompletePesquisar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                }
-            });
+                        final Jogo jogoSelecionado = (Jogo) parent.getItemAtPosition(position);
+
+                        Intent quemTemOJogo = new Intent(fragmentA.getContext(), ActivityQuemTemOJogo.class);
+                        quemTemOJogo.putExtra("JOGO", jogoSelecionado);
+                        fragmentA.getContext().startActivity(quemTemOJogo);
+                        //fragmentA.getActivity().finish();
+
+                    }
+                });
+
+            }
+            }
+
+
 
         }
         //======================================================================================================
