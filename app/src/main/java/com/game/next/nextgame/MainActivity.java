@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private MyFragmentPagerAdapter myFragmentPagerAdapter;
 
     private FirebaseUser user;
-    private DatabaseReference reference, referenceTransacaoUser;
+    private DatabaseReference referenceTransacaoUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
-        reference = FirebaseDatabase.getInstance().getReference();
         referenceTransacaoUser = FirebaseDatabase.getInstance().getReference("Transacoes").child(user.getUid());
 
         tabXbox = (LinearLayout) mTabLayout.getChildAt(0);
@@ -82,71 +81,6 @@ public class MainActivity extends AppCompatActivity {
         tabPS4 = (LinearLayout) mTabLayout.getChildAt(0);
         item2 = (LinearLayout) tabPS4.getChildAt(1);
         item2.setBackgroundColor(Color.parseColor("#0065DE"));
-
-
-
-        //NÃO ESTA LENDO O LOG.D
-        referenceTransacaoUser.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d("CHAVE","" + "ENTROU1");
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    transacaoUser = snapshot.getValue(TransacaoUser.class);
-                    String key = snapshot.getKey();
-
-                    Log.d("CHAVE","" + key);
-                    Toast.makeText(MainActivity.this,"CHAVE " + key, Toast.LENGTH_LONG).show();
-
-                    if(transacaoUser.getStatus() == "ENTREGADO"){
-
-                        if(transacaoUser.getFornecedorId() == user.getUid()){
-
-                            referenceTransacaoUser.child(key).child("status").setValue("CONFIRMADO");
-
-                            reference.child("Users").child(transacaoUser.getUserId()).addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    User usuario = dataSnapshot.getValue(User.class);
-
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-
-                                    builder.setMessage("Você acabou de entregar o jogo \'" + transacaoUser.getJogo().getNome() + "\' para " + usuario.getUsername() + "!").setTitle("PARABÉNS!!!");
-                                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            //referenceTransacaoUser.child("status").setValue("CONFIRMADO");
-                                            //referenceTransacaoUser.child(key).child("status").setValue("CONFIRMADO");
-                                        }
-                                    });
-                                    /*
-                                    builder.setNegativeButton("NÃO", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-
-                                        }
-                                    });
-                                    */
-                                    AlertDialog dialog = builder.create();
-                                    dialog.show();
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                }
-                            });
-
-                        }
-
-                    }
-
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
 
     }
 
@@ -177,22 +111,12 @@ public class MainActivity extends AppCompatActivity {
 
                                 if(transacaoUser.getJogo().getCodigoDeBarra().equals(contents) ){
 
-                                    //Log.d("CHAVE","" + key);
-
                                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
-                                    /*
-                                    builder.setMessage("Você já está com o jogo " + transacaoUser.getJogo().getNome() + " em mãos?").setTitle("ATENÇÃO!");
-                                    builder.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            referenceTransacaoUser.child("status").setValue("PROCESSANDO");
-                                        }
-                                    });
-                                    */
                                     builder.setMessage("Você acaba de receber o jogo " + transacaoUser.getJogo().getNome() + ". Boa diversão!!!").setTitle("PARABÉNS!!!");
                                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
-                                            //referenceTransacaoUser.child("status").setValue("ENTREGADO");
+
                                         }
                                     });
 
@@ -225,16 +149,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    }
-
-    private String formatNumber(double distance) {
-        String unit = " m";
-        if (distance > 1000) {
-            distance /= 1000;
-            unit = " km";
-        }
-
-        return String.format("%4.1f%s", distance, unit);
     }
 
 }
