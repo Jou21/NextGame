@@ -73,6 +73,8 @@ public class FragmentA extends Fragment {
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         exibirProgress(true);
 
+        autoCompletePesquisar = (AutoCompleteTextView) view.findViewById(R.id.pesquisarAutoCompleteFragmentA);
+
         layoutFragmentXbox = (ConstraintLayout) view.findViewById(R.id.layoutFragmentXbox);
         layoutButtons = (LinearLayout) view.findViewById(R.id.layoutButtons);
         layoutContent = (LinearLayout) view.findViewById(R.id.layoutContent);
@@ -82,7 +84,7 @@ public class FragmentA extends Fragment {
         recyclerViewOfRecyclers.setHasFixedSize(true);
         layoutManagerOfRecyclers = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerViewOfRecyclers.setLayoutManager(layoutManagerOfRecyclers);
-        mAdapterOfRecyclers = new MyAdapterOfRecyclers(this);
+        mAdapterOfRecyclers = new MyAdapterOfRecyclers(this, autoCompletePesquisar);
         recyclerViewOfRecyclers.setAdapter(mAdapterOfRecyclers);
 
         fab = (FloatingActionButton) view.findViewById(R.id.floatingActionButton);
@@ -105,8 +107,6 @@ public class FragmentA extends Fragment {
         btnChat = (Button) view.findViewById(R.id.chat_xbox);
         btnScan = (Button) view.findViewById(R.id.scan_xbox);
         btnMapa = (Button) view.findViewById(R.id.mapa_xbox);
-
-        autoCompletePesquisar = (AutoCompleteTextView) view.findViewById(R.id.pesquisarAutoCompleteFragmentA);
 
         btnMyGames.setOnClickListener(new View.OnClickListener() {
             @Override

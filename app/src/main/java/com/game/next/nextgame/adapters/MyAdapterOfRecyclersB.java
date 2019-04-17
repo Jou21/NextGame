@@ -49,8 +49,9 @@ public class MyAdapterOfRecyclersB extends RecyclerView.Adapter<MyAdapterOfRecyc
         }
     }
 
-    public MyAdapterOfRecyclersB(final FragmentB fragmentB) {
+    public MyAdapterOfRecyclersB(final FragmentB fragmentB, AutoCompleteTextView autoCompletePesquisar) {
         this.fragmentB = fragmentB;
+        this.autoCompletePesquisar = autoCompletePesquisar;
 
         final ArrayList<Jogo> jogosPS4 = new ArrayList<>();
 
@@ -255,13 +256,7 @@ public class MyAdapterOfRecyclersB extends RecyclerView.Adapter<MyAdapterOfRecyc
         //====================Auto Complete Pesquisar========================================================
         if(listTodosJogosPS4.isEmpty() == false) {
 
-            if(fragmentB != null){
-
-                int id = R.id.pesquisarAutoCompleteFragmentA;
-                String name = fragmentB.getContext().getResources().getResourceName(id);
-                if (name == null || !name.startsWith(PACKAGE_ID)) {
-
-                    autoCompletePesquisar = (AutoCompleteTextView) fragmentB.getActivity().findViewById(R.id.pesquisarAutoCompleteFragmentB);
+            if(fragmentB != null && autoCompletePesquisar != null){
 
                     adapter = new MyAdapterListJogos(fragmentB.getContext(), listTodosJogosPS4);
                     autoCompletePesquisar.setAdapter(adapter);
@@ -281,7 +276,7 @@ public class MyAdapterOfRecyclersB extends RecyclerView.Adapter<MyAdapterOfRecyc
 
                         }
                     });
-                }
+                //}
 
             }
 

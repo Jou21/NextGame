@@ -46,8 +46,9 @@ public class MyAdapterOfRecyclers extends RecyclerView.Adapter<MyAdapterOfRecycl
         }
     }
 
-    public MyAdapterOfRecyclers(final FragmentA fragmentA) {
+    public MyAdapterOfRecyclers(final FragmentA fragmentA, AutoCompleteTextView autoCompletePesquisar) {
         this.fragmentA = fragmentA;
+        this.autoCompletePesquisar = autoCompletePesquisar;
 
         final ArrayList<Jogo> jogosXbox = new ArrayList<>();
 
@@ -255,14 +256,7 @@ public class MyAdapterOfRecyclers extends RecyclerView.Adapter<MyAdapterOfRecycl
         //====================Auto Complete Pesquisar========================================================
         if(listTodosJogosXbox.isEmpty() == false) {
 
-            if(fragmentA != null) {
-
-                int id = R.id.pesquisarAutoCompleteFragmentA;
-                String name = fragmentA.getContext().getResources().getResourceName(id);
-                if (name == null || !name.startsWith(PACKAGE_ID)) {
-                    // id is not an id used by a layout element.
-
-                autoCompletePesquisar = (AutoCompleteTextView) fragmentA.getActivity().findViewById(R.id.pesquisarAutoCompleteFragmentA);
+            if(fragmentA != null && autoCompletePesquisar != null) {
 
                 adapter = new MyAdapterListJogos(fragmentA.getContext(), listTodosJogosXbox);
                 autoCompletePesquisar.setAdapter(adapter);
@@ -283,7 +277,7 @@ public class MyAdapterOfRecyclers extends RecyclerView.Adapter<MyAdapterOfRecycl
                     }
                 });
 
-            }
+            //}
             }
 
 
