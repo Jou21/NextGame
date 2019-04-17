@@ -8,6 +8,7 @@
     tools:context=".JogoDoUsuarioActivity">
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
@@ -52,12 +53,12 @@
 
                 <RatingBar
                     android:id="@+id/rating_bar_user_jogo_do_usuario"
+                    style="?android:attr/ratingBarStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
-                    style="?android:attr/ratingBarStyleSmall"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/txt_nome_user_jogo_do_usuario" />
@@ -151,12 +152,12 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="ALUGAR"
-        android:textSize="20sp"
-        android:textColor="#fff"
         android:background="@drawable/shape_btn_arredondado_roxo"
+        android:text="ALUGAR"
+        android:textColor="#fff"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline13"
+        app:layout_constraintEnd_toStartOf="@+id/btn_trocar_jogo_do_usuario"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -166,13 +167,13 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="COMPRAR"
-        android:textSize="20sp"
-        android:textColor="#fff"
         android:background="@drawable/shape_btn_arredondado_verde"
+        android:text="COMPRAR"
+        android:textColor="#fff"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline13" />
+        app:layout_constraintStart_toEndOf="@+id/btn_trocar_jogo_do_usuario" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline13"
@@ -181,7 +182,19 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
 
-
+    <Button
+        android:id="@+id/btn_trocar_jogo_do_usuario"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/shape_btn_arredondado_azul"
+        android:text="TROCAR"
+        android:textColor="#fff"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline13"
+        app:layout_constraintStart_toStartOf="@+id/guideline13"
+        app:layout_constraintTop_toTopOf="@+id/btn_alugar_jogo_do_usuario" />
 
 
 </android.support.constraint.ConstraintLayout>

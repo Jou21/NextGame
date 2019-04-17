@@ -35,7 +35,7 @@ public class JogoDoUsuarioActivity extends AppCompatActivity {
     private RatingBar ratingBarUser,ratingBarJogo;
     private CircleImageView imgUserJogoDoUsuario;
     private TextView txtNomeUserJogoDoUsuario,txtTituloJogoDoUsuario,descricaoDoJogoDoUsuario;
-    private Button btnAlugarJogoDoUsuario,btnComprarJogoDoUsuario;
+    private Button btnAlugarJogoDoUsuario,btnComprarJogoDoUsuario,btnTrocarJogoDoUsuario;
 
     public static Jogo modelJodoDoUsuario;
     private String imgOtherUserURL;
@@ -62,6 +62,8 @@ public class JogoDoUsuarioActivity extends AppCompatActivity {
 
         viewPager = (LoopingViewPager) findViewById(R.id.viewpager);
         indicatorView = (PageIndicatorView) findViewById(R.id.indicator);
+
+        btnTrocarJogoDoUsuario = (Button) findViewById(R.id.btn_trocar_jogo_do_usuario);
 
         ratingBarUser = (RatingBar) findViewById(R.id.rating_bar_user_jogo_do_usuario);
         ratingBarJogo = (RatingBar) findViewById(R.id.rating_bar_jogo_do_usuario);
@@ -192,7 +194,17 @@ public class JogoDoUsuarioActivity extends AppCompatActivity {
             if (getIntent().hasExtra("PRECOALUGUEL")) {
                 precoAluguel = getIntent().getStringExtra("PRECOALUGUEL");
 
-                btnAlugarJogoDoUsuario.setText("R$" + precoAluguel + ",00" + "\nALUGAR");
+                if(precoAluguel.equals("N")){
+                    btnAlugarJogoDoUsuario.setText("Indisponível");
+                    btnAlugarJogoDoUsuario.setTextSize(16);
+                    btnAlugarJogoDoUsuario.setEnabled(false);
+                }else {
+                    btnAlugarJogoDoUsuario.setText("R$" + precoAluguel + ",00" + "\nALUGAR");
+                    btnAlugarJogoDoUsuario.setTextSize(20);
+                    btnAlugarJogoDoUsuario.setEnabled(true);
+                }
+
+
             } else {
                 Toast.makeText(JogoDoUsuarioActivity.this,"Activity cannot find  extras " + "PRECOALUGUEL",Toast.LENGTH_SHORT).show();
                 Log.d("EXTRASJOGO","Activity cannot find  extras " + "PRECOALUGUEL");
@@ -202,8 +214,15 @@ public class JogoDoUsuarioActivity extends AppCompatActivity {
 
             if (getIntent().hasExtra("PRECOVENDA")) {
                 precoVenda = getIntent().getStringExtra("PRECOVENDA");
-
-                btnComprarJogoDoUsuario.setText("R$" + precoVenda + ",00" + "\nCOMPRAR");
+                if(precoVenda.equals("N")){
+                    btnComprarJogoDoUsuario.setText("Indisponível");
+                    btnComprarJogoDoUsuario.setTextSize(16);
+                    btnComprarJogoDoUsuario.setEnabled(false);
+                }else {
+                    btnComprarJogoDoUsuario.setText("R$" + precoVenda + ",00" + "\nCOMPRAR");
+                    btnComprarJogoDoUsuario.setTextSize(20);
+                    btnComprarJogoDoUsuario.setEnabled(true);
+                }
             } else {
                 Toast.makeText(JogoDoUsuarioActivity.this,"Activity cannot find  extras " + "PRECOVENDA",Toast.LENGTH_SHORT).show();
                 Log.d("EXTRASJOGO","Activity cannot find  extras " + "PRECOVENDA");
@@ -252,6 +271,31 @@ public class JogoDoUsuarioActivity extends AppCompatActivity {
                 transacaoAlugarIntent.putExtra("PRECOJOGODOUSUARIO",precoVenda);
                 transacaoAlugarIntent.putExtra("TIME",time);
                 startActivity(transacaoAlugarIntent);
+                finish();
+            }
+        });
+
+        btnTrocarJogoDoUsuario.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(JogoDoUsuarioActivity.this, MessageActivity.class);
+                intent.putExtra("userid", userId);
+                intent.putExtra("MOSTRADIALOG", "TROCAR");
+                intent.putExtra("JOGODOUSUARIO", modelJodoDoUsuario);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        btnComprarJogoDoUsuario.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent transacaoComprarIntent = new Intent(JogoDoUsuarioActivity.this,TransacaoComprarActivity.class);
+                transacaoComprarIntent.putExtra("USUARIOID",userId);
+                transacaoComprarIntent.putExtra("JOGODOUSUARIO",modelJodoDoUsuario);
+                transacaoComprarIntent.putExtra("PRECOJOGODOUSUARIO",precoVenda);
+                transacaoComprarIntent.putExtra("TIME",time);
+                startActivity(transacaoComprarIntent);
                 finish();
             }
         });

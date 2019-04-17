@@ -112,11 +112,7 @@ public class ActivityMapa extends FragmentActivity implements OnMapReadyCallback
         btnMapsConfirmarLocal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 reference.child("UserGame").child(user.getUid()).push().setValue(model);
-
-                //Intent telaMeusJogos = new Intent(ActivityMapa.this, ActivityMeusJogos.class);
-                //startActivity(telaMeusJogos);
                 finish();
             }
         });

@@ -12,13 +12,13 @@
     android:paddingBottom="10dp">
 
     <TextView
-        android:id="@+id/txt_transacao_contrato"
+        android:id="@+id/txt_transacao_termos_de_uso"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:text="CONTRATO"
+        android:text="TERMOS DE USO"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,7 +33,7 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_transacao_contrato">
+        app:layout_constraintTop_toBottomOf="@+id/txt_transacao_termos_de_uso">
 
         <TextView
             android:id="@+id/txt_transacao_1"
@@ -331,14 +331,7 @@
         app:layout_constraintStart_toStartOf="@+id/btn_transacao_alugar"
         app:layout_constraintTop_toBottomOf="@+id/btn_transacao_alugar" />
 
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline33"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="36dp"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.57"
-        app:layout_constraintStart_toStartOf="parent" />
+
 
 
 </android.support.constraint.ConstraintLayout>

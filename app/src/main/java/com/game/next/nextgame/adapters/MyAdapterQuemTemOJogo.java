@@ -107,8 +107,22 @@ public class MyAdapterQuemTemOJogo extends RecyclerView.Adapter<MyAdapterQuemTem
                     if(user.getId().equals(listaUserGames.get(position).getUserId())){
 
                         holder.firstLine.setText(user.getUsername());
-                        holder.txtAluguel.setText("R$" + listaUserGames.get(position).getPrecoAluga() + ",00");
-                        holder.txtCompra.setText("R$" + listaUserGames.get(position).getPrecoVenda() + ",00");
+                        if(listaUserGames.get(position).getAluga().equals("N")){
+                            holder.txtAluguel.setTextSize(14);
+                            holder.txtAluguel.setText("Indisponível");
+                        }else {
+                            holder.txtAluguel.setTextSize(17);
+                            holder.txtAluguel.setText("R$" + listaUserGames.get(position).getPrecoAluga() + ",00");
+                        }
+                        if(listaUserGames.get(position).getVende().equals("N")) {
+                            holder.txtCompra.setTextSize(14);
+                            holder.txtCompra.setText("Indisponível");
+
+                        }else {
+                            holder.txtCompra.setTextSize(17);
+                            holder.txtCompra.setText("R$" + listaUserGames.get(position).getPrecoVenda() + ",00");
+                        }
+
 
                         if (!user.getImageURL().equals("default")){
 

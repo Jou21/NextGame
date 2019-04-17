@@ -118,34 +118,60 @@ public class MessageActivity extends AppCompatActivity {
         if (getIntent().hasExtra("MOSTRADIALOG")) {
             String alugarOuComprar = getIntent().getStringExtra("MOSTRADIALOG");
 
-            // 1. Instantiate an AlertDialog.Builder with its constructor
-            AlertDialog.Builder builder = new AlertDialog.Builder(MessageActivity.this);
-
-            // 2. Chain together various setter methods to set the dialog characteristics
-            builder.setMessage("Para concluir o processo você precisa se encontrar com o dono do jogo. Converse com ele e marque um local de encontro!").setTitle("Parabéns você está quase lá!");
-
-            // Add the buttons
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    // User clicked OK button
-                }
-            });
-
-            // 3. Get the AlertDialog from create()
-            AlertDialog dialog = builder.create();
-
-            dialog.show();
-
             if(alugarOuComprar.equals("ALUGAR")){
+
+                // 1. Instantiate an AlertDialog.Builder with its constructor
+                AlertDialog.Builder builder = new AlertDialog.Builder(MessageActivity.this);
+
+                // 2. Chain together various setter methods to set the dialog characteristics
+                builder.setMessage("Para concluir o processo você precisa se encontrar com o dono do jogo. Converse com ele e marque um local de encontro!").setTitle("Parabéns você está quase lá!");
+
+                // Add the buttons
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User clicked OK button
+                    }
+                });
+
+                // 3. Get the AlertDialog from create()
+                AlertDialog dialog = builder.create();
+
+                dialog.show();
+
                 sendMessage(fuser.getUid(), userid, "Olá, tudo jóia! Gostaria de alugar o jogo \'" + model.getNome() + "\' com você. Teria interesse?");
-            } else {
+            }
+
+            if(alugarOuComprar.equals("TROCAR")){
+                sendMessage(fuser.getUid(), userid, "Olá, tudo jóia! Gostaria de trocar o jogo \'" + model.getNome() + "\' com você. Teria interesse?");
+            }
+
+            if(alugarOuComprar.equals("COMPRAR")){
+
+                // 1. Instantiate an AlertDialog.Builder with its constructor
+                AlertDialog.Builder builder = new AlertDialog.Builder(MessageActivity.this);
+
+                // 2. Chain together various setter methods to set the dialog characteristics
+                builder.setMessage("Para concluir o processo você precisa se encontrar com o dono do jogo. Converse com ele e marque um local de encontro!").setTitle("Parabéns você está quase lá!");
+
+                // Add the buttons
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User clicked OK button
+                    }
+                });
+
+                // 3. Get the AlertDialog from create()
+                AlertDialog dialog = builder.create();
+
+                dialog.show();
+
                 sendMessage(fuser.getUid(), userid, "Olá, tudo jóia! Gostaria de comprar o jogo \'" + model.getNome() + "\' com você. Teria interesse?");
             }
 
 
 
         } else {
-            //Toast.makeText(MessageActivity.this,"Activity cannot find  extras " + "MOSTRADIALOG",Toast.LENGTH_SHORT).show();
+            sendMessage(fuser.getUid(), userid, "Olá, tudo jóia! Gostaria de negociar o jogo \'" + model.getNome() + "\' com você. Teria interesse?");
         }
 
         btn_send.setOnClickListener(new View.OnClickListener() {
