@@ -37,6 +37,8 @@ public class MyAdapterOfRecyclersB extends RecyclerView.Adapter<MyAdapterOfRecyc
     private MyAdapterListJogos adapter = null;
     private AutoCompleteTextView autoCompletePesquisar;
 
+    private boolean entrou = false;
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public View layout;
@@ -52,6 +54,8 @@ public class MyAdapterOfRecyclersB extends RecyclerView.Adapter<MyAdapterOfRecyc
     public MyAdapterOfRecyclersB(final FragmentB fragmentB, AutoCompleteTextView autoCompletePesquisar) {
         this.fragmentB = fragmentB;
         this.autoCompletePesquisar = autoCompletePesquisar;
+
+        entrou = false;
 
         final ArrayList<Jogo> jogosPS4 = new ArrayList<>();
 
@@ -76,7 +80,7 @@ public class MyAdapterOfRecyclersB extends RecyclerView.Adapter<MyAdapterOfRecyc
                     jogosPS4.add(jogo);
                 }
 
-                acionaDrop(fragmentB, jogosPS4);
+
 
                 for(Jogo j : jogosPS4){
                     if(j.getCategoria().equals("Ação e Aventura")){
@@ -134,6 +138,9 @@ public class MyAdapterOfRecyclersB extends RecyclerView.Adapter<MyAdapterOfRecyc
 
 
         });
+        if(entrou == true) {
+            acionaDrop(fragmentB, jogosPS4);
+        }
     }
 
     @Override

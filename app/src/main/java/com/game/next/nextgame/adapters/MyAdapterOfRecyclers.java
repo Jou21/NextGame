@@ -34,6 +34,8 @@ public class MyAdapterOfRecyclers extends RecyclerView.Adapter<MyAdapterOfRecycl
     private MyAdapterListJogos adapter = null;
     private AutoCompleteTextView autoCompletePesquisar;
 
+    private boolean entrou = false;
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public View layout;
@@ -49,6 +51,8 @@ public class MyAdapterOfRecyclers extends RecyclerView.Adapter<MyAdapterOfRecycl
     public MyAdapterOfRecyclers(final FragmentA fragmentA, AutoCompleteTextView autoCompletePesquisar) {
         this.fragmentA = fragmentA;
         this.autoCompletePesquisar = autoCompletePesquisar;
+
+        entrou = false;
 
         final ArrayList<Jogo> jogosXbox = new ArrayList<>();
 
@@ -73,7 +77,7 @@ public class MyAdapterOfRecyclers extends RecyclerView.Adapter<MyAdapterOfRecycl
                     jogosXbox.add(jogo);
                 }
 
-                acionaDrop(fragmentA, jogosXbox);
+                entrou = true;
 
                 for(Jogo j : jogosXbox){
                     if (j.getCategoria().equals("Ação e Aventura")) {
@@ -131,6 +135,10 @@ public class MyAdapterOfRecyclers extends RecyclerView.Adapter<MyAdapterOfRecycl
 
 
         });
+
+        if(entrou == true) {
+            acionaDrop(fragmentA, jogosXbox);
+        }
     }
 
     @Override
