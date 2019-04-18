@@ -64,14 +64,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.82" />
+        app:layout_constraintGuide_percent="0.83" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.80" />
+        app:layout_constraintGuide_percent="0.83" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline6"
@@ -106,105 +106,104 @@
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="83dp"
+        android:layout_height="73dp"
         android:background="@android:color/transparent"
         android:orientation="vertical"
         android:paddingTop="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline6"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline5">
+        app:layout_constraintStart_toStartOf="parent">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="8dp"
-        android:background="@drawable/layout_elevado" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:background="@drawable/layout_elevado" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="83dp"
-        android:background="#ffffff"
-        android:orientation="horizontal"
-        android:paddingTop="0dp"
-        >
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="83dp"
+            android:background="#ffffff"
+            android:orientation="horizontal"
+            android:paddingTop="0dp">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="-20dp"
-            android:layout_marginTop="-5dp"
-            android:layout_weight="1"
-            android:drawablePadding="-10dp"
-            android:drawableTop="@drawable/ic_branco"
-            android:text=" "
-            android:textSize="11sp"
-            android:backgroundTint="#ffffff"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="-20dp"
+                android:layout_marginTop="-5dp"
+                android:layout_weight="1"
+                android:backgroundTint="#ffffff"
+                android:drawableTop="@drawable/ic_branco"
+                android:drawablePadding="-10dp"
+                android:text=" "
+                android:textSize="11sp" />
 
-        <Button
-            android:id="@+id/mapa_xbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="-6dp"
-            android:paddingTop="40dp"
-            android:paddingBottom="20dp"
-            android:layout_marginTop="-35dp"
-            android:layout_weight="1"
-            android:drawablePadding="0dp"
-            android:drawableTop="@drawable/ic_baseline_map_24px"
-            android:text="Mapa"
-            android:textSize="11sp"
-            android:textColor="#FF6B6B6B"
-            android:backgroundTint="#ffffff"/>
+            <Button
+                android:id="@+id/mapa_xbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="-6dp"
+                android:layout_marginTop="-35dp"
+                android:layout_weight="1"
+                android:backgroundTint="#ffffff"
+                android:drawableTop="@drawable/ic_baseline_map_24px"
+                android:drawablePadding="0dp"
+                android:paddingTop="40dp"
+                android:paddingBottom="20dp"
+                android:text="Mapa"
+                android:textColor="#FF6B6B6B"
+                android:textSize="11sp" />
 
-        <Button
-            android:id="@+id/scan_xbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="-6dp"
-            android:paddingBottom="20dp"
-            android:layout_marginTop="-35dp"
-            android:paddingTop="40dp"
-            android:layout_weight="1"
-            android:drawablePadding="0dp"
-            android:drawableTop="@drawable/ic_barcode_scan"
-            android:text="Scan"
-            android:textSize="11sp"
-            android:textColor="#FF6B6B6B"
-            android:backgroundTint="#ffffff"/>
+            <Button
+                android:id="@+id/scan_xbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="-6dp"
+                android:layout_marginTop="-35dp"
+                android:layout_weight="1"
+                android:backgroundTint="#ffffff"
+                android:drawableTop="@drawable/ic_barcode_scan"
+                android:drawablePadding="0dp"
+                android:paddingTop="40dp"
+                android:paddingBottom="20dp"
+                android:text="Scan"
+                android:textColor="#FF6B6B6B"
+                android:textSize="11sp" />
 
-        <Button
-            android:id="@+id/chat_xbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="-6dp"
-            android:paddingBottom="20dp"
-            android:layout_marginTop="-35dp"
-            android:paddingTop="40dp"
-            android:layout_weight="1"
-            android:drawablePadding="0dp"
-            android:drawableTop="@drawable/ic_baseline_chat_24px"
-            android:text="Chat"
-            android:textSize="11sp"
-            android:textColor="#FF6B6B6B"
-            android:backgroundTint="#ffffff"/>
+            <Button
+                android:id="@+id/chat_xbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="-6dp"
+                android:layout_marginTop="-35dp"
+                android:layout_weight="1"
+                android:backgroundTint="#ffffff"
+                android:drawableTop="@drawable/ic_baseline_chat_24px"
+                android:drawablePadding="0dp"
+                android:paddingTop="40dp"
+                android:paddingBottom="20dp"
+                android:text="Chat"
+                android:textColor="#FF6B6B6B"
+                android:textSize="11sp" />
 
-        <Button
-            android:id="@+id/my_games_xbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="-6dp"
-            android:paddingBottom="20dp"
-            android:layout_marginTop="-35dp"
-            android:paddingTop="40dp"
-            android:layout_weight="1"
-            android:drawablePadding="0dp"
-            android:drawableTop="@drawable/ic_baseline_videogame_asset_24px"
-            android:text="Meus Jogos"
-            android:textSize="11sp"
-            android:textColor="#FF6B6B6B"
-            android:backgroundTint="#ffffff"/>
+            <Button
+                android:id="@+id/my_games_xbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="-6dp"
+                android:layout_marginTop="-35dp"
+                android:layout_weight="1"
+                android:backgroundTint="#ffffff"
+                android:drawableTop="@drawable/ic_baseline_videogame_asset_24px"
+                android:drawablePadding="0dp"
+                android:paddingTop="40dp"
+                android:paddingBottom="20dp"
+                android:text="Meus Jogos"
+                android:textColor="#FF6B6B6B"
+                android:textSize="11sp" />
 
-    </LinearLayout>
+        </LinearLayout>
 
     </LinearLayout>
 

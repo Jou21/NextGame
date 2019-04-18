@@ -110,80 +110,86 @@ public class TransacaoComprarActivity extends AppCompatActivity {
                 String valorNaCarteiraNew = "";
                 String valorNaCarteiraNew2 = "";
                 String valorNaCarteiraNew3 = "";
-                valorNaCarteiraNew = valorNaCarteira.replace("R$ ","");
-                valorNaCarteiraNew2 = valorNaCarteiraNew.replace("R$","");
-                valorNaCarteiraNew3 = valorNaCarteiraNew2.replace(",00","");
+                valorNaCarteiraNew = valorNaCarteira.replace("R$ ", "");
+                valorNaCarteiraNew2 = valorNaCarteiraNew.replace("R$", "");
+                valorNaCarteiraNew3 = valorNaCarteiraNew2.replace(",00", "");
 
                 String valorCaucao = txtTransacaoValorComprar.getText().toString();
                 String valorCaucaoNew = "";
                 String valorCaucaoNew2 = "";
                 String valorCaucaoNew3 = "";
-                valorCaucaoNew = valorCaucao.replace("R$ ","");
-                valorCaucaoNew2 = valorCaucaoNew.replace("R$","");
-                valorCaucaoNew3 = valorCaucaoNew2.replace(",00","");
+                valorCaucaoNew = valorCaucao.replace("R$ ", "");
+                valorCaucaoNew2 = valorCaucaoNew.replace("R$", "");
+                valorCaucaoNew3 = valorCaucaoNew2.replace(",00", "");
 
-                if(Integer.parseInt(valorNaCarteiraNew3) >= Integer.parseInt(valorCaucaoNew3)){
+                if(!valorNaCarteiraNew3.equals("N") && !valorCaucaoNew3.equals("N") && !valorNaCarteiraNew3.equals("S") && !valorCaucaoNew3.equals("S") ){
 
-                    referenceTransacaoUser.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (Integer.parseInt(valorNaCarteiraNew3) >= Integer.parseInt(valorCaucaoNew3)) {
 
-                            boolean entrou = false;
+                        referenceTransacaoUser.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                            for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                                TransacaoUser transacaoUser = snapshot.getValue(TransacaoUser.class);
-                                String key = snapshot.getKey();
+                                boolean entrou = false;
 
-                                if( (transacaoUser.getJogo().getCodigoDeBarra().equals(model.getCodigoDeBarra()) && transacaoUser.getFornecedorId().equals(fornecedorId)) && transacaoUser.getTime().equals(time) ){
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    TransacaoUser transacaoUser = snapshot.getValue(TransacaoUser.class);
+                                    String key = snapshot.getKey();
+
+                                    if ((transacaoUser.getJogo().getCodigoDeBarra().equals(model.getCodigoDeBarra()) && transacaoUser.getFornecedorId().equals(fornecedorId)) && transacaoUser.getTime().equals(time)) {
+
+                                        HashMap<String, Object> hashMap = new HashMap<>();
+                                        hashMap.put("userId", user.getUid());
+                                        hashMap.put("fornecedorId", fornecedorId);
+                                        hashMap.put("valorAluguel", "N");
+                                        hashMap.put("valorCaucao", precoJogo);
+                                        hashMap.put("jogo", model);
+                                        hashMap.put("time", time);
+                                        hashMap.put("status", "INICIO");
+
+                                        referenceTransacaoUser.child(key).setValue(hashMap);
+
+                                        entrou = true;
+                                        break;
+                                    }
+                                }
+
+                                if (entrou == false) {
 
                                     HashMap<String, Object> hashMap = new HashMap<>();
                                     hashMap.put("userId", user.getUid());
                                     hashMap.put("fornecedorId", fornecedorId);
                                     hashMap.put("valorAluguel", "N");
                                     hashMap.put("valorCaucao", precoJogo);
-                                    hashMap.put("jogo",model);
-                                    hashMap.put("time",time);
-                                    hashMap.put("status","INICIO");
+                                    hashMap.put("jogo", model);
+                                    hashMap.put("time", time);
+                                    hashMap.put("status", "INICIO");
 
-                                    referenceTransacaoUser.child(key).setValue(hashMap);
-
-                                    entrou = true;
-                                    break;
+                                    referenceTransacaoUser.push().setValue(hashMap);
                                 }
+
+
                             }
 
-                            if(entrou == false){
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                HashMap<String, Object> hashMap = new HashMap<>();
-                                hashMap.put("userId", user.getUid());
-                                hashMap.put("fornecedorId", fornecedorId);
-                                hashMap.put("valorAluguel", "N");
-                                hashMap.put("valorCaucao", precoJogo);
-                                hashMap.put("jogo",model);
-                                hashMap.put("time",time);
-                                hashMap.put("status","INICIO");
-
-                                referenceTransacaoUser.push().setValue(hashMap);
                             }
+                        });
 
+                        Intent intent = new Intent(TransacaoComprarActivity.this, MessageActivity.class);
+                        intent.putExtra("userid", fornecedorId);
+                        intent.putExtra("MOSTRADIALOG", "COMPRAR");
+                        intent.putExtra("JOGODOUSUARIO", model);
+                        startActivity(intent);
+                        finish();
 
-                        }
+                    } else {
+                        Toast.makeText(TransacaoComprarActivity.this, "Você não tem saldo suficiente! Adicione saldo para continuar.", Toast.LENGTH_SHORT).show();
+                    }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-
-                    Intent intent = new Intent(TransacaoComprarActivity.this, MessageActivity.class);
-                    intent.putExtra("userid", fornecedorId);
-                    intent.putExtra("MOSTRADIALOG", "COMPRAR");
-                    intent.putExtra("JOGODOUSUARIO", model);
-                    startActivity(intent);
-                    finish();
-
-                }else {
-                    Toast.makeText(TransacaoComprarActivity.this,"Você não tem saldo suficiente! Adicione saldo para continuar.",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(TransacaoComprarActivity.this, "Não foi possível ler o valor", Toast.LENGTH_SHORT).show();
                 }
             }
         });

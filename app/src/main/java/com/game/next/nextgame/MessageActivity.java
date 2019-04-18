@@ -79,12 +79,7 @@ public class MessageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
 
-        if (getIntent().hasExtra("JOGODOUSUARIO")) {
-            model = (Jogo) getIntent().getSerializableExtra("JOGODOUSUARIO");
-        } else {
-            //Toast.makeText(MessageActivity.this,"Activity cannot find  extras " + "JOGODOUSUARIO",Toast.LENGTH_SHORT).show();
-            //Log.d("EXTRASJOGO","Activity cannot find  extras " + "JOGODOUSUARIO");
-        }
+
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -114,6 +109,10 @@ public class MessageActivity extends AppCompatActivity {
         intent = getIntent();
         userid = intent.getStringExtra("userid");
         fuser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (getIntent().hasExtra("JOGODOUSUARIO")) {
+            model = (Jogo) getIntent().getSerializableExtra("JOGODOUSUARIO");
+
 
         if (getIntent().hasExtra("MOSTRADIALOG")) {
             String alugarOuComprar = getIntent().getStringExtra("MOSTRADIALOG");
@@ -173,6 +172,14 @@ public class MessageActivity extends AppCompatActivity {
         } else {
             sendMessage(fuser.getUid(), userid, "Olá, tudo jóia! Gostaria de negociar o jogo \'" + model.getNome() + "\' com você. Teria interesse?");
         }
+
+
+        } else {
+            //Toast.makeText(MessageActivity.this,"Activity cannot find  extras " + "JOGODOUSUARIO",Toast.LENGTH_SHORT).show();
+            //Log.d("EXTRASJOGO","Activity cannot find  extras " + "JOGODOUSUARIO");
+        }
+
+
 
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override

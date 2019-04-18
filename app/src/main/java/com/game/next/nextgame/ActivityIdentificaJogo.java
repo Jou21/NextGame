@@ -503,11 +503,11 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
                             hashMap.put("precoAluga", "N");
                         }
 
-                        if(vende == "S"){
+                        //if(vende == "S"){
                             hashMap.put("precoVenda", String.valueOf(progressChangedValuePreco));
-                        }else{
-                            hashMap.put("precoVenda", "N");
-                        }
+                        //}else{
+                        //    hashMap.put("precoVenda", "N");
+                        //}
 
                         hashMap.put("domingo", domingoSelecionado);
                         hashMap.put("segunda", segundaSelecionado);

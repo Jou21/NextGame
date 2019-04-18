@@ -58,14 +58,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.82" />
+        app:layout_constraintGuide_percent="0.83" />
 
     <android.support.constraint.Guideline
         android:id="@+id/b_guideline5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.80" />
+        app:layout_constraintGuide_percent="0.83" />
 
     <android.support.constraint.Guideline
         android:id="@+id/b_guideline6"
@@ -102,13 +102,13 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
-        android:layout_height="83dp"
+        android:layout_height="73dp"
         android:background="@android:color/transparent"
         android:orientation="vertical"
         android:paddingTop="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/b_guideline6"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/b_guideline5">
+        app:layout_constraintStart_toStartOf="parent">
 
         <View
             android:layout_width="match_parent"
@@ -128,13 +128,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="-6dp"
-                android:paddingBottom="20dp"
                 android:layout_marginTop="-35dp"
-                android:paddingTop="40dp"
                 android:layout_weight="1"
                 android:backgroundTint="#2d2d2d"
-                android:drawablePadding="0dp"
                 android:drawableTop="@drawable/ic_baseline_videogame_asset_b"
+                android:drawablePadding="0dp"
+                android:paddingTop="40dp"
+                android:paddingBottom="20dp"
                 android:text="Meus Jogos"
                 android:textColor="#ffffff"
                 android:textSize="11sp" />
@@ -144,13 +144,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="-6dp"
-                android:paddingBottom="20dp"
                 android:layout_marginTop="-35dp"
-                android:paddingTop="40dp"
                 android:layout_weight="1"
                 android:backgroundTint="#2d2d2d"
-                android:drawablePadding="0dp"
                 android:drawableTop="@drawable/ic_baseline_chat_b"
+                android:drawablePadding="0dp"
+                android:paddingTop="40dp"
+                android:paddingBottom="20dp"
                 android:text="Chat"
                 android:textColor="#ffffff"
                 android:textSize="11sp" />
@@ -160,13 +160,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="-6dp"
-                android:paddingBottom="20dp"
                 android:layout_marginTop="-35dp"
-                android:paddingTop="40dp"
                 android:layout_weight="1"
                 android:backgroundTint="#2d2d2d"
-                android:drawablePadding="0dp"
                 android:drawableTop="@drawable/ic_barcorde_scan_b"
+                android:drawablePadding="0dp"
+                android:paddingTop="40dp"
+                android:paddingBottom="20dp"
                 android:text="Scan"
                 android:textColor="#ffffff"
                 android:textSize="11sp" />
@@ -176,13 +176,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="-6dp"
-                android:paddingBottom="20dp"
                 android:layout_marginTop="-35dp"
-                android:paddingTop="40dp"
                 android:layout_weight="1"
                 android:backgroundTint="#2d2d2d"
-                android:drawablePadding="0dp"
                 android:drawableTop="@drawable/ic_baseline_map_b"
+                android:drawablePadding="0dp"
+                android:paddingTop="40dp"
+                android:paddingBottom="20dp"
                 android:text="Mapa"
                 android:textColor="#ffffff"
                 android:textSize="11sp" />
@@ -194,8 +194,8 @@
                 android:layout_marginTop="-5dp"
                 android:layout_weight="1"
                 android:backgroundTint="#2d2d2d"
-                android:drawablePadding="-10dp"
                 android:drawableTop="@drawable/ic_cinza"
+                android:drawablePadding="-10dp"
                 android:text=" "
                 android:textSize="11sp" />
 
