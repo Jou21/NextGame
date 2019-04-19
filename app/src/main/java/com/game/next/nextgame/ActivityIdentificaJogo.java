@@ -714,12 +714,15 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
 
         if(b != null) {
             codigoDeBarras = b.getString("CODBAR");
+            final String corretoCodBar = b.getString("CORRETOCODBAR");
+
             final String finalCodigoDeBarras = codigoDeBarras;
 
             final boolean[] jogoXboxEncontrado = {false};
             final boolean[] jogoPS4Encontrado = {false};
             final boolean[] pesquisouJogosXbox = {false};
             final boolean[] pesquisouJogosPS4 = {false};
+
 
             exibirProgress(true);
 
@@ -740,49 +743,61 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
 
                     acionaDrop();
 
-                    for(Jogo j : jogosPS4){
+                    if (corretoCodBar.equals("SIM")){
 
-                        if (j == jogosPS4.get(jogosPS4.size()-1) && jogoPS4Encontrado[0] == false){
-                            pesquisouJogosPS4[0] = true;
+                        for (Jogo j : jogosPS4) {
+
+                            if (j == jogosPS4.get(jogosPS4.size() - 1) && jogoPS4Encontrado[0] == false) {
+                                pesquisouJogosPS4[0] = true;
+                            }
+
+                            if (j.getCodigoDeBarra().equals(finalCodigoDeBarras)) {
+                                txtCodIdentificado.setText(j.getNome());
+                                Picasso.get().load(j.getUrlImgJogo()).into(imgCodIdentificado, new Callback() {
+                                    @Override
+                                    public void onSuccess() {
+
+                                    }
+
+                                    @Override
+                                    public void onError(Exception e) {
+
+                                    }
+                                });
+                                achouJogoPeloCodBar = true;
+                                jogoIdentificado = j;
+                                txtCodigoDeBarras.setText("(Cod. de barras: " + finalCodigoDeBarras + ")");
+                                jogoPS4Encontrado[0] = true;
+                                //btnAdicionarJogoManualmente.setVisibility(View.GONE);
+                                btnAdicionarJogoSucesso.setVisibility(View.VISIBLE);
+                                imgCodIdentificado.setVisibility(View.VISIBLE);
+                                layAchouJogo.setVisibility(View.VISIBLE);
+                                layNaoAchouJogo.setVisibility(View.GONE);
+
+                                exibirProgress(false);
+
+
+                            } else if (j == jogosPS4.get(jogosPS4.size() - 1) && jogoXboxEncontrado[0] == false && jogoPS4Encontrado[0] == false && pesquisouJogosXbox[0] == true && pesquisouJogosPS4[0] == true) {
+                                txtCodIdentificado.setText("Nenhum jogo encontrado");
+                                txtCodigoDeBarras.setText("(Cod. de barras: " + finalCodigoDeBarras + ")");
+                                //btnAdicionarJogoManualmente.setVisibility(View.VISIBLE);
+                                layNaoAchouJogo.setVisibility(View.VISIBLE);
+                                btnAdicionarJogoSucesso.setVisibility(View.GONE);
+                                layAchouJogo.setVisibility(View.GONE);
+
+                                exibirProgress(false);
+                            }
+
                         }
+                    }else {
+                        txtCodIdentificado.setText("Nenhum jogo encontrado");
+                        txtCodigoDeBarras.setText("(Cod. de barras: " + finalCodigoDeBarras + ")");
+                        //btnAdicionarJogoManualmente.setVisibility(View.VISIBLE);
+                        btnAdicionarJogoSucesso.setVisibility(View.GONE);
+                        layAchouJogo.setVisibility(View.GONE);
+                        layNaoAchouJogo.setVisibility(View.VISIBLE);
 
-                        if (j.getCodigoDeBarra().equals(finalCodigoDeBarras)) {
-                            txtCodIdentificado.setText(j.getNome());
-                            Picasso.get().load(j.getUrlImgJogo()).into(imgCodIdentificado, new Callback() {
-                                @Override
-                                public void onSuccess() {
-
-                                }
-
-                                @Override
-                                public void onError(Exception e) {
-
-                                }
-                            });
-                            achouJogoPeloCodBar = true;
-                            jogoIdentificado = j;
-                            txtCodigoDeBarras.setText("(Cod. de barras: "+finalCodigoDeBarras+")");
-                            jogoPS4Encontrado[0] = true;
-                            //btnAdicionarJogoManualmente.setVisibility(View.GONE);
-                            btnAdicionarJogoSucesso.setVisibility(View.VISIBLE);
-                            imgCodIdentificado.setVisibility(View.VISIBLE);
-                            layAchouJogo.setVisibility(View.VISIBLE);
-                            layNaoAchouJogo.setVisibility(View.GONE);
-
-                            exibirProgress(false);
-
-
-                        }else if (j == jogosPS4.get(jogosPS4.size()-1) && jogoXboxEncontrado[0] == false && jogoPS4Encontrado[0] == false && pesquisouJogosXbox[0] == true && pesquisouJogosPS4[0] == true) {
-                            txtCodIdentificado.setText("Nenhum jogo encontrado");
-                            txtCodigoDeBarras.setText("(Cod. de barras: "+finalCodigoDeBarras+")");
-                            //btnAdicionarJogoManualmente.setVisibility(View.VISIBLE);
-                            layNaoAchouJogo.setVisibility(View.VISIBLE);
-                            btnAdicionarJogoSucesso.setVisibility(View.GONE);
-                            layAchouJogo.setVisibility(View.GONE);
-
-                            exibirProgress(false);
-                        }
-
+                        exibirProgress(false);
                     }
 
                 }
@@ -811,48 +826,61 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
 
                     acionaDrop();
 
-                    for(Jogo j : jogosXbox){
+                    if (corretoCodBar.equals("SIM")){
 
-                        if (j == jogosXbox.get(jogosXbox.size()-1) && jogoXboxEncontrado[0] == false){
-                            pesquisouJogosXbox[0] = true;
+                        for (Jogo j : jogosXbox) {
+
+                            if (j == jogosXbox.get(jogosXbox.size() - 1) && jogoXboxEncontrado[0] == false) {
+                                pesquisouJogosXbox[0] = true;
+                            }
+
+                            if (j.getCodigoDeBarra().equals(finalCodigoDeBarras)) {
+                                txtCodIdentificado.setText(j.getNome());
+                                Picasso.get().load(j.getUrlImgJogo()).into(imgCodIdentificado, new Callback() {
+                                    @Override
+                                    public void onSuccess() {
+
+                                    }
+
+                                    @Override
+                                    public void onError(Exception e) {
+
+                                    }
+                                });
+                                achouJogoPeloCodBar = true;
+                                jogoIdentificado = j;
+                                txtCodigoDeBarras.setText("(Cod. de barras: " + finalCodigoDeBarras + ")");
+                                jogoXboxEncontrado[0] = true;
+                                //btnAdicionarJogoManualmente.setVisibility(View.GONE);
+                                btnAdicionarJogoSucesso.setVisibility(View.VISIBLE);
+                                imgCodIdentificado.setVisibility(View.VISIBLE);
+                                layAchouJogo.setVisibility(View.VISIBLE);
+                                layNaoAchouJogo.setVisibility(View.GONE);
+
+                                exibirProgress(false);
+
+                            } else if (j == jogosXbox.get(jogosXbox.size() - 1) && jogoXboxEncontrado[0] == false && jogoPS4Encontrado[0] == false && pesquisouJogosXbox[0] == true && pesquisouJogosPS4[0] == true) {
+                                txtCodIdentificado.setText("Nenhum jogo encontrado");
+                                txtCodigoDeBarras.setText("(Cod. de barras: " + finalCodigoDeBarras + ")");
+                                //btnAdicionarJogoManualmente.setVisibility(View.VISIBLE);
+                                btnAdicionarJogoSucesso.setVisibility(View.GONE);
+                                layAchouJogo.setVisibility(View.GONE);
+                                layNaoAchouJogo.setVisibility(View.VISIBLE);
+
+                                exibirProgress(false);
+                            }
+
                         }
 
-                        if (j.getCodigoDeBarra().equals(finalCodigoDeBarras)) {
-                            txtCodIdentificado.setText(j.getNome());
-                            Picasso.get().load(j.getUrlImgJogo()).into(imgCodIdentificado, new Callback() {
-                                @Override
-                                public void onSuccess() {
+                    }else {
+                        txtCodIdentificado.setText("Nenhum jogo encontrado");
+                        txtCodigoDeBarras.setText("(Cod. de barras: " + finalCodigoDeBarras + ")");
+                        //btnAdicionarJogoManualmente.setVisibility(View.VISIBLE);
+                        btnAdicionarJogoSucesso.setVisibility(View.GONE);
+                        layAchouJogo.setVisibility(View.GONE);
+                        layNaoAchouJogo.setVisibility(View.VISIBLE);
 
-                                }
-
-                                @Override
-                                public void onError(Exception e) {
-
-                                }
-                            });
-                            achouJogoPeloCodBar = true;
-                            jogoIdentificado = j;
-                            txtCodigoDeBarras.setText("(Cod. de barras: "+finalCodigoDeBarras+")");
-                            jogoXboxEncontrado[0] = true;
-                            //btnAdicionarJogoManualmente.setVisibility(View.GONE);
-                            btnAdicionarJogoSucesso.setVisibility(View.VISIBLE);
-                            imgCodIdentificado.setVisibility(View.VISIBLE);
-                            layAchouJogo.setVisibility(View.VISIBLE);
-                            layNaoAchouJogo.setVisibility(View.GONE);
-
-                            exibirProgress(false);
-
-                        }else if (j == jogosXbox.get(jogosXbox.size()-1) && jogoXboxEncontrado[0] == false && jogoPS4Encontrado[0] == false && pesquisouJogosXbox[0] == true && pesquisouJogosPS4[0] == true) {
-                            txtCodIdentificado.setText("Nenhum jogo encontrado");
-                            txtCodigoDeBarras.setText("(Cod. de barras: "+finalCodigoDeBarras+")");
-                            //btnAdicionarJogoManualmente.setVisibility(View.VISIBLE);
-                            btnAdicionarJogoSucesso.setVisibility(View.GONE);
-                            layAchouJogo.setVisibility(View.GONE);
-                            layNaoAchouJogo.setVisibility(View.VISIBLE);
-
-                            exibirProgress(false);
-                        }
-
+                        exibirProgress(false);
                     }
 
                 }
@@ -864,6 +892,8 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
 
 
             });
+
+
 
 
             recyclerView.setLayoutManager(new GridLayoutManager(this, 2));

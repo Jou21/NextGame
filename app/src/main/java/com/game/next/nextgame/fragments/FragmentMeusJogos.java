@@ -20,6 +20,7 @@ import com.game.next.nextgame.ActivityIdentificaJogo;
 import com.game.next.nextgame.ActivityMeusJogos;
 import com.game.next.nextgame.CaptureActivityPortrait;
 import com.game.next.nextgame.R;
+import com.game.next.nextgame.VerificaSeAchouOJogoCorretoActivity;
 import com.game.next.nextgame.adapters.MyAdapterMeusJogos;
 import com.game.next.nextgame.entidades.UserGame;
 import com.google.firebase.auth.FirebaseAuth;
@@ -130,9 +131,12 @@ public class FragmentMeusJogos extends Fragment {
 
                     Log.d("CODBAR", "" + contents);
 
-                    Intent telaIdentificaJogo = new Intent(getActivity(), ActivityIdentificaJogo.class);
-                    telaIdentificaJogo.putExtra("CODBAR", contents);
-                    startActivity(telaIdentificaJogo);
+                    Intent verificaSeAchouOJogoCorreto = new Intent(getActivity(), VerificaSeAchouOJogoCorretoActivity.class);
+                    verificaSeAchouOJogoCorreto.putExtra("CODBAR", contents);
+                    startActivity(verificaSeAchouOJogoCorreto);
+                    //Intent telaIdentificaJogo = new Intent(getActivity(), ActivityIdentificaJogo.class);
+                    //telaIdentificaJogo.putExtra("CODBAR", contents);
+                    //startActivity(telaIdentificaJogo);
                     //getActivity().finish()
 
                 } else {

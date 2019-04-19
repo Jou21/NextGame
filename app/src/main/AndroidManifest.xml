@@ -5,10 +5,10 @@
 
     <permission
         android:name="com.game.next.nextgame.permission.MAPS_RECEIVE"
-        android:protectionLevel="signature"/>
-    <uses-permission android:name="com.game.next.nextgame.permission.MAPS_RECEIVE"/>
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+        android:protectionLevel="signature" />
 
+    <uses-permission android:name="com.game.next.nextgame.permission.MAPS_RECEIVE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -27,7 +27,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TransacaoComprarActivity"></activity>
+        <activity android:name=".VerificaSeAchouOJogoCorretoActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".TransacaoComprarActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".AdicionarSaldoActivity"
             android:screenOrientation="portrait" />
