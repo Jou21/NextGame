@@ -100,11 +100,12 @@ public class ActivityMapa extends FragmentActivity implements OnMapReadyCallback
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference();
 
+
         if (getIntent().hasExtra("HASHMAP")) {
             model = (HashMap<String, Object>) getIntent().getSerializableExtra("HASHMAP");
 
         } else {
-            Toast.makeText(ActivityMapa.this,"Activity cannot find  extras " + "HASHMAP",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(ActivityMapa.this,"Activity cannot find  extras " + "HASHMAP",Toast.LENGTH_SHORT).show();
             Log.d("EXTRASJOGO","Activity cannot find  extras " + "HASHMAP");
         }
 
@@ -128,7 +129,6 @@ public class ActivityMapa extends FragmentActivity implements OnMapReadyCallback
             mGoogleApiClient.connect();
         }
 
-        //getLocation();
         startGettingLocations();
 
     }
@@ -145,7 +145,10 @@ public class ActivityMapa extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
+        //LatLng cascavel = new LatLng(-24.952327, -53.461767);
+        //mMap.addMarker(new MarkerOptions().position(cascavel).title("Cascavel"));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(cascavel));
+        //mMap.animateCamera(CameraUpdateFactory.zoomTo(13.0f));
     }
 
     @Override
@@ -403,17 +406,19 @@ public class ActivityMapa extends FragmentActivity implements OnMapReadyCallback
 
                                 Toast.makeText(ActivityMapa.this, "Localização atualizada", Toast.LENGTH_SHORT).show();
 
-                                if ((Double.parseDouble(entregaLatitude) != currentLocationLatLong.latitude) || (Double.parseDouble(entregaLongitude) != currentLocationLatLong.longitude)) {
-                                    //Add to firebase
-                                    HashMap<String, Object> hashMap = new HashMap<>();
-                                    hashMap.put("userId", user.getUid());
-                                    hashMap.put("time", String.valueOf(new Date().getTime()));
-                                    hashMap.put("latitude", String.valueOf(currentLocationLatLong.latitude));
-                                    hashMap.put("longitude", String.valueOf(currentLocationLatLong.longitude));
-                                    hashMap.put("entregaLatitude", String.valueOf(localDeEncontro.latitude));
-                                    hashMap.put("entregaLongitude", String.valueOf(localDeEncontro.longitude));
+                                if(currentLocationLatLong != null) {
+                                    if ((Double.parseDouble(entregaLatitude) != currentLocationLatLong.latitude) || (Double.parseDouble(entregaLongitude) != currentLocationLatLong.longitude)) {
+                                        //Add to firebase
+                                        HashMap<String, Object> hashMap = new HashMap<>();
+                                        hashMap.put("userId", user.getUid());
+                                        hashMap.put("time", String.valueOf(new Date().getTime()));
+                                        hashMap.put("latitude", String.valueOf(currentLocationLatLong.latitude));
+                                        hashMap.put("longitude", String.valueOf(currentLocationLatLong.longitude));
+                                        hashMap.put("entregaLatitude", String.valueOf(localDeEncontro.latitude));
+                                        hashMap.put("entregaLongitude", String.valueOf(localDeEncontro.longitude));
 
-                                    reference.child("location").child(user.getUid()).setValue(hashMap);
+                                        reference.child("location").child(user.getUid()).setValue(hashMap);
+                                    }
                                 }
 
                                 CameraPosition cameraPosition = new CameraPosition.Builder().zoom(15).target(localDeEncontro).build();

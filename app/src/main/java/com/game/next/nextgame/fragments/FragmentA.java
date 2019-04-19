@@ -39,8 +39,11 @@ import com.game.next.nextgame.MainActivity;
 import com.game.next.nextgame.MessageActivity;
 import com.game.next.nextgame.R;
 import com.game.next.nextgame.adapters.MyAdapterOfRecyclers;
+import com.game.next.nextgame.entidades.Jogo;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import java.util.HashMap;
 
 public class FragmentA extends Fragment {
 
