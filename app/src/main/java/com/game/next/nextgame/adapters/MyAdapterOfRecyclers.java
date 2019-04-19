@@ -31,11 +31,6 @@ public class MyAdapterOfRecyclers extends RecyclerView.Adapter<MyAdapterOfRecycl
     private MyAdapterTitulos[] myAdapterTitulos = new MyAdapterTitulos[8];
     private MyAdapter[] myAdapter = new MyAdapter[8];
 
-    private MyAdapterListJogos adapter = null;
-    private AutoCompleteTextView autoCompletePesquisar;
-
-    private boolean entrou = false;
-
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public View layout;
@@ -48,11 +43,8 @@ public class MyAdapterOfRecyclers extends RecyclerView.Adapter<MyAdapterOfRecycl
         }
     }
 
-    public MyAdapterOfRecyclers(final FragmentA fragmentA, AutoCompleteTextView autoCompletePesquisar) {
+    public MyAdapterOfRecyclers(final FragmentA fragmentA) {
         this.fragmentA = fragmentA;
-        this.autoCompletePesquisar = autoCompletePesquisar;
-
-        entrou = false;
 
         final ArrayList<Jogo> jogosXbox = new ArrayList<>();
 
@@ -76,8 +68,6 @@ public class MyAdapterOfRecyclers extends RecyclerView.Adapter<MyAdapterOfRecycl
                     Jogo jogo = snapshot.getValue(Jogo.class);
                     jogosXbox.add(jogo);
                 }
-
-                entrou = true;
 
                 for(Jogo j : jogosXbox){
                     if (j.getCategoria().equals("Ação e Aventura")) {
@@ -123,6 +113,7 @@ public class MyAdapterOfRecyclers extends RecyclerView.Adapter<MyAdapterOfRecycl
                 myAdapterTitulos[7] = new MyAdapterTitulos("Estratégia");
                 myAdapter[7] = new MyAdapter(jogosXboxEstretegia);
 
+                fragmentA.acionaDrop(jogosXbox);
                 fragmentA.getMAdapterOfRecyclers().notifyDataSetChanged();
                 fragmentA.exibirProgress(false);
 
@@ -136,9 +127,6 @@ public class MyAdapterOfRecyclers extends RecyclerView.Adapter<MyAdapterOfRecycl
 
         });
 
-        if(entrou == true) {
-            acionaDrop(fragmentA, jogosXbox);
-        }
     }
 
     @Override
@@ -258,40 +246,6 @@ public class MyAdapterOfRecyclers extends RecyclerView.Adapter<MyAdapterOfRecycl
     @Override
     public int getItemCount() {
         return 16;
-    }
-
-    private void acionaDrop(final FragmentA fragmentA, ArrayList<Jogo> listTodosJogosXbox){
-        //====================Auto Complete Pesquisar========================================================
-        if(listTodosJogosXbox.isEmpty() == false) {
-
-            if(fragmentA != null && autoCompletePesquisar != null) {
-
-                adapter = new MyAdapterListJogos(fragmentA.getContext(), listTodosJogosXbox);
-                autoCompletePesquisar.setAdapter(adapter);
-
-                autoCompletePesquisar.setThreshold(2);//Começa a procurar do segundo caractere
-
-                autoCompletePesquisar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                        final Jogo jogoSelecionado = (Jogo) parent.getItemAtPosition(position);
-
-                        Intent quemTemOJogo = new Intent(fragmentA.getContext(), ActivityQuemTemOJogo.class);
-                        quemTemOJogo.putExtra("JOGO", jogoSelecionado);
-                        fragmentA.getContext().startActivity(quemTemOJogo);
-                        //fragmentA.getActivity().finish();
-
-                    }
-                });
-
-            //}
-            }
-
-
-
-        }
-        //======================================================================================================
     }
 
 }

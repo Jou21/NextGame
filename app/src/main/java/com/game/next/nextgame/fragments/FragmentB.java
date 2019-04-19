@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -31,11 +32,16 @@ import com.game.next.nextgame.ActivityChat;
 import com.game.next.nextgame.ActivityIdentificaJogo;
 import com.game.next.nextgame.ActivityMapa;
 import com.game.next.nextgame.ActivityMeusJogos;
+import com.game.next.nextgame.ActivityQuemTemOJogo;
 import com.game.next.nextgame.CaptureActivityPortrait;
 import com.game.next.nextgame.R;
+import com.game.next.nextgame.adapters.MyAdapterListJogos;
 import com.game.next.nextgame.adapters.MyAdapterOfRecyclersB;
+import com.game.next.nextgame.entidades.Jogo;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import java.util.ArrayList;
 
 public class FragmentB extends Fragment {
 
@@ -53,6 +59,7 @@ public class FragmentB extends Fragment {
     private RecyclerView recyclerViewOfRecyclers;
     private RecyclerView.Adapter mAdapterOfRecyclers;
     private RecyclerView.LayoutManager layoutManagerOfRecyclers;
+    private MyAdapterListJogos adapter;
 
     private AutoCompleteTextView autoCompletePesquisar;
 
@@ -81,7 +88,7 @@ public class FragmentB extends Fragment {
         recyclerViewOfRecyclers.setHasFixedSize(true);
         layoutManagerOfRecyclers = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerViewOfRecyclers.setLayoutManager(layoutManagerOfRecyclers);
-        mAdapterOfRecyclers = new MyAdapterOfRecyclersB(this, autoCompletePesquisar);
+        mAdapterOfRecyclers = new MyAdapterOfRecyclersB(this);
         recyclerViewOfRecyclers.setAdapter(mAdapterOfRecyclers);
 
         fabB = (FloatingActionButton) view.findViewById(R.id.floatingActionButtonB);
@@ -283,11 +290,30 @@ public class FragmentB extends Fragment {
         }
     }
 
+    public void acionaDrop(ArrayList<Jogo> listTodosJogosPS4){
+
+        adapter = new MyAdapterListJogos(getActivity(), listTodosJogosPS4);
+        autoCompletePesquisar.setAdapter(adapter);
+
+        autoCompletePesquisar.setThreshold(2);//Começa a procurar do segundo caractere
+
+        autoCompletePesquisar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            final Jogo jogoSelecionado = (Jogo) parent.getItemAtPosition(position);
+
+            Intent quemTemOJogo = new Intent(getActivity(), ActivityQuemTemOJogo.class);
+            quemTemOJogo.putExtra("JOGO", jogoSelecionado);
+            getActivity().startActivity(quemTemOJogo);
+
+            }
+        });
+
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-
-
-
         super.onActivityResult(requestCode, resultCode, intent);
     }
 }
