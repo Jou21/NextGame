@@ -87,6 +87,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private LatLng currentLocationLatLong;
 
+    private boolean pegouTransacoes = false;
+    private boolean pegouTransacoesProximas = false;
+
+    private int contador = 0;
+
+    private ArrayList<String> keys = new ArrayList<>();
+    private ArrayList<TransacaoUser> transacaoUsers = new ArrayList<>();
+    private ArrayList<TransacaoUser> transacaoUsersProximas = new ArrayList<>();
+    private HashMap<String,String> hashMap = new HashMap<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -154,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
 
-        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode,resultCode,intent);
+        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
 
         if (myFragmentPagerAdapter.getItem(0) != null) {
             myFragmentPagerAdapter.getItem(0).onActivityResult(requestCode, resultCode, intent);
@@ -164,54 +174,146 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             myFragmentPagerAdapter.getItem(1).onActivityResult(requestCode, resultCode, intent);
         }
 
-        if(scanningResult != null){
-            if(scanningResult.getContents() != null) {
+        if (scanningResult != null) {
+            if (scanningResult.getContents() != null) {
                 if (intent.hasExtra("SCAN_RESULT")) {
                     contents = intent.getStringExtra("SCAN_RESULT");
 
-                    referenceTransacaoUser.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                transacaoUser = snapshot.getValue(TransacaoUser.class);
-                                String key = snapshot.getKey();
+                    transacaoUsers = new ArrayList<>();
 
-                                if(transacaoUser.getJogo().getCodigoDeBarra().equals(contents) && transacaoUser.getFornecedorId() != user.getUid() ){
+                    keys = new ArrayList<>();
 
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    hashMap = new HashMap<>();
 
-                                    builder.setMessage("Você acaba de receber o jogo " + transacaoUser.getJogo().getNome() + ". Boa diversão!!!").setTitle("PARABÉNS!!!");
-                                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
+                    pegouTransacoes = false;
+
+                    reference.child("location").child(user.getUid())
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    String currentUserlatitude = dataSnapshot.child("latitude").getValue(String.class);
+                                    String currentUserlongitude = dataSnapshot.child("longitude").getValue(String.class);
+
+                                    final LatLng posicaoUsuario = new LatLng(Double.parseDouble(currentUserlatitude), Double.parseDouble(currentUserlongitude));
+
+                                    referenceTransacaoUser.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                                transacaoUser = snapshot.getValue(TransacaoUser.class);
+                                                String key = snapshot.getKey();
+
+                                                transacaoUsers.add(transacaoUser);
+                                                keys.add(key);
+                                                hashMap.put(transacaoUser.getUserId(),key);
+                                            }
+
+                                            pegouTransacoes = true;
+                                            Log.d("ENTROUPROXIMAS0", "ENTROUPROXIMAS0");
+                                            Toast.makeText(MainActivity.this, "ENTROUPROXIMAS0", Toast.LENGTH_SHORT).show();
+
+
+                                            if (pegouTransacoes == true) {
+
+                                            contador = 0;
+
+                                                for (final TransacaoUser transacaoUser : transacaoUsers) {
+
+                                                    Log.d("TRASACOESUSERS", "" + transacaoUser.getFornecedorId());
+
+                                                    if(transacaoUser.getFornecedorId() != null){
+
+                                                    reference.child("location").child(transacaoUser.getFornecedorId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                                            Log.d("ENTROUPROXIMAS1", "ENTROUPROXIMAS1");
+                                                            Toast.makeText(MainActivity.this, "ENTROUPROXIMAS1", Toast.LENGTH_SHORT).show();
+
+                                                            String latitudeFonecedor = dataSnapshot.child("latitude").getValue(String.class);
+                                                            String longitudeFonecedor = dataSnapshot.child("longitude").getValue(String.class);
+
+                                                            LatLng posicaoFonecedor = new LatLng(Double.parseDouble(latitudeFonecedor), Double.parseDouble(longitudeFonecedor));
+
+                                                            double distance = SphericalUtil.computeDistanceBetween(posicaoUsuario, posicaoFonecedor);
+
+                                                            if (transacaoUser.getFornecedorId() != user.getUid() && distance < 3000) {
+
+                                                                transacaoUsersProximas.add(transacaoUser);
+
+                                                            }
+
+                                                            contador++;
+
+                                                            if (contador == transacaoUsers.size()) {
+                                                                Log.d("ENTROUPROXIMAS2", "ENTROUPROXIMAS2");
+                                                                Toast.makeText(MainActivity.this, "ENTROUPROXIMAS2", Toast.LENGTH_SHORT).show();
+                                                                if (transacaoUsersProximas.size() > 1) {
+
+                                                                    //gerar lista para o usuario para ele escolher a transação correta
+
+                                                                } else if (transacaoUsersProximas.size() == 1) {
+                                                                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+                                                                    builder.setMessage("Você acaba de receber o jogo " + transacaoUser.getJogo().getNome() + ". Boa diversão!!!").setTitle("PARABÉNS!!!");
+                                                                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                                        public void onClick(DialogInterface dialog, int id) {
+
+                                                                        }
+                                                                    });
+
+                                                                    String key = (String) hashMap.get(transacaoUsersProximas.get(0).getUserId());
+
+                                                                    AlertDialog dialog = builder.create();
+                                                                    referenceTransacaoUser.child(key).child("status").setValue("ENTREGADO");
+                                                                    dialog.show();
+                                                                } else {
+                                                                    Toast.makeText(MainActivity.this, "É necessário estar próximo do usuário fornecedor...", Toast.LENGTH_LONG).show();
+                                                                }
+
+                                                            }
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(DatabaseError databaseError) {
+                                                        }
+                                                    });
+
+                                                }
+                                                }
+
+
+
+                                            }
+
+
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
                                         }
                                     });
 
-                                    AlertDialog dialog = builder.create();
-                                    referenceTransacaoUser.child(key).child("status").setValue("ENTREGADO");
-                                    dialog.show();
-
-
                                 }
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                }
+                            });
 
-                            }
 
-                        }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                        }
-                    });
 
 
 
                 } else {
-                    Toast.makeText(MainActivity.this,"Activity cannot find  extras " + "SCAN_RESULT",Toast.LENGTH_SHORT).show();
-                    Log.d("EXTRASJOGO","Activity cannot find  extras " + "SCAN_RESULT");
+                    Toast.makeText(MainActivity.this, "Activity cannot find  extras " + "SCAN_RESULT", Toast.LENGTH_SHORT).show();
+                    Log.d("EXTRASJOGO", "Activity cannot find  extras " + "SCAN_RESULT");
                 }
             }
         }
+
 
 
 
