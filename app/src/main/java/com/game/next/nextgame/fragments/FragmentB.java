@@ -290,9 +290,11 @@ public class FragmentB extends Fragment {
         }
     }
 
-    public void acionaDrop(ArrayList<Jogo> listTodosJogosPS4){
+    public void acionaDrop(ArrayList<Jogo> listTodosJogosPS4) {
 
-        adapter = new MyAdapterListJogos(getActivity(), listTodosJogosPS4);
+        if(getActivity() != null) {
+            adapter = new MyAdapterListJogos(getActivity(), listTodosJogosPS4);
+        }
         autoCompletePesquisar.setAdapter(adapter);
 
         autoCompletePesquisar.setThreshold(2);//Começa a procurar do segundo caractere

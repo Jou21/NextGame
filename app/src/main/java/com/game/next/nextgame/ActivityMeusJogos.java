@@ -111,7 +111,7 @@ public class ActivityMeusJogos extends AppCompatActivity {
 
         viewPagerAdapter.addFragment(fragmentMeusJogos, "Meus Jogos");
         viewPagerAdapter.addFragment(new FragmentCarteira(), "Carteira");
-        viewPagerAdapter.addFragment(new ProfileFragment(), "Profile");
+        viewPagerAdapter.addFragment(new ProfileFragment(), "Perfil");
 
         viewPager.setAdapter(viewPagerAdapter);
 

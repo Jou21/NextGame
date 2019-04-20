@@ -301,7 +301,9 @@ public class FragmentA extends Fragment {
 
     public void acionaDrop(ArrayList<Jogo> listTodosJogosXbox){
 
-        adapter = new MyAdapterListJogos(getActivity(), listTodosJogosXbox);
+        if(getActivity() != null) {
+            adapter = new MyAdapterListJogos(getActivity(), listTodosJogosXbox);
+        }
         autoCompletePesquisar.setAdapter(adapter);
 
         autoCompletePesquisar.setThreshold(2);//Começa a procurar do segundo caractere
@@ -323,6 +325,12 @@ public class FragmentA extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
+    }
+
+    @Override
+    public void onAttach(Activity activity){
+        super.onAttach (activity);
+
     }
 
 }

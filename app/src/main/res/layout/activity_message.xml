@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/text_send"
             android:background="@android:color/transparent"
-            android:hint="Type a message..."
+            android:hint="Escreva uma mensagem..."
             android:layout_toLeftOf="@id/btn_send"
             android:layout_centerVertical="true"/>
 

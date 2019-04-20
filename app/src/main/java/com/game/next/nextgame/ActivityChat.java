@@ -111,7 +111,7 @@ public class ActivityChat extends AppCompatActivity {
                 }
 
                 //viewPagerAdapter.addFragment(new UsersFragment(), "Users");
-                viewPagerAdapter.addFragment(new ProfileFragment(), "Profile");
+                viewPagerAdapter.addFragment(new ProfileFragment(), "Perfil");
 
                 viewPager.setAdapter(viewPagerAdapter);
                 tabLayout.setupWithViewPager(viewPager);
