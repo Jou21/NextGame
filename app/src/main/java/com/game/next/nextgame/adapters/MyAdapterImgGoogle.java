@@ -1,7 +1,9 @@
 package com.game.next.nextgame.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.game.next.nextgame.ActivityIdentificaJogo;
+import com.game.next.nextgame.PerguntaXboxOuPS4Activity;
 import com.game.next.nextgame.R;
 
 import com.squareup.picasso.Callback;
@@ -63,10 +66,8 @@ public class MyAdapterImgGoogle extends RecyclerView.Adapter<MyAdapterImgGoogle.
                 holder.imgMeuJogo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                         activityIdentificaJogo.capturaCapa(position);
                         holder.itemView.setBackgroundColor(Color.GREEN);
-
                     }
                 });
             }

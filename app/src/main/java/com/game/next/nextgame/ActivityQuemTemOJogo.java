@@ -80,7 +80,8 @@ public class ActivityQuemTemOJogo extends AppCompatActivity {
 
                             //Toast.makeText(ActivityQuemTemOJogo.this,""+userGame.getUserId(),Toast.LENGTH_SHORT).show();
 
-                            if(userGame.getJogoId().equals(model.getCodigoDeBarra())){
+                            //if(userGame.getJogoId().equals(model.getCodigoDeBarra())){
+                            if(userGame.getNomeJogo().equals(model.getNome())){
                                 //txtQuemTemOJogo.setText(userGame.getJogoId());
                                 //Toast.makeText(ActivityQuemTemOJogo.this, "Tem pelo menos 1 pessoa com esse jogo disponível!!!", Toast.LENGTH_LONG).show();
                                 if(!userGame.getUserId().equals(user.getUid())){

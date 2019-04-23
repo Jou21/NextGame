@@ -1,5 +1,6 @@
 package com.game.next.nextgame;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
@@ -133,7 +134,7 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
 
     private List<String> resultUrls = new ArrayList<String>();
 
-
+    private String resultXboxOuPS4 = "N";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -553,6 +554,7 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
 
                         Intent telaMapa = new Intent(ActivityIdentificaJogo.this, ActivityMapa.class);
                         telaMapa.putExtra("HASHMAP",hashMap);
+                        telaMapa.putExtra("resultXboxOuPS4",resultXboxOuPS4);
                         startActivity(telaMapa);
                         finish();
 
@@ -622,6 +624,7 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
 
                             Intent telaMapa = new Intent(ActivityIdentificaJogo.this, ActivityMapa.class);
                             telaMapa.putExtra("HASHMAP",hashMap);
+                            telaMapa.putExtra("resultXboxOuPS4",resultXboxOuPS4);
                             startActivity(telaMapa);
                             finish();
 
@@ -696,6 +699,7 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
 
                         Intent telaMapa = new Intent(ActivityIdentificaJogo.this, ActivityMapa.class);
                         telaMapa.putExtra("HASHMAP",hashMap);
+                        telaMapa.putExtra("resultXboxOuPS4",resultXboxOuPS4);
                         startActivity(telaMapa);
                         finish();
 
@@ -1044,16 +1048,8 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
         Picasso.get().load(resultUrls.get(posicao)).into(imgCodIdentificado, new Callback() {
             @Override
             public void onSuccess() {
-                scrollIdentificaJogo.setVisibility(View.VISIBLE);
-                txtCodIdentificado.setVisibility(View.GONE);
-                edtDigiteONomeDeSeuJogoAqui.setVisibility(View.VISIBLE);
-                txtSelecioneUmaCapaIdentificaJogo.setVisibility(View.GONE);
-                txtObsSelecioneUmaCapaIdentificaJogo.setVisibility(View.GONE);
-                recyclerView.setVisibility(View.GONE);
-                btnAdicionarJogoSucesso.setVisibility(View.VISIBLE);
-                imgCodIdentificado.setVisibility(View.VISIBLE);
-                layAchouJogo.setVisibility(View.VISIBLE);
-                layNaoAchouJogo.setVisibility(View.GONE);
+                Intent perguntaXboxOuPS4Intent = new Intent(ActivityIdentificaJogo.this, PerguntaXboxOuPS4Activity.class);
+                startActivityForResult(perguntaXboxOuPS4Intent, 1);
             }
 
             @Override
@@ -1072,4 +1068,45 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK){
+                resultXboxOuPS4 = data.getStringExtra("result");
+
+                if(resultXboxOuPS4.equals("XBOX")){
+                    scrollIdentificaJogo.setVisibility(View.VISIBLE);
+                    txtCodIdentificado.setVisibility(View.GONE);
+                    edtDigiteONomeDeSeuJogoAqui.setVisibility(View.VISIBLE);
+                    txtSelecioneUmaCapaIdentificaJogo.setVisibility(View.GONE);
+                    txtObsSelecioneUmaCapaIdentificaJogo.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.GONE);
+                    btnAdicionarJogoSucesso.setVisibility(View.VISIBLE);
+                    imgCodIdentificado.setVisibility(View.VISIBLE);
+                    layAchouJogo.setVisibility(View.VISIBLE);
+                    layNaoAchouJogo.setVisibility(View.GONE);
+                }
+
+                if(resultXboxOuPS4.equals("PS4")){
+                    scrollIdentificaJogo.setVisibility(View.VISIBLE);
+                    txtCodIdentificado.setVisibility(View.GONE);
+                    edtDigiteONomeDeSeuJogoAqui.setVisibility(View.VISIBLE);
+                    txtSelecioneUmaCapaIdentificaJogo.setVisibility(View.GONE);
+                    txtObsSelecioneUmaCapaIdentificaJogo.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.GONE);
+                    btnAdicionarJogoSucesso.setVisibility(View.VISIBLE);
+                    imgCodIdentificado.setVisibility(View.VISIBLE);
+                    layAchouJogo.setVisibility(View.VISIBLE);
+                    layNaoAchouJogo.setVisibility(View.GONE);
+                }
+
+
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
+    }//onActivityResult
 }

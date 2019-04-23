@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PerguntaXboxOuPS4Activity">
+
+    <TextView
+        android:id="@+id/txt_seu_jogo_e_de"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_btn_arredondado_com_borda"
+        android:text="Seu jogo é de ?"
+        android:textColor="#ffffff"
+        android:textSize="30sp"
+        android:padding="10dp"
+        android:textStyle="bold"
+        android:translationZ="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_pergunta_xbox_ou_ps4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <Button
+        android:id="@+id/btn_pergunta_xbox"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="XBOX ONE"
+        android:textSize="30sp"
+        android:backgroundTint="#28DE00"
+        android:textColor="#ffffff"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_pergunta_xbox_ou_ps4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_pergunta_ps4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="PLAYSTATION 4"
+        android:textSize="30sp"
+        android:backgroundTint="#0065DE"
+        android:textColor="#ffffff"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline_pergunta_xbox_ou_ps4" />
+
+
+
+
+</android.support.constraint.ConstraintLayout>

@@ -26,7 +26,9 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.game.next.nextgame.entidades.Jogo;
 import com.game.next.nextgame.entidades.LocationData;
+import com.game.next.nextgame.entidades.UserGame;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -46,6 +48,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -77,7 +81,7 @@ public class ActivityMapa extends FragmentActivity implements OnMapReadyCallback
 
     private HashMap<String, Object> model;
 
-
+    private String resultXboxOuPS4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,10 +113,93 @@ public class ActivityMapa extends FragmentActivity implements OnMapReadyCallback
             Log.d("EXTRASJOGO","Activity cannot find  extras " + "HASHMAP");
         }
 
+        if (getIntent().hasExtra("resultXboxOuPS4")) {
+            resultXboxOuPS4 =  getIntent().getStringExtra("resultXboxOuPS4");
+
+        } else {
+            //Toast.makeText(ActivityMapa.this,"Activity cannot find  extras " + "HASHMAP",Toast.LENGTH_SHORT).show();
+            Log.d("resultXboxOuPS4","Activity cannot find  extras " + "resultXboxOuPS4");
+        }
+
 
         btnMapsConfirmarLocal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(resultXboxOuPS4.equals("XBOX")) {
+
+                    Gson gson = new Gson();
+                    JsonElement jsonElement = gson.toJsonTree(model);
+                    UserGame userGame = gson.fromJson(jsonElement, UserGame.class);
+
+                    Jogo jogo = new Jogo();
+                    jogo.setCategoria("Ação e Aventura");
+                    jogo.setCodigoDeBarra("9999999999999");
+                    jogo.setDataLancamento("");
+                    jogo.setDescricao("Este jogo não tem descrição pois foi cadastrado pelo usuário.");
+                    jogo.setFaixaEtaria("");
+                    jogo.setMultiplayer("");
+                    jogo.setNome(userGame.getNomeJogo());
+                    jogo.setPreco("");
+                    jogo.setRating("5.0");
+                    jogo.setSku("");
+                    jogo.setUrlImgJogo(userGame.getImgJogo());
+                    jogo.setUrlVideo("");
+                    jogo.setCodigoDeBarra1("");
+                    jogo.setCodigoDeBarra2("");
+                    jogo.setCodigoDeBarra3("");
+                    jogo.setCodigoDeBarra4("");
+                    jogo.setCodigoDeBarra5("");
+                    jogo.setCodigoDeBarra6("");
+                    jogo.setCodigoDeBarra7("");
+                    jogo.setCodigoDeBarra8("");
+                    jogo.setCodigoDeBarra9("");
+                    jogo.setCodigoDeBarra10("");
+                    jogo.setUrlImgComplementar1("");
+                    jogo.setUrlImgComplementar2("");
+                    jogo.setUrlImgComplementar3("");
+                    jogo.setUrlImgComplementar4("");
+                    jogo.setUrlImgComplementar5("");
+
+                    reference.child("Xbox").push().setValue(jogo);
+                }
+                if(resultXboxOuPS4.equals("PS4")) {
+
+                    Gson gson = new Gson();
+                    JsonElement jsonElement = gson.toJsonTree(model);
+                    UserGame userGame = gson.fromJson(jsonElement, UserGame.class);
+
+                    Jogo jogo = new Jogo();
+                    jogo.setCategoria("Ação e Aventura");
+                    jogo.setCodigoDeBarra("9999999999999");
+                    jogo.setDataLancamento("");
+                    jogo.setDescricao("Este jogo não tem descrição pois foi cadastrado pelo usuário.");
+                    jogo.setFaixaEtaria("");
+                    jogo.setMultiplayer("");
+                    jogo.setNome(userGame.getNomeJogo());
+                    jogo.setPreco("");
+                    jogo.setRating("5.0");
+                    jogo.setSku("");
+                    jogo.setUrlImgJogo(userGame.getImgJogo());
+                    jogo.setUrlVideo("");
+                    jogo.setCodigoDeBarra1("");
+                    jogo.setCodigoDeBarra2("");
+                    jogo.setCodigoDeBarra3("");
+                    jogo.setCodigoDeBarra4("");
+                    jogo.setCodigoDeBarra5("");
+                    jogo.setCodigoDeBarra6("");
+                    jogo.setCodigoDeBarra7("");
+                    jogo.setCodigoDeBarra8("");
+                    jogo.setCodigoDeBarra9("");
+                    jogo.setCodigoDeBarra10("");
+                    jogo.setUrlImgComplementar1("");
+                    jogo.setUrlImgComplementar2("");
+                    jogo.setUrlImgComplementar3("");
+                    jogo.setUrlImgComplementar4("");
+                    jogo.setUrlImgComplementar5("");
+
+                    reference.child("PS4").push().setValue(jogo);
+                }
                 reference.child("UserGame").child(user.getUid()).push().setValue(model);
                 finish();
             }
