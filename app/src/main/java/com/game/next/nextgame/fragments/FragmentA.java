@@ -5,9 +5,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -18,7 +16,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -29,25 +26,20 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.game.next.nextgame.ActivityChat;
-import com.game.next.nextgame.ActivityIdentificaJogo;
 import com.game.next.nextgame.ActivityMapa;
 import com.game.next.nextgame.ActivityMeusJogos;
 import com.game.next.nextgame.ActivityQuemTemOJogo;
 import com.game.next.nextgame.CaptureActivityPortrait;
-import com.game.next.nextgame.MainActivity;
-import com.game.next.nextgame.MessageActivity;
+import com.game.next.nextgame.CustomScannerActivity;
 import com.game.next.nextgame.R;
 import com.game.next.nextgame.adapters.MyAdapterListJogos;
 import com.game.next.nextgame.adapters.MyAdapterOfRecyclers;
 import com.game.next.nextgame.entidades.Jogo;
 import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class FragmentA extends Fragment {
 
@@ -145,7 +137,8 @@ public class FragmentA extends Fragment {
                 integrator.setCameraId(0);  // Use a specific camera of the device
                 integrator.setOrientationLocked(true);
                 integrator.setBeepEnabled(true);
-                integrator.setCaptureActivity(CaptureActivityPortrait.class);
+                //integrator.setCaptureActivity(CaptureActivityPortrait.class);
+                integrator.setCaptureActivity(CustomScannerActivity.class);
                 integrator.initiateScan();
             }
         });

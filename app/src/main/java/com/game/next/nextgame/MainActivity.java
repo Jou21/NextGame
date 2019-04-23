@@ -178,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             if (scanningResult.getContents() != null) {
                 if (intent.hasExtra("SCAN_RESULT")) {
                     contents = intent.getStringExtra("SCAN_RESULT");
+                    Toast.makeText(MainActivity.this,"" + contents,Toast.LENGTH_LONG).show();
 
                     transacaoUsers = new ArrayList<>();
 

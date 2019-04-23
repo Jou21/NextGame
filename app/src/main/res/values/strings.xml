@@ -23,7 +23,8 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-
+    <string name="turn_on_flashlight">Ligar Flash</string>
+    <string name="turn_off_flashlight">Desligar Flash</string>
     <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
     <string name="facebook_app_id">338901533369067</string>
     <string name="fb_login_protocol_scheme">fb338901533369067</string>
