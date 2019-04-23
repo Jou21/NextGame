@@ -4,6 +4,7 @@
     android:id="@+id/fragment_meus_jogos"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:context=".fragments.FragmentMeusJogos"
     android:background="#fff"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 

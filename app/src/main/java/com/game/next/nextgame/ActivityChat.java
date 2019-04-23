@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.game.next.nextgame.entidades.Chat;
 import com.game.next.nextgame.entidades.User;
 import com.game.next.nextgame.fragments.ChatsFragment;
+import com.game.next.nextgame.fragments.FragmentTransacoes;
 import com.game.next.nextgame.fragments.ProfileFragment;
 import com.game.next.nextgame.fragments.UsersFragment;
 import com.google.firebase.auth.FirebaseAuth;
@@ -111,7 +112,8 @@ public class ActivityChat extends AppCompatActivity {
                 }
 
                 //viewPagerAdapter.addFragment(new UsersFragment(), "Users");
-                viewPagerAdapter.addFragment(new ProfileFragment(), "Perfil");
+                //viewPagerAdapter.addFragment(new ProfileFragment(), "Perfil");
+                viewPagerAdapter.addFragment(new FragmentTransacoes(), "Transações");
 
                 viewPager.setAdapter(viewPagerAdapter);
                 tabLayout.setupWithViewPager(viewPager);
