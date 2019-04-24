@@ -28,7 +28,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/shape_btn_arredondado_azul"
-        android:text="ADD CREDIT CARD"
+        android:text="ADICIONAR CARTÃO"
         android:drawableLeft="@drawable/ic_baseline_credit_card_24px"
         android:drawablePadding="-20dp"
         android:paddingLeft="10dp"

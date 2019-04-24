@@ -18,6 +18,8 @@
         android:id="@+id/first_line_transacao"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:singleLine="true"
         android:layout_above="@id/second_line_transacao"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"

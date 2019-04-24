@@ -83,7 +83,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="63dp"
         android:layout_marginEnd="8dp"
-        android:text="Procurando..."
+        android:text="Aguarde um pouco..."
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
