@@ -34,6 +34,7 @@ import com.game.next.nextgame.ActivityMapa;
 import com.game.next.nextgame.ActivityMeusJogos;
 import com.game.next.nextgame.ActivityQuemTemOJogo;
 import com.game.next.nextgame.CaptureActivityPortrait;
+import com.game.next.nextgame.CustomScannerActivity;
 import com.game.next.nextgame.R;
 import com.game.next.nextgame.adapters.MyAdapterListJogos;
 import com.game.next.nextgame.adapters.MyAdapterOfRecyclersB;
@@ -131,15 +132,12 @@ public class FragmentB extends Fragment {
         btnScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent telaMeusJogos = new Intent(view.getContext(), FragmentCarteira.class);
-                //startActivity(telaMeusJogos);
-
                 IntentIntegrator integrator = new IntentIntegrator(getActivity());
                 integrator.setPrompt("Mantenha um palmo de distancia do código de barras");
                 integrator.setCameraId(0);  // Use a specific camera of the device
                 integrator.setOrientationLocked(true);
                 integrator.setBeepEnabled(true);
-                integrator.setCaptureActivity(CaptureActivityPortrait.class);
+                integrator.setCaptureActivity(CustomScannerActivity.class);
                 integrator.initiateScan();
             }
         });

@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.game.next.nextgame.ActivityIdentificaJogo;
 import com.game.next.nextgame.ActivityMeusJogos;
 import com.game.next.nextgame.CaptureActivityPortrait;
+import com.game.next.nextgame.CustomScannerActivity;
 import com.game.next.nextgame.R;
 import com.game.next.nextgame.VerificaSeAchouOJogoCorretoActivity;
 import com.game.next.nextgame.adapters.MyAdapterMeusJogos;
@@ -70,7 +71,8 @@ public class FragmentMeusJogos extends Fragment {
                 integrator.setCameraId(0);  // Use a specific camera of the device
                 integrator.setOrientationLocked(true);
                 integrator.setBeepEnabled(true);
-                integrator.setCaptureActivity(CaptureActivityPortrait.class);
+                //integrator.setCaptureActivity(CaptureActivityPortrait.class);
+                integrator.setCaptureActivity(CustomScannerActivity.class);
                 integrator.initiateScan();
 
             }

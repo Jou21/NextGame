@@ -1,8 +1,12 @@
 package com.game.next.nextgame;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -22,13 +26,18 @@ public class CustomScannerActivity extends Activity implements
 
     private CaptureManager capture;
     private DecoratedBarcodeView barcodeScannerView;
-    private Button switchFlashlightButton;
+    private FloatingActionButton switchFlashlightButton;
     private ViewfinderView viewfinderView;
+    private Button btnSemCodigoDeBarras;
+
+    private boolean luzLigada = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom_scanner);
+
+        luzLigada = false;
 
         Window window = getWindow();
 
@@ -37,7 +46,20 @@ public class CustomScannerActivity extends Activity implements
         barcodeScannerView = (DecoratedBarcodeView)findViewById(R.id.zxing_barcode_scanner);
         barcodeScannerView.setTorchListener(this);
 
-        switchFlashlightButton = (Button)findViewById(R.id.switch_flashlight);
+        switchFlashlightButton = (FloatingActionButton)findViewById(R.id.switch_flashlight);
+        btnSemCodigoDeBarras = (Button) findViewById(R.id.btn_sem_codigo_de_barras);
+
+        btnSemCodigoDeBarras.setText("O JOGO NÃO TEM CÓDIGO DE BARRAS \nPEGAR JOGO POR LOCALIZAÇÃO PRÓXIMA");
+
+        btnSemCodigoDeBarras.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getIntent().getAction());
+                intent.putExtra("SCAN_RESULT", "0000000000000");
+                setResult(RESULT_OK,intent);
+                finish();
+            }
+        });
 
         viewfinderView = (ViewfinderView) findViewById(R.id.zxing_viewfinder_view);
 
@@ -93,11 +115,15 @@ public class CustomScannerActivity extends Activity implements
     }
 
     public void switchFlashlight(View view) {
-        if (getString(R.string.turn_on_flashlight).equals(switchFlashlightButton.getText())) {
-            barcodeScannerView.setTorchOn();
-        } else {
+
+        if (luzLigada == true) {
             barcodeScannerView.setTorchOff();
+            luzLigada = false;
+        } else {
+            barcodeScannerView.setTorchOn();
+            luzLigada = true;
         }
+
     }
 
     public void changeMaskColor(View view) {
@@ -108,11 +134,15 @@ public class CustomScannerActivity extends Activity implements
 
     @Override
     public void onTorchOn() {
-        switchFlashlightButton.setText(R.string.turn_off_flashlight);
+        //switchFlashlightButton.setText(R.string.turn_off_flashlight);
+        switchFlashlightButton.setImageDrawable(ContextCompat.getDrawable(CustomScannerActivity.this, R.drawable.ic_flash_on_black_24dp));
+        switchFlashlightButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF6F22")));
     }
 
     @Override
     public void onTorchOff() {
-        switchFlashlightButton.setText(R.string.turn_on_flashlight);
+        //switchFlashlightButton.setText(R.string.turn_on_flashlight);
+        switchFlashlightButton.setImageDrawable(ContextCompat.getDrawable(CustomScannerActivity.this, R.drawable.ic_flash_off_black_24dp));
+        switchFlashlightButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#0065DE")));
     }
 }

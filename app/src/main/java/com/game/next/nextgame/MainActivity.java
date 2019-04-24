@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             if (scanningResult.getContents() != null) {
                 if (intent.hasExtra("SCAN_RESULT")) {
                     contents = intent.getStringExtra("SCAN_RESULT");
-                    Toast.makeText(MainActivity.this,"" + contents,Toast.LENGTH_LONG).show();
+                    //Toast.makeText(MainActivity.this,"" + contents,Toast.LENGTH_LONG).show();
 
                     transacaoUsers = new ArrayList<>();
 
@@ -210,8 +210,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                             }
 
                                             pegouTransacoes = true;
-                                            Log.d("ENTROUPROXIMAS0", "ENTROUPROXIMAS0");
-                                            Toast.makeText(MainActivity.this, "ENTROUPROXIMAS0", Toast.LENGTH_SHORT).show();
+                                            //Log.d("ENTROUPROXIMAS0", "ENTROUPROXIMAS0");
+                                            //Toast.makeText(MainActivity.this, "ENTROUPROXIMAS0", Toast.LENGTH_SHORT).show();
 
 
                                             if (pegouTransacoes == true) {
@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                                                 for (final TransacaoUser transacaoUser : transacaoUsers) {
 
-                                                    Log.d("TRASACOESUSERS", "" + transacaoUser.getFornecedorId());
+                                                    //Log.d("TRASACOESUSERS", "" + transacaoUser.getFornecedorId());
 
                                                     if(transacaoUser.getFornecedorId() != null){
 
@@ -228,8 +228,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                                         @Override
                                                         public void onDataChange(DataSnapshot dataSnapshot) {
 
-                                                            Log.d("ENTROUPROXIMAS1", "ENTROUPROXIMAS1");
-                                                            Toast.makeText(MainActivity.this, "ENTROUPROXIMAS1", Toast.LENGTH_SHORT).show();
+                                                            //Log.d("ENTROUPROXIMAS1", "ENTROUPROXIMAS1");
+                                                            //Toast.makeText(MainActivity.this, "ENTROUPROXIMAS1", Toast.LENGTH_SHORT).show();
 
                                                             String latitudeFonecedor = dataSnapshot.child("latitude").getValue(String.class);
                                                             String longitudeFonecedor = dataSnapshot.child("longitude").getValue(String.class);
@@ -247,27 +247,33 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                                             contador++;
 
                                                             if (contador == transacaoUsers.size()) {
-                                                                Log.d("ENTROUPROXIMAS2", "ENTROUPROXIMAS2");
-                                                                Toast.makeText(MainActivity.this, "ENTROUPROXIMAS2", Toast.LENGTH_SHORT).show();
+                                                                //Log.d("ENTROUPROXIMAS2", "ENTROUPROXIMAS2");
+                                                                //Toast.makeText(MainActivity.this, "ENTROUPROXIMAS2", Toast.LENGTH_SHORT).show();
                                                                 if (transacaoUsersProximas.size() > 1) {
 
                                                                     //gerar lista para o usuario para ele escolher a transação correta
 
                                                                 } else if (transacaoUsersProximas.size() == 1) {
-                                                                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
-                                                                    builder.setMessage("Você acaba de receber o jogo " + transacaoUser.getJogo().getNome() + ". Boa diversão!!!").setTitle("PARABÉNS!!!");
-                                                                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                                                        public void onClick(DialogInterface dialog, int id) {
+                                                                    if(transacaoUsersProximas.get(0).getStatus().equals("INICIO")) {
+                                                                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
-                                                                        }
-                                                                    });
+                                                                        builder.setMessage("Você acaba de receber o jogo " + transacaoUser.getJogo().getNome() + ". Boa diversão!!!").setTitle("PARABÉNS!!!");
+                                                                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                                            public void onClick(DialogInterface dialog, int id) {
 
-                                                                    String key = (String) hashMap.get(transacaoUsersProximas.get(0).getUserId());
+                                                                            }
+                                                                        });
 
-                                                                    AlertDialog dialog = builder.create();
-                                                                    referenceTransacaoUser.child(key).child("status").setValue("ENTREGADO");
-                                                                    dialog.show();
+                                                                        String key = (String) hashMap.get(transacaoUsersProximas.get(0).getUserId());
+
+                                                                        AlertDialog dialog = builder.create();
+                                                                        referenceTransacaoUser.child(key).child("status").setValue("ENTREGADO");
+                                                                        dialog.show();
+                                                                    }else {
+                                                                        Toast.makeText(MainActivity.this, "O jogo já está entregue!", Toast.LENGTH_LONG).show();
+                                                                    }
+
                                                                 } else {
                                                                     Toast.makeText(MainActivity.this, "É necessário estar próximo do usuário fornecedor...", Toast.LENGTH_LONG).show();
                                                                 }
