@@ -1,6 +1,7 @@
 package com.game.next.nextgame.adapters;
 
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,7 +58,15 @@ public class MyAdapterTransacoes extends RecyclerView.Adapter<MyAdapterTransacoe
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.txtFirstLine.setText(transacoesUsers.get(position).getJogo().getNome());
-        holder.txtSecondLine.setText(transacoesUsers.get(position).getStatus());
+
+        if(transacoesUsers.get(position).getStatus().equals("ENTREGADO")) {
+            holder.txtSecondLine.setText(transacoesUsers.get(position).getStatus());
+            holder.txtSecondLine.setBackground(ContextCompat.getDrawable(holder.layout.getContext(), R.drawable.shape_btn_arredondado_verde));
+        }else {
+            holder.txtSecondLine.setText(transacoesUsers.get(position).getStatus());
+            holder.txtSecondLine.setBackground(ContextCompat.getDrawable(holder.layout.getContext(), R.drawable.shape_btn_arredondado_azul));
+        }
+
 
         referenceUsers.addValueEventListener(new ValueEventListener() {
             @Override
