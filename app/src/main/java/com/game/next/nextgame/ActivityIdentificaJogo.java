@@ -1,7 +1,9 @@
 package com.game.next.nextgame;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 
 import android.graphics.PorterDuff;
@@ -905,35 +907,54 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
         btnNaoAcheiOJogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                scrollIdentificaJogo.setVisibility(View.GONE);
-                txtSelecioneUmaCapaIdentificaJogo.setVisibility(View.VISIBLE);
-                txtObsSelecioneUmaCapaIdentificaJogo.setVisibility(View.VISIBLE);
-                recyclerView.setVisibility(View.VISIBLE);
-
-                exibirProgress(true);
-
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
 
 
-                        try {
-                            Document doc = Jsoup.connect("https://www.google.com.br/search?tbm=isch&sa=1&ei=xTIUW5nGJYSPwwSZspqACg&q=" + finalCodigoDeBarras + "&oq=" + finalCodigoDeBarras + "&gs_l=img.3...4944.4944.0.5656.1.1.0.0.0.0.116.116.0j1.1.0....0...1c.1.64.img..0.0.0....0.AuKFroOBgdI#imgrc=_").get();
+                AlertDialog.Builder builder = new AlertDialog.Builder(ActivityIdentificaJogo.this);
 
-                            Log.d("URL","https://www.google.com.br/search?tbm=isch&sa=1&ei=xTIUW5nGJYSPwwSZspqACg&q=" + finalCodigoDeBarras + "&oq=" + finalCodigoDeBarras + "&gs_l=img.3...4944.4944.0.5656.1.1.0.0.0.0.116.116.0j1.1.0....0...1c.1.64.img..0.0.0....0.AuKFroOBgdI#imgrc=_");
-                            //Document doc1 = Jsoup.connect("https://cosmos.bluesoft.com.br/produtos/" + finalCodigoDeBarras).get();
+                builder.setTitle("Qual é o nome do seu jogo?");
 
-                            //nomeProduto = doc1.getElementById("container-principal").getElementsByTag("h1").text();
+                final EditText input = new EditText(ActivityIdentificaJogo.this);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT);
+                input.setLayoutParams(lp);
+                builder.setView(input);
 
-                            Elements elements = doc.select("div.rg_meta");
+                builder.setPositiveButton("Pesquisar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
 
-                            JSONObject jsonObject;
-                            for (Element element : elements) {
-                                if (element.childNodeSize() > 0) {
-                                    jsonObject = (JSONObject) new JSONParser().parse(element.childNode(0).toString());
-                                    resultUrls.add((String) jsonObject.get("ou"));
-                                }
-                            }
+
+                        scrollIdentificaJogo.setVisibility(View.GONE);
+                        txtSelecioneUmaCapaIdentificaJogo.setVisibility(View.VISIBLE);
+                        txtObsSelecioneUmaCapaIdentificaJogo.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.VISIBLE);
+
+                        exibirProgress(true);
+
+
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+
+
+                                try {
+                                    Document doc = Jsoup.connect("https://www.google.com.br/search?tbm=isch&sa=1&ei=xTIUW5nGJYSPwwSZspqACg&q=" + input.getText().toString() + "&oq=" + input.getText().toString() + "&gs_l=img.3...4944.4944.0.5656.1.1.0.0.0.0.116.116.0j1.1.0....0...1c.1.64.img..0.0.0....0.AuKFroOBgdI#imgrc=_").get();
+
+                                    Log.d("URL","https://www.google.com.br/search?tbm=isch&sa=1&ei=xTIUW5nGJYSPwwSZspqACg&q=" + input.getText().toString() + "&oq=" + input.getText().toString() + "&gs_l=img.3...4944.4944.0.5656.1.1.0.0.0.0.116.116.0j1.1.0....0...1c.1.64.img..0.0.0....0.AuKFroOBgdI#imgrc=_");
+                                    //Document doc1 = Jsoup.connect("https://cosmos.bluesoft.com.br/produtos/" + finalCodigoDeBarras).get();
+
+                                    //nomeProduto = doc1.getElementById("container-principal").getElementsByTag("h1").text();
+
+                                    Elements elements = doc.select("div.rg_meta");
+
+                                    JSONObject jsonObject;
+                                    for (Element element : elements) {
+                                        if (element.childNodeSize() > 0) {
+                                            jsonObject = (JSONObject) new JSONParser().parse(element.childNode(0).toString());
+                                            resultUrls.add((String) jsonObject.get("ou"));
+                                        }
+                                    }
 
                         /*
                         System.out.println("number of results: " + resultUrls.size());
@@ -943,32 +964,43 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
                         }
                         */
 
-                        //    url = resultUrls.get(0);
+                                    //    url = resultUrls.get(0);
 
 
-                        } catch (IOException e) {
+                                } catch (IOException e) {
 
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
 
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
 
-                                //mAdapter = new MyAdapterImgGoogle(resultUrls, recyclerView);
-                                mAdapter = new MyAdapterImgGoogle(resultUrls, ActivityIdentificaJogo.this);
-                                recyclerView.setAdapter(mAdapter);
+                                        //mAdapter = new MyAdapterImgGoogle(resultUrls, recyclerView);
+                                        mAdapter = new MyAdapterImgGoogle(resultUrls, ActivityIdentificaJogo.this);
+                                        recyclerView.setAdapter(mAdapter);
 
-                                exibirProgress(false);
+                                        exibirProgress(false);
 
-                                //Picasso.get().load(url).into(imageView);
-                                //txtCodBar.setText(nomeProduto);
-                                //exibirProgress(false);
+                                        //Picasso.get().load(url).into(imageView);
+                                        //txtCodBar.setText(nomeProduto);
+                                        //exibirProgress(false);
+                                    }
+                                });
                             }
-                        });
+                        }).start();
+
                     }
-                }).start();
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+
+
+
+
 
             }
         });
