@@ -263,7 +263,7 @@ public class ActivityMapa extends FragmentActivity implements OnMapReadyCallback
 
         //Toast.makeText(this, "Localização atualizada", Toast.LENGTH_SHORT).show();
 
-        currentLocationLatLong = new LatLng(location.getLatitude(),location.getLongitude());
+        //currentLocationLatLong = new LatLng(location.getLatitude(),location.getLongitude());
         currentLocationExiste = true;
 
         reference.child("location").child(user.getUid()).child("latitude").setValue(String.valueOf(location.getLatitude()));

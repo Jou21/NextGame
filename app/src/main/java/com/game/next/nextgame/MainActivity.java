@@ -189,9 +189,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     pegouTransacoes = false;
 
                     reference.child("location").child(user.getUid())
-                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                            .addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
+
                                     String currentUserlatitude = dataSnapshot.child("latitude").getValue(String.class);
                                     String currentUserlongitude = dataSnapshot.child("longitude").getValue(String.class);
 
@@ -200,6 +201,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     referenceTransacaoUser.addValueEventListener(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                            transacaoUsers = new ArrayList<>();
+
+                                            keys = new ArrayList<>();
+
+                                            hashMap = new HashMap<>();
+
+                                            pegouTransacoes = false;
+
+
                                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                                 transacaoUser = snapshot.getValue(TransacaoUser.class);
                                                 String key = snapshot.getKey();
@@ -218,13 +229,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                                             contador = 0;
 
+                                            transacaoUsersProximas = new ArrayList<>();
+
                                                 for (final TransacaoUser transacaoUser : transacaoUsers) {
 
                                                     //Log.d("TRASACOESUSERS", "" + transacaoUser.getFornecedorId());
 
                                                     if(transacaoUser.getFornecedorId() != null){
 
-                                                    reference.child("location").child(transacaoUser.getFornecedorId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    reference.child("location").child(transacaoUser.getFornecedorId()).addValueEventListener(new ValueEventListener() {
                                                         @Override
                                                         public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -238,7 +251,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                                                             double distance = SphericalUtil.computeDistanceBetween(posicaoUsuario, posicaoFonecedor);
 
-                                                            if (transacaoUser.getFornecedorId() != user.getUid() && distance < 3000) {
+                                                            if (transacaoUser.getFornecedorId() != user.getUid() && distance < 1500) {
 
                                                                 transacaoUsersProximas.add(transacaoUser);
 
@@ -289,10 +302,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                                 }
                                                 }
 
-
-
                                             }
-
 
                                         }
 
@@ -308,22 +318,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 }
                             });
 
-
-
-
-
-
-
                 } else {
                     Toast.makeText(MainActivity.this, "Activity cannot find  extras " + "SCAN_RESULT", Toast.LENGTH_SHORT).show();
                     Log.d("EXTRASJOGO", "Activity cannot find  extras " + "SCAN_RESULT");
                 }
             }
         }
-
-
-
-
 
     }
 
@@ -446,11 +446,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //UPDATE
         reference.child("location").child(user.getUid())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+                .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        if (currentLocationExiste == true) {
+                        if (currentLocationExiste == true && currentLocationLatLong != null) {
 
                             if (!dataSnapshot.exists()) {
 
@@ -466,15 +466,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                                 localDeEncontro = new LatLng(Double.parseDouble(entregaLatitude), Double.parseDouble(entregaLongitude));
 
-                                if(currentLocationLatLong != null){
 
-                                    if ((Double.parseDouble(entregaLatitude) != currentLocationLatLong.latitude) || (Double.parseDouble(entregaLongitude) != currentLocationLatLong.longitude)) {
+                                if ((Double.parseDouble(entregaLatitude) != currentLocationLatLong.latitude) || (Double.parseDouble(entregaLongitude) != currentLocationLatLong.longitude)) {
 
-                                        reference.child("location").child(user.getUid()).child("latitude").setValue(String.valueOf(currentLocationLatLong.latitude));
-                                        reference.child("location").child(user.getUid()).child("longitude").setValue(String.valueOf(currentLocationLatLong.longitude));
+                                    reference.child("location").child(user.getUid()).child("latitude").setValue(String.valueOf(currentLocationLatLong.latitude));
+                                    reference.child("location").child(user.getUid()).child("longitude").setValue(String.valueOf(currentLocationLatLong.longitude));
 
-                                    }
                                 }
+
 
                             }
 
@@ -500,7 +499,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         reference.child("location").child(user.getUid()).child("longitude").setValue(String.valueOf(location.getLongitude()));
 
         //Add to firebase
-
         //if(currentLocationLatLong != null){
         //    reference.child("location").child(user.getUid()).child("latitude").setValue(String.valueOf(currentLocationLatLong.latitude));
         //    reference.child("location").child(user.getUid()).child("longitude").setValue(String.valueOf(currentLocationLatLong.longitude));
@@ -538,6 +536,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mLastLocation != null) {
+
+            currentLocationLatLong = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
 
             currentLocationExiste = true;
 
