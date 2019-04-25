@@ -71,7 +71,7 @@ public class MyViewPagerAdapter extends LoopingPagerAdapter<Integer> {
 
 
             if(listPosition == 0){
-                if(modelJodoDoUsuario.getUrlImgJogo() != null) {
+                if(modelJodoDoUsuario.getUrlImgJogo() != null && !modelJodoDoUsuario.getUrlImgJogo().equals("")) {
 
                     String urlImgJogo = "";
                     if(modelJodoDoUsuario.getUrlImgJogo().contains("https:")){
@@ -97,7 +97,7 @@ public class MyViewPagerAdapter extends LoopingPagerAdapter<Integer> {
 
 
             if(listPosition == 1){
-                if(modelJodoDoUsuario.getUrlImgComplementar1() != null) {
+                if(modelJodoDoUsuario.getUrlImgComplementar1() != null && !modelJodoDoUsuario.getUrlImgComplementar1().equals("")) {
 
                     String urlImgComplementar1 = "";
                     if(modelJodoDoUsuario.getUrlImgComplementar1().contains("https:")){
@@ -123,7 +123,7 @@ public class MyViewPagerAdapter extends LoopingPagerAdapter<Integer> {
 
 
             if(listPosition == 2){
-                if(modelJodoDoUsuario.getUrlImgComplementar2() != null) {
+                if(modelJodoDoUsuario.getUrlImgComplementar2() != null && !modelJodoDoUsuario.getUrlImgComplementar2().equals("")) {
 
                     String urlImgComplementar2 = "";
                     if(modelJodoDoUsuario.getUrlImgComplementar2().contains("https:")){
@@ -149,7 +149,7 @@ public class MyViewPagerAdapter extends LoopingPagerAdapter<Integer> {
 
 
             if(listPosition == 3){
-                if(modelJodoDoUsuario.getUrlImgComplementar3() != null) {
+                if(modelJodoDoUsuario.getUrlImgComplementar3() != null && !modelJodoDoUsuario.getUrlImgComplementar3().equals("")) {
 
                     String urlImgComplementar3 = "";
                     if(modelJodoDoUsuario.getUrlImgComplementar3().contains("https:")){
@@ -175,7 +175,7 @@ public class MyViewPagerAdapter extends LoopingPagerAdapter<Integer> {
 
 
             if(listPosition == 4){
-                if(modelJodoDoUsuario.getUrlImgComplementar4() != null) {
+                if(modelJodoDoUsuario.getUrlImgComplementar4() != null && !modelJodoDoUsuario.getUrlImgComplementar4().equals("")) {
 
                     String urlImgComplementar4 = "";
                     if(modelJodoDoUsuario.getUrlImgComplementar4().contains("https:")){
@@ -201,7 +201,7 @@ public class MyViewPagerAdapter extends LoopingPagerAdapter<Integer> {
 
 
             if(listPosition == 5){
-                if(modelJodoDoUsuario.getUrlImgComplementar5() != null) {
+                if(modelJodoDoUsuario.getUrlImgComplementar5() != null && !modelJodoDoUsuario.getUrlImgComplementar5().equals("")) {
 
                     String urlImgComplementar5 = "";
                     if(modelJodoDoUsuario.getUrlImgComplementar5().contains("https:")){

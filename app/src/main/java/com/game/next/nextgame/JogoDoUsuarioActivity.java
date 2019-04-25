@@ -96,27 +96,27 @@ public class JogoDoUsuarioActivity extends AppCompatActivity {
 
             int numeroDeViewsPager = 0;
 
-            if(modelJodoDoUsuario.getUrlImgJogo() != null){
+            if(modelJodoDoUsuario.getUrlImgJogo() != null && !modelJodoDoUsuario.getUrlImgJogo().equals("")){
                 numeroDeViewsPager += 1;
             }
 
-            if(modelJodoDoUsuario.getUrlImgComplementar1() != null){
+            if(modelJodoDoUsuario.getUrlImgComplementar1() != null && !modelJodoDoUsuario.getUrlImgComplementar1().equals("")){
                 numeroDeViewsPager += 1;
             }
 
-            if(modelJodoDoUsuario.getUrlImgComplementar2() != null){
+            if(modelJodoDoUsuario.getUrlImgComplementar2() != null && !modelJodoDoUsuario.getUrlImgComplementar2().equals("")){
                 numeroDeViewsPager += 1;
             }
 
-            if(modelJodoDoUsuario.getUrlImgComplementar3() != null){
+            if(modelJodoDoUsuario.getUrlImgComplementar3() != null && !modelJodoDoUsuario.getUrlImgComplementar3().equals("")){
                 numeroDeViewsPager += 1;
             }
 
-            if(modelJodoDoUsuario.getUrlImgComplementar4() != null){
+            if(modelJodoDoUsuario.getUrlImgComplementar4() != null && !modelJodoDoUsuario.getUrlImgComplementar4().equals("")){
                 numeroDeViewsPager += 1;
             }
 
-            if(modelJodoDoUsuario.getUrlImgComplementar5() != null){
+            if(modelJodoDoUsuario.getUrlImgComplementar5() != null && !modelJodoDoUsuario.getUrlImgComplementar5().equals("")){
                 numeroDeViewsPager += 1;
             }
 

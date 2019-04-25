@@ -497,8 +497,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //Add to firebase
 
-        reference.child("location").child(user.getUid()).child("latitude").setValue(String.valueOf(currentLocationLatLong.latitude));
-        reference.child("location").child(user.getUid()).child("longitude").setValue(String.valueOf(currentLocationLatLong.longitude));
+        if(currentLocationLatLong != null){
+            reference.child("location").child(user.getUid()).child("latitude").setValue(String.valueOf(currentLocationLatLong.latitude));
+            reference.child("location").child(user.getUid()).child("longitude").setValue(String.valueOf(currentLocationLatLong.longitude));
+        }
 
         //Toast.makeText(this, "Localização atualizada", Toast.LENGTH_SHORT).show();
     }
