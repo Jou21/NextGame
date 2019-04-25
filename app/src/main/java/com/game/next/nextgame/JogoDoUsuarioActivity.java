@@ -44,6 +44,8 @@ public class JogoDoUsuarioActivity extends AppCompatActivity {
     private String precoAluguel;
     private String precoVenda;
     private String time;
+    private String aluga = "N";
+    private String vende = "N";
 
     private LoopingViewPager viewPager;
     private MyViewPagerAdapter adapter;
@@ -194,7 +196,15 @@ public class JogoDoUsuarioActivity extends AppCompatActivity {
             if (getIntent().hasExtra("PRECOALUGUEL")) {
                 precoAluguel = getIntent().getStringExtra("PRECOALUGUEL");
 
-                if(precoAluguel.equals("N")){
+                if (getIntent().hasExtra("ALUGA")) {
+                    aluga = getIntent().getStringExtra("ALUGA");
+                } else {
+                    aluga = "N";
+                }
+
+                //Toast.makeText(JogoDoUsuarioActivity.this, "" + precoAluguel , Toast.LENGTH_LONG).show();
+
+                if(aluga.equals("N")){
                     btnAlugarJogoDoUsuario.setText("Indisponível");
                     btnAlugarJogoDoUsuario.setTextSize(16);
                     btnAlugarJogoDoUsuario.setEnabled(false);
@@ -214,7 +224,16 @@ public class JogoDoUsuarioActivity extends AppCompatActivity {
 
             if (getIntent().hasExtra("PRECOVENDA")) {
                 precoVenda = getIntent().getStringExtra("PRECOVENDA");
-                if(precoVenda.equals("N")){
+
+                if (getIntent().hasExtra("VENDE")) {
+                    vende = getIntent().getStringExtra("VENDE");
+                } else {
+                    vende = "N";
+                }
+
+                //Toast.makeText(JogoDoUsuarioActivity.this, "" + precoVenda , Toast.LENGTH_LONG).show();
+
+                if(vende.equals("N")){
                     btnComprarJogoDoUsuario.setText("Indisponível");
                     btnComprarJogoDoUsuario.setTextSize(16);
                     btnComprarJogoDoUsuario.setEnabled(false);

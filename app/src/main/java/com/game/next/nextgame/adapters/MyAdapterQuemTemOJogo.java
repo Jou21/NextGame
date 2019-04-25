@@ -146,18 +146,20 @@ public class MyAdapterQuemTemOJogo extends RecyclerView.Adapter<MyAdapterQuemTem
                             @Override
                             public void onClick(View v) {
 
-                                //Log.d("USERIDS",listaUserGames.get(position).getPrecoAluga());
+                            //Log.d("USERIDS",listaUserGames.get(position).getPrecoAluga());
 
-                                Intent jogoDoUsuarioIntent = new Intent(holder.layout.getContext(), JogoDoUsuarioActivity.class);
-                                jogoDoUsuarioIntent.putExtra("USERID",listaUserGames.get(position).getUserId());
-                                jogoDoUsuarioIntent.putExtra("JOGOUSER",jogo);
-                                jogoDoUsuarioIntent.putExtra("IMAGEMUSER",user.getImageURL());
-                                jogoDoUsuarioIntent.putExtra("NOMEUSER",user.getUsername());
-                                jogoDoUsuarioIntent.putExtra("PRECOALUGUEL",listaUserGames.get(position).getPrecoAluga());
-                                jogoDoUsuarioIntent.putExtra("PRECOVENDA",listaUserGames.get(position).getPrecoVenda());
-                                jogoDoUsuarioIntent.putExtra("TIME",listaUserGames.get(position).getTime());
-                                holder.layout.getContext().startActivity(jogoDoUsuarioIntent);
-                                ((ActivityQuemTemOJogo)holder.layout.getContext()).finish();
+                            Intent jogoDoUsuarioIntent = new Intent(holder.layout.getContext(), JogoDoUsuarioActivity.class);
+                            jogoDoUsuarioIntent.putExtra("USERID",listaUserGames.get(position).getUserId());
+                            jogoDoUsuarioIntent.putExtra("JOGOUSER",jogo);
+                            jogoDoUsuarioIntent.putExtra("IMAGEMUSER",user.getImageURL());
+                            jogoDoUsuarioIntent.putExtra("NOMEUSER",user.getUsername());
+                            jogoDoUsuarioIntent.putExtra("ALUGA",listaUserGames.get(position).getAluga());
+                            jogoDoUsuarioIntent.putExtra("VENDE",listaUserGames.get(position).getVende());
+                            jogoDoUsuarioIntent.putExtra("PRECOALUGUEL",listaUserGames.get(position).getPrecoAluga());
+                            jogoDoUsuarioIntent.putExtra("PRECOVENDA",listaUserGames.get(position).getPrecoVenda());
+                            jogoDoUsuarioIntent.putExtra("TIME",listaUserGames.get(position).getTime());
+                            holder.layout.getContext().startActivity(jogoDoUsuarioIntent);
+                            ((ActivityQuemTemOJogo)holder.layout.getContext()).finish();
                             }
                         });
                     }
