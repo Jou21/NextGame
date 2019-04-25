@@ -134,6 +134,7 @@ public class FragmentA extends Fragment {
                 integrator.setCameraId(0);  // Use a specific camera of the device
                 integrator.setOrientationLocked(true);
                 integrator.setBeepEnabled(true);
+                integrator.addExtra("QUALTELA","MAIN");
                 integrator.setCaptureActivity(CustomScannerActivity.class);
                 integrator.initiateScan();
             }

@@ -71,6 +71,7 @@ public class FragmentMeusJogos extends Fragment {
                 integrator.setCameraId(0);  // Use a specific camera of the device
                 integrator.setOrientationLocked(true);
                 integrator.setBeepEnabled(true);
+                integrator.addExtra("QUALTELA","MEUSJOGOS");
                 //integrator.setCaptureActivity(CaptureActivityPortrait.class);
                 integrator.setCaptureActivity(CustomScannerActivity.class);
                 integrator.initiateScan();

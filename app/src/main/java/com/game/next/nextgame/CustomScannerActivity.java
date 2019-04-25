@@ -9,11 +9,13 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
@@ -24,125 +26,139 @@ import java.util.Random;
 public class CustomScannerActivity extends Activity implements
         DecoratedBarcodeView.TorchListener {
 
-    private CaptureManager capture;
-    private DecoratedBarcodeView barcodeScannerView;
-    private FloatingActionButton switchFlashlightButton;
-    private ViewfinderView viewfinderView;
-    private Button btnSemCodigoDeBarras;
+     private CaptureManager capture;
+     private DecoratedBarcodeView barcodeScannerView;
+     private FloatingActionButton switchFlashlightButton;
+     private ViewfinderView viewfinderView;
+     private Button btnSemCodigoDeBarras;
 
-    private boolean luzLigada = false;
+     private boolean luzLigada = false;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_custom_scanner);
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_custom_scanner);
 
-        luzLigada = false;
+      luzLigada = false;
 
-        Window window = getWindow();
+      Window window = getWindow();
 
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+      window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        barcodeScannerView = (DecoratedBarcodeView)findViewById(R.id.zxing_barcode_scanner);
-        barcodeScannerView.setTorchListener(this);
+      barcodeScannerView = (DecoratedBarcodeView)findViewById(R.id.zxing_barcode_scanner);
+      barcodeScannerView.setTorchListener(this);
 
-        switchFlashlightButton = (FloatingActionButton)findViewById(R.id.switch_flashlight);
-        btnSemCodigoDeBarras = (Button) findViewById(R.id.btn_sem_codigo_de_barras);
+      switchFlashlightButton = (FloatingActionButton)findViewById(R.id.switch_flashlight);
+      btnSemCodigoDeBarras = (Button) findViewById(R.id.btn_sem_codigo_de_barras);
 
-        btnSemCodigoDeBarras.setText("O JOGO NÃO TEM CÓDIGO DE BARRAS \nPEGAR JOGO POR LOCALIZAÇÃO PRÓXIMA");
+    if (getIntent().hasExtra("QUALTELA")) {
+        String qualTela = getIntent().getStringExtra("QUALTELA");
 
-        btnSemCodigoDeBarras.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getIntent().getAction());
-                intent.putExtra("SCAN_RESULT", "0000000000000");
-                setResult(RESULT_OK,intent);
-                finish();
-            }
-        });
-
-        viewfinderView = (ViewfinderView) findViewById(R.id.zxing_viewfinder_view);
-
-        // if the device does not have flashlight in its camera,
-        // then remove the switch flashlight button...
-        if (!hasFlash()) {
-            switchFlashlightButton.setVisibility(View.GONE);
+        if(qualTela.equals("MAIN")){
+            btnSemCodigoDeBarras.setText("O JOGO NÃO TEM CÓDIGO DE BARRAS \nPEGAR JOGO POR LOCALIZAÇÃO PRÓXIMA");
+        }else{
+            btnSemCodigoDeBarras.setText("MEU JOGO NÃO TEM CÓDIGO DE BARRAS");
         }
 
-        capture = new CaptureManager(this, barcodeScannerView);
-        capture.initializeFromIntent(getIntent(), savedInstanceState);
-        capture.decode();
-
-        changeMaskColor(null);
+    } else {
+        //Toast.makeText(JogoDoUsuarioActivity.this,"Activity cannot find  extras " + "USERID",Toast.LENGTH_SHORT).show();
+        //Log.d("EXTRASJOGO","Activity cannot find  extras " + "USERID");
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        capture.onResume();
+
+
+    btnSemCodigoDeBarras.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Intent intent = new Intent(getIntent().getAction());
+        intent.putExtra("SCAN_RESULT", "0000000000000");
+        setResult(RESULT_OK,intent);
+        finish();
+      }
+    });
+
+    viewfinderView = (ViewfinderView) findViewById(R.id.zxing_viewfinder_view);
+
+    // if the device does not have flashlight in its camera,
+    // then remove the switch flashlight button...
+    if (!hasFlash()) {
+      switchFlashlightButton.setVisibility(View.GONE);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        capture.onPause();
+    capture = new CaptureManager(this, barcodeScannerView);
+    capture.initializeFromIntent(getIntent(), savedInstanceState);
+    capture.decode();
+
+    changeMaskColor(null);
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    capture.onResume();
+  }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+    capture.onPause();
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    capture.onDestroy();
+  }
+
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    capture.onSaveInstanceState(outState);
+  }
+
+  @Override
+  public boolean onKeyDown(int keyCode, KeyEvent event) {
+    return barcodeScannerView.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
+  }
+
+  /**
+   * Check if the device's camera has a Flashlight.
+   * @return true if there is Flashlight, otherwise false.
+   */
+  private boolean hasFlash() {
+    return getApplicationContext().getPackageManager()
+            .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+  }
+
+  public void switchFlashlight(View view) {
+
+    if (luzLigada == true) {
+      barcodeScannerView.setTorchOff();
+      luzLigada = false;
+    } else {
+      barcodeScannerView.setTorchOn();
+      luzLigada = true;
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        capture.onDestroy();
-    }
+  }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        capture.onSaveInstanceState(outState);
-    }
+  public void changeMaskColor(View view) {
+    Random rnd = new Random();
+    int color = Color.argb(100, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+    //viewfinderView.setBackgroundColor(color);
+  }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        return barcodeScannerView.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
-    }
+  @Override
+  public void onTorchOn() {
+    //switchFlashlightButton.setText(R.string.turn_off_flashlight);
+    switchFlashlightButton.setImageDrawable(ContextCompat.getDrawable(CustomScannerActivity.this, R.drawable.ic_flash_on_black_24dp));
+    switchFlashlightButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF6F22")));
+  }
 
-    /**
-     * Check if the device's camera has a Flashlight.
-     * @return true if there is Flashlight, otherwise false.
-     */
-    private boolean hasFlash() {
-        return getApplicationContext().getPackageManager()
-                .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
-    }
-
-    public void switchFlashlight(View view) {
-
-        if (luzLigada == true) {
-            barcodeScannerView.setTorchOff();
-            luzLigada = false;
-        } else {
-            barcodeScannerView.setTorchOn();
-            luzLigada = true;
-        }
-
-    }
-
-    public void changeMaskColor(View view) {
-        Random rnd = new Random();
-        int color = Color.argb(100, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-        //viewfinderView.setBackgroundColor(color);
-    }
-
-    @Override
-    public void onTorchOn() {
-        //switchFlashlightButton.setText(R.string.turn_off_flashlight);
-        switchFlashlightButton.setImageDrawable(ContextCompat.getDrawable(CustomScannerActivity.this, R.drawable.ic_flash_on_black_24dp));
-        switchFlashlightButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF6F22")));
-    }
-
-    @Override
-    public void onTorchOff() {
-        //switchFlashlightButton.setText(R.string.turn_on_flashlight);
-        switchFlashlightButton.setImageDrawable(ContextCompat.getDrawable(CustomScannerActivity.this, R.drawable.ic_flash_off_black_24dp));
-        switchFlashlightButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#0065DE")));
-    }
+  @Override
+  public void onTorchOff() {
+    //switchFlashlightButton.setText(R.string.turn_on_flashlight);
+    switchFlashlightButton.setImageDrawable(ContextCompat.getDrawable(CustomScannerActivity.this, R.drawable.ic_flash_off_black_24dp));
+    switchFlashlightButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#0065DE")));
+  }
 }

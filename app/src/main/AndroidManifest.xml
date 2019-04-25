@@ -29,7 +29,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CustomScannerActivity"></activity>
+        <activity android:name=".CustomScannerActivity"
+            android:screenOrientation="portrait"></activity>
         <activity android:name=".PerguntaXboxOuPS4Activity"
             android:screenOrientation="portrait"/>
         <activity
