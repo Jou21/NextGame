@@ -127,24 +127,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         item2 = (LinearLayout) tabPS4.getChildAt(1);
         item2.setBackgroundColor(Color.parseColor("#0065DE"));
 
-        referenceTransacaoUser.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    //transacaoUser = snapshot.getValue(TransacaoUser.class);
-                    //String key = snapshot.getKey();
-                    //Toast.makeText(MainActivity.this,dataSnapshot.getKey(),Toast.LENGTH_LONG);
-                Log.d("ENTROUUU1","ENTROUUU1");
-                //}
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)

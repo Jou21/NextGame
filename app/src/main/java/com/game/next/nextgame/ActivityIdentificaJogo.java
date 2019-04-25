@@ -735,10 +735,14 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference myRefPS4 = database.getReference("PS4");
 
-            myRefPS4.addValueEventListener(new ValueEventListener() {
+            myRefPS4.addListenerForSingleValueEvent(new ValueEventListener() {
 
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    jogosPS4 = new ArrayList<>();
+                    listTodosJogos = new ArrayList<>();
+                    listNomeTodosJogos = new ArrayList<>();
 
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Jogo jogo = snapshot.getValue(Jogo.class);
@@ -818,10 +822,14 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
 
             DatabaseReference myRefXbox = database.getReference("Xbox");
 
-            myRefXbox.addValueEventListener(new ValueEventListener() {
+            myRefXbox.addListenerForSingleValueEvent(new ValueEventListener() {
 
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    jogosXbox = new ArrayList<>();
+                    listTodosJogos = new ArrayList<>();
+                    listNomeTodosJogos = new ArrayList<>();
 
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Jogo jogo = snapshot.getValue(Jogo.class);
@@ -908,7 +916,6 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
                 AlertDialog.Builder builder = new AlertDialog.Builder(ActivityIdentificaJogo.this);
 
                 builder.setTitle("Qual é o nome do seu jogo?");
@@ -938,56 +945,56 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
                             public void run() {
 
 
-                                try {
-                                    Document doc = Jsoup.connect("https://www.google.com.br/search?tbm=isch&sa=1&ei=xTIUW5nGJYSPwwSZspqACg&q=" + input.getText().toString() + "&oq=" + input.getText().toString() + "&gs_l=img.3...4944.4944.0.5656.1.1.0.0.0.0.116.116.0j1.1.0....0...1c.1.64.img..0.0.0....0.AuKFroOBgdI#imgrc=_").get();
+                            try {
+                                Document doc = Jsoup.connect("https://www.google.com.br/search?tbm=isch&sa=1&ei=xTIUW5nGJYSPwwSZspqACg&q=" + input.getText().toString() + "&oq=" + input.getText().toString() + "&gs_l=img.3...4944.4944.0.5656.1.1.0.0.0.0.116.116.0j1.1.0....0...1c.1.64.img..0.0.0....0.AuKFroOBgdI#imgrc=_").get();
 
-                                    Log.d("URL","https://www.google.com.br/search?tbm=isch&sa=1&ei=xTIUW5nGJYSPwwSZspqACg&q=" + input.getText().toString() + "&oq=" + input.getText().toString() + "&gs_l=img.3...4944.4944.0.5656.1.1.0.0.0.0.116.116.0j1.1.0....0...1c.1.64.img..0.0.0....0.AuKFroOBgdI#imgrc=_");
-                                    //Document doc1 = Jsoup.connect("https://cosmos.bluesoft.com.br/produtos/" + finalCodigoDeBarras).get();
+                                Log.d("URL","https://www.google.com.br/search?tbm=isch&sa=1&ei=xTIUW5nGJYSPwwSZspqACg&q=" + input.getText().toString() + "&oq=" + input.getText().toString() + "&gs_l=img.3...4944.4944.0.5656.1.1.0.0.0.0.116.116.0j1.1.0....0...1c.1.64.img..0.0.0....0.AuKFroOBgdI#imgrc=_");
+                                //Document doc1 = Jsoup.connect("https://cosmos.bluesoft.com.br/produtos/" + finalCodigoDeBarras).get();
 
-                                    //nomeProduto = doc1.getElementById("container-principal").getElementsByTag("h1").text();
+                                //nomeProduto = doc1.getElementById("container-principal").getElementsByTag("h1").text();
 
-                                    Elements elements = doc.select("div.rg_meta");
+                                Elements elements = doc.select("div.rg_meta");
 
-                                    JSONObject jsonObject;
-                                    for (Element element : elements) {
-                                        if (element.childNodeSize() > 0) {
-                                            jsonObject = (JSONObject) new JSONParser().parse(element.childNode(0).toString());
-                                            resultUrls.add((String) jsonObject.get("ou"));
-                                        }
+                                JSONObject jsonObject;
+                                for (Element element : elements) {
+                                    if (element.childNodeSize() > 0) {
+                                        jsonObject = (JSONObject) new JSONParser().parse(element.childNode(0).toString());
+                                        resultUrls.add((String) jsonObject.get("ou"));
                                     }
-
-                        /*
-                        System.out.println("number of results: " + resultUrls.size());
-
-                        for (String imageUrl : resultUrls) {
-                            System.out.println(imageUrl);
-                        }
-                        */
-
-                                    //    url = resultUrls.get(0);
-
-
-                                } catch (IOException e) {
-
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
                                 }
 
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
+                            /*
+                            System.out.println("number of results: " + resultUrls.size());
 
-                                        //mAdapter = new MyAdapterImgGoogle(resultUrls, recyclerView);
-                                        mAdapter = new MyAdapterImgGoogle(resultUrls, ActivityIdentificaJogo.this);
-                                        recyclerView.setAdapter(mAdapter);
+                            for (String imageUrl : resultUrls) {
+                                System.out.println(imageUrl);
+                            }
+                            */
 
-                                        exibirProgress(false);
+                                //    url = resultUrls.get(0);
 
-                                        //Picasso.get().load(url).into(imageView);
-                                        //txtCodBar.setText(nomeProduto);
-                                        //exibirProgress(false);
-                                    }
-                                });
+
+                            } catch (IOException e) {
+
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    //mAdapter = new MyAdapterImgGoogle(resultUrls, recyclerView);
+                                    mAdapter = new MyAdapterImgGoogle(resultUrls, ActivityIdentificaJogo.this);
+                                    recyclerView.setAdapter(mAdapter);
+
+                                    exibirProgress(false);
+
+                                    //Picasso.get().load(url).into(imageView);
+                                    //txtCodBar.setText(nomeProduto);
+                                    //exibirProgress(false);
+                                }
+                            });
                             }
                         }).start();
 
@@ -996,11 +1003,6 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
-
-
-
-
-
 
             }
         });
@@ -1029,7 +1031,6 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
     private void acionaDrop(){
         //====================Auto Complete Pesquisar========================================================
         if(listTodosJogos.isEmpty() == false) {
-
 
             adapter = new MyAdapterListJogos(ActivityIdentificaJogo.this, listTodosJogos);
             autoCompletePesquisar.setAdapter(adapter);

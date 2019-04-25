@@ -43,6 +43,8 @@ public class VerificaSeAchouOJogoCorretoActivity extends AppCompatActivity {
 
     private Jogo jogoIdentificado = new Jogo();
 
+    private boolean entrou = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,10 +82,12 @@ public class VerificaSeAchouOJogoCorretoActivity extends AppCompatActivity {
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference myRefPS4 = database.getReference("PS4");
 
-            myRefPS4.addValueEventListener(new ValueEventListener() {
+            myRefPS4.addListenerForSingleValueEvent(new ValueEventListener() {
 
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+
+
 
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Jogo jogo = snapshot.getValue(Jogo.class);
@@ -150,7 +154,7 @@ public class VerificaSeAchouOJogoCorretoActivity extends AppCompatActivity {
 
             DatabaseReference myRefXbox = database.getReference("Xbox");
 
-            myRefXbox.addValueEventListener(new ValueEventListener() {
+            myRefXbox.addListenerForSingleValueEvent(new ValueEventListener() {
 
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {

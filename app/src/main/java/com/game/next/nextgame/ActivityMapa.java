@@ -104,7 +104,6 @@ public class ActivityMapa extends FragmentActivity implements OnMapReadyCallback
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference();
 
-
         if (getIntent().hasExtra("HASHMAP")) {
             model = (HashMap<String, Object>) getIntent().getSerializableExtra("HASHMAP");
 
@@ -202,6 +201,10 @@ public class ActivityMapa extends FragmentActivity implements OnMapReadyCallback
                 }
                 reference.child("UserGame").child(user.getUid()).push().setValue(model);
                 finish();
+                //finishAffinity();
+                //Intent intent = new Intent(ActivityMapa.this, ActivityMeusJogos.class);
+                //startActivity(intent);
+
             }
         });
 
