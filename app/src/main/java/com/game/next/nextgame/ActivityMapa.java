@@ -252,17 +252,22 @@ public class ActivityMapa extends FragmentActivity implements OnMapReadyCallback
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
         currentLocationMaker = mMap.addMarker(markerOptions);
 
-        currentLocationExiste = true;
         //Move to new location
         //CameraPosition cameraPosition = new CameraPosition.Builder().zoom(15).target(currentLocationLatLong).build();
         //mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
         //Add to firebase
 
-        reference.child("location").child(user.getUid()).child("latitude").setValue(String.valueOf(currentLocationLatLong.latitude));
-        reference.child("location").child(user.getUid()).child("longitude").setValue(String.valueOf(currentLocationLatLong.longitude));
+        //reference.child("location").child(user.getUid()).child("latitude").setValue(String.valueOf(currentLocationLatLong.latitude));
+        //reference.child("location").child(user.getUid()).child("longitude").setValue(String.valueOf(currentLocationLatLong.longitude));
 
-        Toast.makeText(this, "Localização atualizada", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Localização atualizada", Toast.LENGTH_SHORT).show();
+
+        currentLocationLatLong = new LatLng(location.getLatitude(),location.getLongitude());
+        currentLocationExiste = true;
+
+        reference.child("location").child(user.getUid()).child("latitude").setValue(String.valueOf(location.getLatitude()));
+        reference.child("location").child(user.getUid()).child("longitude").setValue(String.valueOf(location.getLongitude()));
 
 
     }

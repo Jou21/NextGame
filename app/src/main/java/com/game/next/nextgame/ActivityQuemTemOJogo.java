@@ -72,6 +72,8 @@ public class ActivityQuemTemOJogo extends AppCompatActivity {
 
                     //String jogoId = reference.child("UserGame").child(userId).child(key).child("jogoId");
 
+                    listaUserGames.clear();
+
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
 
                         for (DataSnapshot postSnapshot2 : postSnapshot.getChildren()){
