@@ -47,7 +47,7 @@ public class FragmentTransacoes extends Fragment {
         exibirProgress(true);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
-        referenceUsers = FirebaseDatabase.getInstance().getReference("Users").child(user.getUid());
+        referenceUsers = FirebaseDatabase.getInstance().getReference("Users");
         referenceTransacaoUser = FirebaseDatabase.getInstance().getReference("Transacoes").child(user.getUid());
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_transacoes);

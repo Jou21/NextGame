@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,24 +74,35 @@ public class MyAdapterTransacoes extends RecyclerView.Adapter<MyAdapterTransacoe
             holder.txtSecondLine.setBackground(ContextCompat.getDrawable(holder.layout.getContext(), R.drawable.shape_btn_arredondado_azul));
         }
 
-        referenceUsers.addValueEventListener(new ValueEventListener() {
+        referenceUsers.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
 
-                if(user.getId() == transacoesUsers.get(position).getFornecedorId()){
-                    Picasso.get().load(user.getImageURL()).into(holder.imgUser, new Callback() {
-                        @Override
-                        public void onSuccess() {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
 
-                        }
+                    User user = postSnapshot.getValue(User.class);
 
-                        @Override
-                        public void onError(Exception e) {
+                    //Log.d("IDSS", user.getId());
+                    //Log.d("IDSS", transacoesUsers.get(position).getFornecedorId());
 
-                        }
-                    });
+                    if (user.getId().equals(transacoesUsers.get(position).getFornecedorId())) {
+
+                        Log.d("IMG2", user.getImageURL());
+
+                        Picasso.get().load(user.getImageURL()).into(holder.imgUser, new Callback() {
+                            @Override
+                            public void onSuccess() {
+
+                            }
+
+                            @Override
+                            public void onError(Exception e) {
+
+                            }
+                        });
+                    }
                 }
+
 
             }
 
