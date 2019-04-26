@@ -82,12 +82,7 @@ public class MyAdapterTransacoes extends RecyclerView.Adapter<MyAdapterTransacoe
 
                     User user = postSnapshot.getValue(User.class);
 
-                    //Log.d("IDSS", user.getId());
-                    //Log.d("IDSS", transacoesUsers.get(position).getFornecedorId());
-
                     if (user.getId().equals(transacoesUsers.get(position).getFornecedorId())) {
-
-                        Log.d("IMG2", user.getImageURL());
 
                         Picasso.get().load(user.getImageURL()).into(holder.imgUser, new Callback() {
                             @Override
