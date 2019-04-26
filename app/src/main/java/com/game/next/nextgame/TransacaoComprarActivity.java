@@ -177,7 +177,7 @@ public class TransacaoComprarActivity extends AppCompatActivity {
                                     hashMap.put("valorAluguel", "N");
                                     hashMap.put("valorCaucao", precoJogo);
                                     hashMap.put("jogo", model);
-                                    hashMap.put("time", time);
+                                    hashMap.put("time", data);
                                     hashMap.put("status", "INICIO");
 
                                     referenceTransacaoUser.push().setValue(hashMap);

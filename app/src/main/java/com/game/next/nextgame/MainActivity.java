@@ -443,6 +443,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
+                        LocationData locationData = dataSnapshot.getValue(LocationData.class);
+
                         if (currentLocationExiste == true && currentLocationLatLong != null) {
 
                             if (!dataSnapshot.exists()) {
@@ -454,22 +456,30 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                             } else {
 
-                                String entregaLatitude = dataSnapshot.child("entregaLatitude").getValue(String.class);
-                                String entregaLongitude = dataSnapshot.child("entregaLongitude").getValue(String.class);
+                                if (locationData.getEntregaLatitude() == null) {
+                                    localDeEncontro = currentLocationLatLong;
 
-                                if( entregaLatitude != null && entregaLongitude != null){
-                                    localDeEncontro = new LatLng(Double.parseDouble(entregaLatitude), Double.parseDouble(entregaLongitude));
+                                    reference.child("location").child(user.getUid()).child("latitude").setValue(String.valueOf(currentLocationLatLong.latitude));
+                                    reference.child("location").child(user.getUid()).child("longitude").setValue(String.valueOf(currentLocationLatLong.longitude));
+                                }else {
 
 
-                                    if ((Double.parseDouble(entregaLatitude) != currentLocationLatLong.latitude) || (Double.parseDouble(entregaLongitude) != currentLocationLatLong.longitude)) {
+                                    String entregaLatitude = dataSnapshot.child("entregaLatitude").getValue(String.class);
+                                    String entregaLongitude = dataSnapshot.child("entregaLongitude").getValue(String.class);
 
-                                        reference.child("location").child(user.getUid()).child("latitude").setValue(String.valueOf(currentLocationLatLong.latitude));
-                                        reference.child("location").child(user.getUid()).child("longitude").setValue(String.valueOf(currentLocationLatLong.longitude));
+                                    if (entregaLatitude != null && entregaLongitude != null) {
+                                        localDeEncontro = new LatLng(Double.parseDouble(entregaLatitude), Double.parseDouble(entregaLongitude));
 
+
+                                        if ((Double.parseDouble(entregaLatitude) != currentLocationLatLong.latitude) || (Double.parseDouble(entregaLongitude) != currentLocationLatLong.longitude)) {
+
+                                            reference.child("location").child(user.getUid()).child("latitude").setValue(String.valueOf(currentLocationLatLong.latitude));
+                                            reference.child("location").child(user.getUid()).child("longitude").setValue(String.valueOf(currentLocationLatLong.longitude));
+
+                                        }
                                     }
+
                                 }
-
-
 
 
                             }

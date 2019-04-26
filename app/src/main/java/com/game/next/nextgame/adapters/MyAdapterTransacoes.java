@@ -3,7 +3,6 @@ package com.game.next.nextgame.adapters;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.IntentCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,8 +64,11 @@ public class MyAdapterTransacoes extends RecyclerView.Adapter<MyAdapterTransacoe
 
         if(transacoesUsers.get(position).getStatus().equals("ENTREGADO")) {
             holder.txtSecondLine.setText(transacoesUsers.get(position).getStatus());
+            holder.txtSecondLine.setBackground(ContextCompat.getDrawable(holder.layout.getContext(), R.drawable.shape_btn_arredondado_amarelo));
+        }else if(transacoesUsers.get(position).getStatus().equals("CONCLUIDO")){
+            holder.txtSecondLine.setText(transacoesUsers.get(position).getStatus());
             holder.txtSecondLine.setBackground(ContextCompat.getDrawable(holder.layout.getContext(), R.drawable.shape_btn_arredondado_verde));
-        }else {
+        } else {
             holder.txtSecondLine.setText(transacoesUsers.get(position).getStatus());
             holder.txtSecondLine.setBackground(ContextCompat.getDrawable(holder.layout.getContext(), R.drawable.shape_btn_arredondado_azul));
         }

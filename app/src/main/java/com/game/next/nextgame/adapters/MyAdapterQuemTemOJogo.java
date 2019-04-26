@@ -97,7 +97,7 @@ public class MyAdapterQuemTemOJogo extends RecyclerView.Adapter<MyAdapterQuemTem
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
-        reference.child("Users").addValueEventListener(new ValueEventListener() {
+        reference.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -176,35 +176,41 @@ public class MyAdapterQuemTemOJogo extends RecyclerView.Adapter<MyAdapterQuemTem
             }
         });
 
-        reference.child("location").addValueEventListener(new ValueEventListener() {
+        reference.child("location").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     LocationData locationUser = postSnapshot.getValue(LocationData.class);
 
-                    if(locationUser.getUserId().equals(listaUserGames.get(position).getUserId())){
-                        //latOtherUser = locationUser.getEntregaLatitude();
-                        //longOtherUser = locationUser.getEntregaLongitude();
-                        latOtherUser = locationUser.getLatitude();
-                        longOtherUser = locationUser.getLongitude();
-                    }
+                    if((locationUser.getUserId() != null && listaUserGames.get(position).getUserId() != null) && user != null){
+                        if(locationUser.getUserId().equals(listaUserGames.get(position).getUserId())){
+                            //latOtherUser = locationUser.getEntregaLatitude();
+                            //longOtherUser = locationUser.getEntregaLongitude();
+                            latOtherUser = locationUser.getLatitude();
+                            longOtherUser = locationUser.getLongitude();
+                        }
 
-                    if(locationUser.getUserId().equals(user.getUid())){
-                        latCurrentUser = locationUser.getLatitude();
-                        longCurrentUser = locationUser.getLongitude();
+                        if(locationUser.getUserId().equals(user.getUid())){
+                            latCurrentUser = locationUser.getLatitude();
+                            longCurrentUser = locationUser.getLongitude();
+                        }
                     }
 
                 }
 
-                if((latCurrentUser != "" && longCurrentUser != "") && (latOtherUser != "" && longOtherUser != "")){
-                    LatLng posicaoInicial = new LatLng(Double.parseDouble(latCurrentUser),Double.parseDouble(longCurrentUser));
-                    LatLng posicaoFinal = new LatLng(Double.parseDouble(latOtherUser),Double.parseDouble(longOtherUser));
+                if((latCurrentUser != null && longCurrentUser != null) && (latOtherUser != null && longOtherUser != null)){
+                    if((!latCurrentUser.equals("") && !longCurrentUser.equals("")) && (!latOtherUser.equals("") && !longOtherUser.equals(""))){
+                        LatLng posicaoInicial = new LatLng(Double.parseDouble(latCurrentUser),Double.parseDouble(longCurrentUser));
+                        LatLng posicaoFinal = new LatLng(Double.parseDouble(latOtherUser),Double.parseDouble(longOtherUser));
 
-                    double distance = SphericalUtil.computeDistanceBetween(posicaoInicial, posicaoFinal);
+                        if( posicaoInicial != null && posicaoFinal != null) {
+                            double distance = SphericalUtil.computeDistanceBetween(posicaoInicial, posicaoFinal);
 
-                    holder.secondLine.setText("Está a " + formatNumber(distance) + " de você");
+                            holder.secondLine.setText("Está a " + formatNumber(distance) + " de você");
+                        }
 
+                    }
                 }
 
             }
