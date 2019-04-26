@@ -217,6 +217,53 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
 
     private void pagarComCartao( CreditCard creditCard ){
 
+
+        //TODO DESATIVAR QUANDO TIVER EM PRODUÇÃO
+
+        referenceCarteiraUser.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists() && entrou == false){
+                    Carteira userCarteira = dataSnapshot.getValue(Carteira.class);
+                    String saldoTotal = String.valueOf(Integer.parseInt(userCarteira.getSaldo()) + Integer.parseInt(saldoParaAddCarteira));
+
+                    HashMap<String, String> hashMap = new HashMap<>();
+                    hashMap.put("id", user.getUid());
+                    hashMap.put("saldo", saldoTotal);
+
+                    referenceCarteiraUser.setValue(hashMap);
+
+                    //Intent mainIntent = new Intent(PagamentoActivity.this, MainActivity.class);
+                    //startActivity(mainIntent);
+                    Toast.makeText(PagamentoActivity.this, "Parabéns, você adicionou saldo a sua carteira!", Toast.LENGTH_LONG).show();
+
+                    entrou = true;
+                    finish();
+                }else if(!dataSnapshot.exists() && entrou == false){
+                    HashMap<String, String> hashMap = new HashMap<>();
+                    hashMap.put("id", user.getUid());
+                    hashMap.put("saldo", saldoParaAddCarteira);
+
+                    referenceCarteiraUser.setValue(hashMap);
+
+                    //Intent mainIntent = new Intent(PagamentoActivity.this, MainActivity.class);
+                    //startActivity(mainIntent);
+                    Toast.makeText(PagamentoActivity.this, "Parabéns, você adicionou saldo a sua carteira!", Toast.LENGTH_LONG).show();
+                    entrou = true;
+                    finish();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
         //Inicialização a lib com parametros necessarios
         PSCheckoutConfig psCheckoutConfig = new PSCheckoutConfig();
         psCheckoutConfig.setSellerEmail("jvsb21@gmail.com");
@@ -286,48 +333,7 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
             public void onFailure(PSCheckoutResponse responseVO) {
 
 
-                //TODO DESATIVAR QUANDO TIVER EM PRODUÇÃO
 
-                referenceCarteiraUser.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.exists() && entrou == false){
-                            Carteira userCarteira = dataSnapshot.getValue(Carteira.class);
-                            String saldoTotal = String.valueOf(Integer.parseInt(userCarteira.getSaldo()) + Integer.parseInt(saldoParaAddCarteira));
-
-                            HashMap<String, String> hashMap = new HashMap<>();
-                            hashMap.put("id", user.getUid());
-                            hashMap.put("saldo", saldoTotal);
-
-                            referenceCarteiraUser.setValue(hashMap);
-
-                            //Intent mainIntent = new Intent(PagamentoActivity.this, MainActivity.class);
-                            //startActivity(mainIntent);
-                            Toast.makeText(PagamentoActivity.this, "Parabéns, você adicionou saldo a sua carteira!", Toast.LENGTH_LONG).show();
-
-                            entrou = true;
-                            finish();
-                        }else if(!dataSnapshot.exists() && entrou == false){
-                            HashMap<String, String> hashMap = new HashMap<>();
-                            hashMap.put("id", user.getUid());
-                            hashMap.put("saldo", saldoParaAddCarteira);
-
-                            referenceCarteiraUser.setValue(hashMap);
-
-                            //Intent mainIntent = new Intent(PagamentoActivity.this, MainActivity.class);
-                            //startActivity(mainIntent);
-                            Toast.makeText(PagamentoActivity.this, "Parabéns, você adicionou saldo a sua carteira!", Toast.LENGTH_LONG).show();
-                            entrou = true;
-                            finish();
-                        }
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
 
                 Toast.makeText(PagamentoActivity.this, "Fail: "+responseVO.getMessage(), Toast.LENGTH_LONG).show();
                 Log.d("ERRO1","ERRO: " + responseVO.getCode());

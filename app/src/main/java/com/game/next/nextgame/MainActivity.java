@@ -30,6 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.game.next.nextgame.adapters.MyFragmentPagerAdapter;
+import com.game.next.nextgame.entidades.Carteira;
 import com.game.next.nextgame.entidades.LocationData;
 import com.game.next.nextgame.entidades.TransacaoUser;
 import com.game.next.nextgame.entidades.User;
@@ -55,9 +56,14 @@ import com.google.maps.android.SphericalUtil;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
@@ -71,12 +77,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private String contents;
 
+    private boolean entrou = false;
+
     private TransacaoUser transacaoUser;
 
     private MyFragmentPagerAdapter myFragmentPagerAdapter;
 
     private FirebaseUser user;
-    private DatabaseReference referenceTransacaoUser, reference;
+    private DatabaseReference referenceTransacaoUser, reference, referenceCarteiraUser;
 
     private boolean currentLocationExiste = false;
 
@@ -95,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ArrayList<String> keys = new ArrayList<>();
     private ArrayList<TransacaoUser> transacaoUsers = new ArrayList<>();
     private ArrayList<TransacaoUser> transacaoUsersProximas = new ArrayList<>();
+    private ArrayList<TransacaoUser> transacaoUsersProximasFornecedorReceberDeVoltaOJogo = new ArrayList<>();
     private HashMap<String,String> hashMap = new HashMap<>();
 
     @Override
@@ -118,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference();
         referenceTransacaoUser = FirebaseDatabase.getInstance().getReference("Transacoes").child(user.getUid());
+        referenceCarteiraUser = FirebaseDatabase.getInstance().getReference("CarteiraUsers").child(user.getUid());
 
         tabXbox = (LinearLayout) mTabLayout.getChildAt(0);
         item1 = (LinearLayout) tabXbox.getChildAt(0);
@@ -214,6 +224,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                                     contador = 0;
 
                                                     transacaoUsersProximas = new ArrayList<>();
+                                                    transacaoUsersProximasFornecedorReceberDeVoltaOJogo = new ArrayList<>();
 
                                                     for (final TransacaoUser transacaoUser : transacaoUsers) {
 
@@ -237,28 +248,36 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                                                                         double distance = SphericalUtil.computeDistanceBetween(posicaoUsuario, posicaoFonecedor);
 
-                                                                        if (transacaoUser.getFornecedorId() != user.getUid() && distance < 1500) {
+                                                                        if (transacaoUser.getFornecedorId() != user.getUid() && distance < 500) {
 
                                                                             transacaoUsersProximas.add(transacaoUser);
+
+                                                                        }else {
+
+                                                                            transacaoUsersProximasFornecedorReceberDeVoltaOJogo.add(transacaoUser);
 
                                                                         }
                                                                     }
 
                                                                     contador++;
 
+
                                                                     if (contador == transacaoUsers.size()) {
-                                                                        //Log.d("ENTROUPROXIMAS2", "ENTROUPROXIMAS2");
-                                                                        //Toast.makeText(MainActivity.this, "ENTROUPROXIMAS2", Toast.LENGTH_SHORT).show();
+
+                                                                        //=======USUÁRIO PEGAR O JOGO===================================================================================
+
                                                                         if (transacaoUsersProximas.size() > 1) {
 
                                                                             //gerar lista para o usuario para ele escolher a transação correta
+                                                                            Toast.makeText(MainActivity.this, "Tem mais de um usuário próximo que iniciou uma transação com você. Por favor fique próximo do usuário em que você " +
+                                                                                    "deseja realizar a transação e a pelo menos 500 metros de distância dos outros", Toast.LENGTH_LONG).show();
 
                                                                         } else if (transacaoUsersProximas.size() == 1) {
 
                                                                             if (transacaoUsersProximas.get(0).getStatus().equals("INICIO")) {
                                                                                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
-                                                                                builder.setMessage("Você acaba de receber o jogo " + transacaoUser.getJogo().getNome() + ". Boa diversão!!!").setTitle("PARABÉNS!!!");
+                                                                                builder.setMessage("Você acaba de receber o jogo " + transacaoUsersProximas.get(0).getJogo().getNome() + ". Boa diversão!!!").setTitle("PARABÉNS!!!");
                                                                                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                                                                     public void onClick(DialogInterface dialog, int id) {
 
@@ -283,6 +302,170 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                                                         } else {
                                                                             Toast.makeText(MainActivity.this, "É necessário estar próximo do usuário fornecedor...", Toast.LENGTH_LONG).show();
                                                                         }
+
+                                                                        //=====================================================================================================================
+
+                                                                        //=========FORNECEDOR PEGAR DE VOLTA O JOGO============================================================================
+
+                                                                        if (transacaoUsersProximasFornecedorReceberDeVoltaOJogo.size() > 1) {
+
+                                                                            //gerar lista para o usuario para ele escolher a transação correta
+                                                                            Toast.makeText(MainActivity.this, "Tem mais de um usuário próximo que iniciou uma transação com você. Por favor fique próximo do usuário em que você " +
+                                                                                    "deseja realizar a transação e a pelo menos 500 metros de distância dos outros", Toast.LENGTH_LONG).show();
+
+                                                                        } else if (transacaoUsersProximasFornecedorReceberDeVoltaOJogo.size() == 1) {
+                                                                            if (transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getStatus().equals("ENTREGADO")) {
+
+                                                                                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+                                                                                builder.setMessage("Você acaba de receber de volta o jogo " + transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getJogo().getNome() + ". Obrigado por entreter as pessoas que utilizam o NextGame!").setTitle("PARABÉNS!!!");
+                                                                                builder.setPositiveButton("Ok, Valeu!", new DialogInterface.OnClickListener() {
+                                                                                    public void onClick(DialogInterface dialog, int id) {
+
+                                                                                    }
+                                                                                });
+
+                                                                                String key = (String) hashMap.get(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getUserId());
+
+                                                                                AlertDialog dialog = builder.create();
+
+                                                                                entrou = false;
+
+                                                                                /*
+
+                                                                                String saldoParaAddCarteiraAluguel = transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getValorAluguel();
+
+                                                                                String saldoParaAddCarteiraCaucao = transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getValorCaucao();
+
+                                                                                int caucaoPuroSemOAluguel = Integer.parseInt(saldoParaAddCarteiraCaucao) - Integer.parseInt(saldoParaAddCarteiraAluguel);
+
+                                                                                int parcelaCaucaoPuroSemOAluguel = caucaoPuroSemOAluguel / 7;
+
+                                                                                int parcelaAluguel = (Integer.parseInt(saldoParaAddCarteiraAluguel)) / 7;
+
+                                                                                int saldoTotalParaAddCarteira = 0;
+
+                                                                                String array[] = transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getTime().split("-");
+
+                                                                                String horario = array[0];
+                                                                                String data = array[1];
+
+                                                                                try {
+
+                                                                                    Calendar rightNow = Calendar.getInstance();
+                                                                                    TimeZone tz = TimeZone.getTimeZone("GMT-3:00");
+                                                                                    rightNow.setTimeZone(tz);
+
+                                                                                    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                                                                                    df.setLenient (false);
+                                                                                    Date dt = df.parse(data);
+                                                                                    Calendar cal = Calendar.getInstance();
+                                                                                    cal.setTime(dt);
+
+                                                                                    rightNow.add(Calendar.DATE, - cal.get(Calendar.DAY_OF_MONTH));
+
+                                                                                    int diasQueOUsuarioFicouComOJogo = rightNow.get(Calendar.DAY_OF_MONTH);
+
+                                                                                    if(diasQueOUsuarioFicouComOJogo == 0){
+
+                                                                                    }else if(diasQueOUsuarioFicouComOJogo == 1){
+                                                                                        saldoTotalParaAddCarteira = parcelaAluguel ;
+                                                                                    }else if(diasQueOUsuarioFicouComOJogo == 2){
+                                                                                        saldoTotalParaAddCarteira = parcelaAluguel * 2 ;
+                                                                                    }else if(diasQueOUsuarioFicouComOJogo == 3){
+                                                                                        saldoTotalParaAddCarteira = parcelaAluguel * 3 ;
+                                                                                    }else if(diasQueOUsuarioFicouComOJogo == 4){
+                                                                                        saldoTotalParaAddCarteira = parcelaAluguel * 4 ;
+                                                                                    }else if(diasQueOUsuarioFicouComOJogo == 5){
+                                                                                        saldoTotalParaAddCarteira = parcelaAluguel * 5 ;
+                                                                                    }else if(diasQueOUsuarioFicouComOJogo == 6){
+                                                                                        saldoTotalParaAddCarteira = Integer.parseInt(saldoParaAddCarteiraAluguel);
+
+                                                                                    }else if(diasQueOUsuarioFicouComOJogo == 7){ //começa a descontar do caução por + 7 dias
+                                                                                            saldoTotalParaAddCarteira = Integer.parseInt(saldoParaAddCarteiraAluguel) + parcelaCaucaoPuroSemOAluguel;
+                                                                                    }else if(diasQueOUsuarioFicouComOJogo == 8){
+                                                                                        saldoTotalParaAddCarteira = Integer.parseInt(saldoParaAddCarteiraAluguel) + parcelaCaucaoPuroSemOAluguel * 2;
+                                                                                    }else if(diasQueOUsuarioFicouComOJogo == 9){
+                                                                                        saldoTotalParaAddCarteira = Integer.parseInt(saldoParaAddCarteiraAluguel) + parcelaCaucaoPuroSemOAluguel * 3;
+                                                                                    }else if(diasQueOUsuarioFicouComOJogo == 10){
+                                                                                        saldoTotalParaAddCarteira = Integer.parseInt(saldoParaAddCarteiraAluguel) + parcelaCaucaoPuroSemOAluguel * 4;
+                                                                                    }else if(diasQueOUsuarioFicouComOJogo == 11){
+                                                                                        saldoTotalParaAddCarteira = Integer.parseInt(saldoParaAddCarteiraAluguel) + parcelaCaucaoPuroSemOAluguel * 5;
+                                                                                    }else if(diasQueOUsuarioFicouComOJogo == 12){
+                                                                                        saldoTotalParaAddCarteira = Integer.parseInt(saldoParaAddCarteiraAluguel) + parcelaCaucaoPuroSemOAluguel * 6;
+                                                                                    }else if(diasQueOUsuarioFicouComOJogo == 13){
+                                                                                        saldoTotalParaAddCarteira = Integer.parseInt(saldoParaAddCarteiraAluguel) + caucaoPuroSemOAluguel;
+                                                                                    }else {
+                                                                                        // Não precisa mais devolver o jogo
+                                                                                        saldoTotalParaAddCarteira = Integer.parseInt(saldoParaAddCarteiraAluguel) + caucaoPuroSemOAluguel;
+                                                                                    }
+
+                                                                                    final int saldoParaAddCarteiraDescontadoOsDias = saldoTotalParaAddCarteira;
+
+                                                                                    referenceCarteiraUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                        @Override
+                                                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                                            if(dataSnapshot.exists() && entrou == false){
+                                                                                                Carteira userCarteira = dataSnapshot.getValue(Carteira.class);
+
+                                                                                                String saldoTotal = String.valueOf(Integer.parseInt(userCarteira.getSaldo()) + saldoParaAddCarteiraDescontadoOsDias);
+
+                                                                                                HashMap<String, String> hashMap = new HashMap<>();
+                                                                                                hashMap.put("id", user.getUid());
+                                                                                                hashMap.put("saldo", saldoTotal);
+
+                                                                                                referenceCarteiraUser.setValue(hashMap);
+
+
+
+                                                                                                Toast.makeText(MainActivity.this, "Parabéns, foi adicionado R$" + saldoParaAddCarteiraDescontadoOsDias + ",00 de saldo a sua carteira!", Toast.LENGTH_LONG).show();
+
+                                                                                                entrou = true;
+
+                                                                                            }else if(!dataSnapshot.exists() && entrou == false){
+                                                                                                HashMap<String, String> hashMap = new HashMap<>();
+                                                                                                hashMap.put("id", user.getUid());
+                                                                                                hashMap.put("saldo", String.valueOf(saldoParaAddCarteiraDescontadoOsDias));
+
+                                                                                                referenceCarteiraUser.setValue(hashMap);
+
+                                                                                                //Intent mainIntent = new Intent(PagamentoActivity.this, MainActivity.class);
+                                                                                                //startActivity(mainIntent);
+                                                                                                Toast.makeText(MainActivity.this, "Parabéns, foi adicionado R$" + saldoParaAddCarteiraDescontadoOsDias + ",00 de saldo a sua carteira!", Toast.LENGTH_LONG).show();
+                                                                                                entrou = true;
+
+                                                                                            }
+
+                                                                                        }
+
+                                                                                        @Override
+                                                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                        }
+                                                                                    });
+
+                                                                                    */
+                                                                                    referenceTransacaoUser.child(key).child("status").setValue("CONCLUIDO");
+
+                                                                                    dialog.show();
+                                                                                /*
+                                                                                } catch (ParseException e) {
+                                                                                    Toast.makeText(MainActivity.this, "Ocorreu algum erro... Caso o status mudou para CONCLUIDO, desconsidere essa mensagem!", Toast.LENGTH_LONG).show();
+                                                                                }
+                                                                                */
+
+
+                                                                            } else if(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getStatus().equals("INICIO")){
+                                                                                Toast.makeText(MainActivity.this, "O usuário ainda não pegou o seu jogo...", Toast.LENGTH_LONG).show();
+                                                                            } else {
+                                                                                Toast.makeText(MainActivity.this, "O jogo já está entregue!", Toast.LENGTH_LONG).show();
+                                                                            }
+
+                                                                        } else {
+                                                                            Toast.makeText(MainActivity.this, "É necessário estar próximo do usuário que deseja seu jogo...", Toast.LENGTH_LONG).show();
+                                                                        }
+
+                                                                        //=====================================================================================================================
 
                                                                     }
                                                                 }
