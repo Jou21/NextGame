@@ -743,10 +743,6 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    jogosPS4 = new ArrayList<>();
-                    listTodosJogos = new ArrayList<>();
-                    listNomeTodosJogos = new ArrayList<>();
-
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Jogo jogo = snapshot.getValue(Jogo.class);
                         jogosPS4.add(jogo);
@@ -829,10 +825,6 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
 
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-
-                    jogosXbox = new ArrayList<>();
-                    listTodosJogos = new ArrayList<>();
-                    listNomeTodosJogos = new ArrayList<>();
 
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Jogo jogo = snapshot.getValue(Jogo.class);
