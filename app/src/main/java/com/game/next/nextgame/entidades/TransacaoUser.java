@@ -1,6 +1,8 @@
 package com.game.next.nextgame.entidades;
 
-public class TransacaoUser {
+import java.io.Serializable;
+
+public class TransacaoUser implements Serializable {
 
     private String userId;
     private String fornecedorId;

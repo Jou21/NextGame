@@ -63,6 +63,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TimeZone;
 
 public class ActivityIdentificaJogo extends AppCompatActivity {
 
@@ -539,6 +540,8 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
                         }
 
                         Calendar rightNow = Calendar.getInstance();
+                        TimeZone tz = TimeZone.getTimeZone("GMT-3:00");
+                        rightNow.setTimeZone(tz);
                         int hour = rightNow.get(Calendar.HOUR_OF_DAY);
                         int minute = rightNow.get(Calendar.MINUTE);
                         int second = rightNow.get(Calendar.SECOND);

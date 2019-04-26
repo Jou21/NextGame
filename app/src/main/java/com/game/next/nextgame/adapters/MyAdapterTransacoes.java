@@ -1,12 +1,16 @@
 package com.game.next.nextgame.adapters;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.IntentCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.game.next.nextgame.InfoTransacaoActivity;
 import com.game.next.nextgame.R;
 import com.game.next.nextgame.entidades.TransacaoUser;
 import com.game.next.nextgame.entidades.User;
@@ -67,7 +71,6 @@ public class MyAdapterTransacoes extends RecyclerView.Adapter<MyAdapterTransacoe
             holder.txtSecondLine.setBackground(ContextCompat.getDrawable(holder.layout.getContext(), R.drawable.shape_btn_arredondado_azul));
         }
 
-
         referenceUsers.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -92,6 +95,15 @@ public class MyAdapterTransacoes extends RecyclerView.Adapter<MyAdapterTransacoe
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentInfoTransacao = new Intent(holder.layout.getContext(), InfoTransacaoActivity.class);
+                intentInfoTransacao.putExtra("TRANSACAO", transacoesUsers.get(position));
+                holder.layout.getContext().startActivity(intentInfoTransacao);
             }
         });
 

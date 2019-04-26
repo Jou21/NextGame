@@ -481,74 +481,76 @@ public class ActivityMapa extends FragmentActivity implements OnMapReadyCallback
                                 String entregaLatitude = dataSnapshot.child("entregaLatitude").getValue(String.class);
                                 String entregaLongitude = dataSnapshot.child("entregaLongitude").getValue(String.class);
 
-                                localDeEncontro = new LatLng(Double.parseDouble(entregaLatitude), Double.parseDouble(entregaLongitude));
+                                if( entregaLatitude != null && entregaLongitude != null){
+                                    localDeEncontro = new LatLng(Double.parseDouble(entregaLatitude), Double.parseDouble(entregaLongitude));
 
-                                if (markerEncontro != null) {
-                                    markerEncontro.remove();
+                                    if (markerEncontro != null) {
+                                        markerEncontro.remove();
+                                    }
+
+                                    marker = new MarkerOptions().position(localDeEncontro).title("Seu local de entrega dos jogos!").snippet("Obs: Segure e arraste para mover").draggable(true);
+                                    markerEncontro = mMap.addMarker(marker);
+                                    markerEncontro.showInfoWindow();
+
+                                    exibirProgress(false);
+
+                                    if (model == null) {
+                                        btnMapsConfirmarLocal.setVisibility(View.GONE);
+                                    } else {
+                                        btnMapsConfirmarLocal.setVisibility(View.VISIBLE);
+                                    }
+
+                                    Toast.makeText(ActivityMapa.this, "Localização atualizada", Toast.LENGTH_SHORT).show();
+
+                                    if (currentLocationLatLong != null) {
+                                        if ((Double.parseDouble(entregaLatitude) != currentLocationLatLong.latitude) || (Double.parseDouble(entregaLongitude) != currentLocationLatLong.longitude)) {
+                                            //Add to firebase
+                                            HashMap<String, Object> hashMap = new HashMap<>();
+                                            hashMap.put("userId", user.getUid());
+                                            hashMap.put("time", String.valueOf(new Date().getTime()));
+                                            hashMap.put("latitude", String.valueOf(currentLocationLatLong.latitude));
+                                            hashMap.put("longitude", String.valueOf(currentLocationLatLong.longitude));
+                                            hashMap.put("entregaLatitude", String.valueOf(localDeEncontro.latitude));
+                                            hashMap.put("entregaLongitude", String.valueOf(localDeEncontro.longitude));
+
+                                            reference.child("location").child(user.getUid()).setValue(hashMap);
+                                        }
+                                    }
+
+                                    CameraPosition cameraPosition = new CameraPosition.Builder().zoom(15).target(localDeEncontro).build();
+                                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+                                    mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+                                        @Override
+                                        public void onMarkerDragStart(Marker marker) {
+
+                                        }
+
+                                        @Override
+                                        public void onMarkerDrag(Marker marker) {
+
+                                        }
+
+                                        @Override
+                                        public void onMarkerDragEnd(Marker marker) {
+                                            localDeEncontro = marker.getPosition();
+
+                                            //Add to firebase
+                                            HashMap<String, Object> hashMap = new HashMap<>();
+                                            hashMap.put("userId", user.getUid());
+                                            hashMap.put("time", String.valueOf(new Date().getTime()));
+                                            hashMap.put("latitude", String.valueOf(currentLocationLatLong.latitude));
+                                            hashMap.put("longitude", String.valueOf(currentLocationLatLong.longitude));
+                                            hashMap.put("entregaLatitude", String.valueOf(localDeEncontro.latitude));
+                                            hashMap.put("entregaLongitude", String.valueOf(localDeEncontro.longitude));
+
+                                            reference.child("location").child(user.getUid()).setValue(hashMap);
+
+                                            CameraPosition cameraPosition = new CameraPosition.Builder().zoom(15).target(localDeEncontro).build();
+                                            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                                        }
+                                    });
                                 }
-
-                                marker = new MarkerOptions().position(localDeEncontro).title("Seu local de entrega dos jogos!").snippet("Obs: Segure e arraste para mover").draggable(true);
-                                markerEncontro = mMap.addMarker(marker);
-                                markerEncontro.showInfoWindow();
-
-                                exibirProgress(false);
-
-                                if(model == null){
-                                    btnMapsConfirmarLocal.setVisibility(View.GONE);
-                                }else{
-                                    btnMapsConfirmarLocal.setVisibility(View.VISIBLE);
-                                }
-
-                                Toast.makeText(ActivityMapa.this, "Localização atualizada", Toast.LENGTH_SHORT).show();
-
-                                if(currentLocationLatLong != null) {
-                                    if ((Double.parseDouble(entregaLatitude) != currentLocationLatLong.latitude) || (Double.parseDouble(entregaLongitude) != currentLocationLatLong.longitude)) {
-                                        //Add to firebase
-                                        HashMap<String, Object> hashMap = new HashMap<>();
-                                        hashMap.put("userId", user.getUid());
-                                        hashMap.put("time", String.valueOf(new Date().getTime()));
-                                        hashMap.put("latitude", String.valueOf(currentLocationLatLong.latitude));
-                                        hashMap.put("longitude", String.valueOf(currentLocationLatLong.longitude));
-                                        hashMap.put("entregaLatitude", String.valueOf(localDeEncontro.latitude));
-                                        hashMap.put("entregaLongitude", String.valueOf(localDeEncontro.longitude));
-
-                                        reference.child("location").child(user.getUid()).setValue(hashMap);
-                                    }
-                                }
-
-                                CameraPosition cameraPosition = new CameraPosition.Builder().zoom(15).target(localDeEncontro).build();
-                                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-                                mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-                                    @Override
-                                    public void onMarkerDragStart(Marker marker) {
-
-                                    }
-
-                                    @Override
-                                    public void onMarkerDrag(Marker marker) {
-
-                                    }
-
-                                    @Override
-                                    public void onMarkerDragEnd(Marker marker) {
-                                        localDeEncontro = marker.getPosition();
-
-                                        //Add to firebase
-                                        HashMap<String, Object> hashMap = new HashMap<>();
-                                        hashMap.put("userId", user.getUid());
-                                        hashMap.put("time", String.valueOf(new Date().getTime()));
-                                        hashMap.put("latitude", String.valueOf(currentLocationLatLong.latitude));
-                                        hashMap.put("longitude", String.valueOf(currentLocationLatLong.longitude));
-                                        hashMap.put("entregaLatitude", String.valueOf(localDeEncontro.latitude));
-                                        hashMap.put("entregaLongitude", String.valueOf(localDeEncontro.longitude));
-
-                                        reference.child("location").child(user.getUid()).setValue(hashMap);
-
-                                        CameraPosition cameraPosition = new CameraPosition.Builder().zoom(15).target(localDeEncontro).build();
-                                        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                                    }
-                                });
                             }
 
                             //============================================================================================================

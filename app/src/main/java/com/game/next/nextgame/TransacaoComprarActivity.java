@@ -22,7 +22,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.TimeZone;
 
 public class TransacaoComprarActivity extends AppCompatActivity {
 
@@ -32,7 +34,7 @@ public class TransacaoComprarActivity extends AppCompatActivity {
 
     private Button btnTransacaoComprar, btnAdicionarSaldo;
 
-    private String precoJogo, fornecedorId, time;
+    private String precoJogo, fornecedorId, time, data;
 
     private Jogo model;
 
@@ -122,11 +124,24 @@ public class TransacaoComprarActivity extends AppCompatActivity {
                 valorCaucaoNew2 = valorCaucaoNew.replace("R$", "");
                 valorCaucaoNew3 = valorCaucaoNew2.replace(",00", "");
 
+                Calendar rightNow = Calendar.getInstance();
+                TimeZone tz = TimeZone.getTimeZone("GMT-3:00");
+                rightNow.setTimeZone(tz);
+                int hour = rightNow.get(Calendar.HOUR_OF_DAY);
+                int minute = rightNow.get(Calendar.MINUTE);
+                int second = rightNow.get(Calendar.SECOND);
+                int dia = rightNow.get(Calendar.DAY_OF_MONTH);
+                int mesZeroAteOnze = rightNow.get(Calendar.MONTH);
+                int mesUmAteDoze = mesZeroAteOnze + 1;
+                int ano = rightNow.get(Calendar.YEAR);
+
+                data = String.valueOf(hour) + ":" + String.valueOf(minute) + ":" + String.valueOf(second) + "-" + String.valueOf(dia) + "/" + String.valueOf(mesUmAteDoze) + "/" + String.valueOf(ano);
+
                 if(!valorNaCarteiraNew3.equals("N") && !valorCaucaoNew3.equals("N") && !valorNaCarteiraNew3.equals("S") && !valorCaucaoNew3.equals("S") ){
 
                     if (Integer.parseInt(valorNaCarteiraNew3) >= Integer.parseInt(valorCaucaoNew3)) {
 
-                        referenceTransacaoUser.addValueEventListener(new ValueEventListener() {
+                        referenceTransacaoUser.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -144,7 +159,7 @@ public class TransacaoComprarActivity extends AppCompatActivity {
                                         hashMap.put("valorAluguel", "N");
                                         hashMap.put("valorCaucao", precoJogo);
                                         hashMap.put("jogo", model);
-                                        hashMap.put("time", time);
+                                        hashMap.put("time", data);
                                         hashMap.put("status", "INICIO");
 
                                         referenceTransacaoUser.child(key).setValue(hashMap);
