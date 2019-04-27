@@ -61,7 +61,29 @@ public class TransacaoAlugarActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     Carteira userCarteira = dataSnapshot.getValue(Carteira.class);
-                    txtTransacaoValorNaCarteira.setText("R$ " + userCarteira.getSaldo() + ",00");
+
+                    if(userCarteira.getSaldo().equals("N") || userCarteira.getSaldo().equals("S")){
+                        txtTransacaoValorNaCarteira.setText("N");
+                    }else {
+
+                        String valorInteiro, centavos;
+
+                        String array[] = userCarteira.getSaldo().split("\\.");
+
+                        if(array.length > 1) {
+                            valorInteiro = array[0];
+                            centavos = array[1];
+
+                            if (array[1].length() == 1) {
+                                centavos = centavos.concat("0");
+                            }
+
+                            txtTransacaoValorNaCarteira.setText("R$ " + valorInteiro + "," + centavos);
+                        }else {
+                            valorInteiro = array[0];
+                            txtTransacaoValorNaCarteira.setText("R$ " + valorInteiro + ",00");
+                        }
+                    }
                 }
 
             }
@@ -98,7 +120,24 @@ public class TransacaoAlugarActivity extends AppCompatActivity {
         if (getIntent().hasExtra("ALUGUELJOGODOUSUARIO")) {
             precoAluguelJogo = getIntent().getStringExtra("ALUGUELJOGODOUSUARIO");
 
-            txtTransacaoValorAluguel.setText("R$" + precoAluguelJogo + ",00");
+            String valorInteiro, centavos;
+
+            String array[] = precoAluguelJogo.split("\\.");
+
+            if(array.length > 1) {
+                valorInteiro = array[0];
+                centavos = array[1];
+
+                if (array[1].length() == 1) {
+                    centavos = centavos.concat("0");
+                }
+
+                txtTransacaoValorAluguel.setText("R$ " + valorInteiro + "," + centavos);
+            }else {
+                valorInteiro = array[0];
+                txtTransacaoValorAluguel.setText("R$ " + valorInteiro + ",00");
+            }
+
 
         } else {
             Toast.makeText(TransacaoAlugarActivity.this,"Activity cannot find  extras " + "ALUGUELJOGODOUSUARIO",Toast.LENGTH_SHORT).show();
@@ -108,7 +147,23 @@ public class TransacaoAlugarActivity extends AppCompatActivity {
         if (getIntent().hasExtra("PRECOJOGODOUSUARIO")) {
             precoJogo = getIntent().getStringExtra("PRECOJOGODOUSUARIO");
 
-            txtTransacaoValorCaucao.setText("R$" + precoJogo + ",00");
+            String valorInteiro, centavos;
+
+            String array[] = precoJogo.split("\\.");
+
+            if(array.length > 1) {
+                valorInteiro = array[0];
+                centavos = array[1];
+
+                if(array[1].length() == 1){
+                    centavos = centavos.concat("0");
+                }
+
+                txtTransacaoValorCaucao.setText("R$ " + valorInteiro + "," + centavos);
+            }else {
+                valorInteiro = array[0];
+                txtTransacaoValorCaucao.setText("R$ " + valorInteiro + ",00");
+            }
 
         } else {
             Toast.makeText(TransacaoAlugarActivity.this,"Activity cannot find  extras " + "PRECOJOGODOUSUARIO",Toast.LENGTH_SHORT).show();
@@ -124,7 +179,8 @@ public class TransacaoAlugarActivity extends AppCompatActivity {
                 String valorNaCarteiraNew3 = "";
                 valorNaCarteiraNew = valorNaCarteira.replace("R$ ", "");
                 valorNaCarteiraNew2 = valorNaCarteiraNew.replace("R$", "");
-                valorNaCarteiraNew3 = valorNaCarteiraNew2.replace(",00", "");
+                valorNaCarteiraNew3 = valorNaCarteiraNew2.replace(",", ".");
+                Double valorNaCarteiraDouble = Double.parseDouble(valorNaCarteiraNew3);
 
                 String valorCaucao = txtTransacaoValorCaucao.getText().toString();
                 String valorCaucaoNew = "";
@@ -132,7 +188,8 @@ public class TransacaoAlugarActivity extends AppCompatActivity {
                 String valorCaucaoNew3 = "";
                 valorCaucaoNew = valorCaucao.replace("R$ ", "");
                 valorCaucaoNew2 = valorCaucaoNew.replace("R$", "");
-                valorCaucaoNew3 = valorCaucaoNew2.replace(",00", "");
+                valorCaucaoNew3 = valorCaucaoNew2.replace(",", ".");
+                Double valorCaucaoDouble = Double.parseDouble(valorCaucaoNew3);
 
                 Calendar rightNow = Calendar.getInstance();
                 TimeZone tz = TimeZone.getTimeZone("GMT-3:00");
@@ -149,7 +206,7 @@ public class TransacaoAlugarActivity extends AppCompatActivity {
 
                 if(!valorNaCarteiraNew3.equals("N") && !valorCaucaoNew3.equals("N") && !valorNaCarteiraNew3.equals("S") && !valorCaucaoNew3.equals("S")){
 
-                    if (Integer.parseInt(valorNaCarteiraNew3) >= Integer.parseInt(valorCaucaoNew3)) {
+                    if (valorNaCarteiraDouble >= valorCaucaoDouble) {
 
                         referenceTransacaoUser.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override

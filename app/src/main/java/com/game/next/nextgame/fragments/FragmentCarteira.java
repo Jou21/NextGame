@@ -10,12 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.game.next.nextgame.AdicionarSaldoActivity;
 import com.game.next.nextgame.R;
 import com.game.next.nextgame.entidades.Carteira;
+import com.game.next.nextgame.util.MoneyTextWatcher;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -50,8 +52,25 @@ public class FragmentCarteira extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                        Carteira userCarteira = dataSnapshot.getValue(Carteira.class);
-                        txtCarteiraSaldo.setText("R$ " + userCarteira.getSaldo() + ",00");
+                    Carteira userCarteira = dataSnapshot.getValue(Carteira.class);
+
+                    String valorInteiro, centavos;
+
+                    String array[] = userCarteira.getSaldo().split("\\.");
+
+                    if(array.length > 1) {
+                        valorInteiro = array[0];
+                        centavos = array[1];
+
+                        if (array[1].length() == 1) {
+                            centavos = centavos.concat("0");
+                        }
+
+                        txtCarteiraSaldo.setText("R$ " + valorInteiro + "," + centavos);
+                    }else {
+                        valorInteiro = array[0];
+                        txtCarteiraSaldo.setText("R$ " + valorInteiro + ",00");
+                    }
                 }
 
             }

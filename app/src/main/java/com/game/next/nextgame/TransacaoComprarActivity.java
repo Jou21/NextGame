@@ -61,9 +61,25 @@ public class TransacaoComprarActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     Carteira userCarteira = dataSnapshot.getValue(Carteira.class);
-                    txtTransacaoValorNaCarteiraComprar.setText("R$ " + userCarteira.getSaldo() + ",00");
-                }
 
+                    if(userCarteira.getSaldo().equals("N") || userCarteira.getSaldo().equals("S")){
+                        txtTransacaoValorNaCarteiraComprar.setText("N");
+                    }else {
+
+                        String valorInteiro, centavos;
+
+                        String array[] = userCarteira.getSaldo().split("\\.");
+
+                        valorInteiro = array[0];
+                        centavos = array[1];
+
+                        if (array[1].length() == 1) {
+                            centavos = centavos.concat("0");
+                        }
+
+                        txtTransacaoValorNaCarteiraComprar.setText("R$ " + valorInteiro + "," + centavos);
+                    }
+                }
             }
 
             @Override
@@ -98,7 +114,24 @@ public class TransacaoComprarActivity extends AppCompatActivity {
         if (getIntent().hasExtra("PRECOJOGODOUSUARIO")) {
             precoJogo = getIntent().getStringExtra("PRECOJOGODOUSUARIO");
 
-            txtTransacaoValorComprar.setText("R$" + precoJogo + ",00");
+            String valorInteiro, centavos;
+
+            String array[] = precoJogo.split("\\.");
+
+            if(array.length > 1) {
+                valorInteiro = array[0];
+                centavos = array[1];
+
+                if(array[1].length() == 1){
+                    centavos = centavos.concat("0");
+                }
+
+                txtTransacaoValorComprar.setText("R$ " + valorInteiro + "," + centavos);
+            }else {
+                valorInteiro = array[0];
+                txtTransacaoValorComprar.setText("R$ " + valorInteiro + ",00");
+            }
+
 
         } else {
             Toast.makeText(TransacaoComprarActivity.this,"Activity cannot find  extras " + "PRECOJOGODOUSUARIO",Toast.LENGTH_SHORT).show();
@@ -108,13 +141,15 @@ public class TransacaoComprarActivity extends AppCompatActivity {
         btnTransacaoComprar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String valorNaCarteira = txtTransacaoValorNaCarteiraComprar.getText().toString();
                 String valorNaCarteiraNew = "";
                 String valorNaCarteiraNew2 = "";
                 String valorNaCarteiraNew3 = "";
                 valorNaCarteiraNew = valorNaCarteira.replace("R$ ", "");
                 valorNaCarteiraNew2 = valorNaCarteiraNew.replace("R$", "");
-                valorNaCarteiraNew3 = valorNaCarteiraNew2.replace(",00", "");
+                valorNaCarteiraNew3 = valorNaCarteiraNew2.replace(",", ".");
+                Double valorNaCarteiraDouble = Double.parseDouble(valorNaCarteiraNew3);
 
                 String valorCaucao = txtTransacaoValorComprar.getText().toString();
                 String valorCaucaoNew = "";
@@ -122,7 +157,8 @@ public class TransacaoComprarActivity extends AppCompatActivity {
                 String valorCaucaoNew3 = "";
                 valorCaucaoNew = valorCaucao.replace("R$ ", "");
                 valorCaucaoNew2 = valorCaucaoNew.replace("R$", "");
-                valorCaucaoNew3 = valorCaucaoNew2.replace(",00", "");
+                valorCaucaoNew3 = valorCaucaoNew2.replace(",", ".");
+                Double valorCaucaoDouble = Double.parseDouble(valorCaucaoNew3);
 
                 Calendar rightNow = Calendar.getInstance();
                 TimeZone tz = TimeZone.getTimeZone("GMT-3:00");
@@ -139,7 +175,7 @@ public class TransacaoComprarActivity extends AppCompatActivity {
 
                 if(!valorNaCarteiraNew3.equals("N") && !valorCaucaoNew3.equals("N") && !valorNaCarteiraNew3.equals("S") && !valorCaucaoNew3.equals("S") ){
 
-                    if (Integer.parseInt(valorNaCarteiraNew3) >= Integer.parseInt(valorCaucaoNew3)) {
+                    if (valorNaCarteiraDouble >= valorCaucaoDouble) {
 
                         referenceTransacaoUser.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override

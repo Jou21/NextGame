@@ -82,6 +82,8 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
 
         if(getIntent().hasExtra("ADICIONARSALDO")){
             saldoParaAddCarteira = getIntent().getStringExtra("ADICIONARSALDO");
+
+            Log.d("SALDO", "" + saldoParaAddCarteira);
         }else {
             Toast.makeText(PagamentoActivity.this, "Activity cannot find  extras " + "ADICIONARSALDO", Toast.LENGTH_SHORT).show();
             Log.d("EXTRASJOGO", "Activity cannot find  extras " + "ADICIONARSALDO");
@@ -225,7 +227,7 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists() && entrou == false){
                     Carteira userCarteira = dataSnapshot.getValue(Carteira.class);
-                    String saldoTotal = String.valueOf(Integer.parseInt(userCarteira.getSaldo()) + Integer.parseInt(saldoParaAddCarteira));
+                    String saldoTotal = String.valueOf(Double.parseDouble(userCarteira.getSaldo()) + Double.parseDouble(saldoParaAddCarteira));
 
                     HashMap<String, String> hashMap = new HashMap<>();
                     hashMap.put("id", user.getUid());
