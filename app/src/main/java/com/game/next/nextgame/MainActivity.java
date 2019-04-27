@@ -755,6 +755,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    @Override
+    public void onBackPressed() {
+        this.finish();
+        super.onBackPressed();
+    }
 
-
+    @Override
+    public void finish() {
+        System.runFinalizersOnExit(true) ;
+        super.finish();
+        android.os.Process.killProcess(android.os.Process.myPid());
+    }
 }

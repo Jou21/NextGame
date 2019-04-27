@@ -317,10 +317,4 @@ public class FragmentA extends Fragment {
         super.onActivityResult(requestCode, resultCode, intent);
     }
 
-    @Override
-    public void onAttach(Activity activity){
-        super.onAttach (activity);
-
-    }
-
 }
