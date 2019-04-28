@@ -8,6 +8,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -33,6 +34,10 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -102,7 +107,17 @@ public class ActivityLogin extends AppCompatActivity{
                                         finish();
                                     } else {
                                         // If sign in fails, display a message to the user.
-                                        Toast.makeText(ActivityLogin.this, "Erro: " + task.getException(), Toast.LENGTH_SHORT).show();
+                                        //Toast.makeText(ActivityLogin.this, "Erro: " + task.getException(), Toast.LENGTH_SHORT).show();
+
+                                        try {
+                                            throw task.getException();
+                                        }catch ( FirebaseAuthInvalidUserException e ) {
+                                            Toast.makeText(ActivityLogin.this, "Usuário não está cadastrado.", Toast.LENGTH_SHORT).show();
+                                        }catch ( FirebaseAuthInvalidCredentialsException e ){
+                                            Toast.makeText(ActivityLogin.this, "E-mail ou senha inválidos", Toast.LENGTH_SHORT).show();
+                                        } catch(Exception e) {
+                                            Toast.makeText(ActivityLogin.this, "Erro: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
                                     }
 
                                 }

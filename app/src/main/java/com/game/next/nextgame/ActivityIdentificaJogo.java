@@ -647,7 +647,7 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
                         }
 
                         hashMap.put("precoVenda", String.valueOf(progressChangedValuePreco));
-                        
+
                         hashMap.put("domingo", domingoSelecionado);
                         hashMap.put("segunda", segundaSelecionado);
                         hashMap.put("terca", tercaSelecionado);
