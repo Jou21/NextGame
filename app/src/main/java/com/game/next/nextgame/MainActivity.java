@@ -773,8 +773,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                                                                     "deseja realizar a transação e a pelo menos 100 metros de distância dos outros", Toast.LENGTH_LONG).show();
 
                                                                         } else if (transacaoUsersProximasFornecedorReceberDeVoltaOJogo.size() == 1) {
-                                                                            if (transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getStatus().equals("ENTREGADO")) {
-
+                                                                            Log.d("ENTROUFUNCIONARIO", user.getUid() + "" +transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getFornecedorId());
+                                                                            if (transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getStatus().equals("ENTREGADO") && user.getUid().equals(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getFornecedorId())) {
+                                                                                Log.d("ENTROUFUNCIONARIO1", user.getUid() + "" +transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getFornecedorId());
                                                                                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
                                                                                 builder.setMessage("Você acaba de receber de volta o jogo " + transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getJogo().getNome() + ". Obrigado por entreter as pessoas que utilizam o NextGame!").setTitle("PARABÉNS!!!");
