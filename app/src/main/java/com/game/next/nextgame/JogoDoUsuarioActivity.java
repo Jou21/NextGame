@@ -225,6 +225,8 @@ public class JogoDoUsuarioActivity extends AppCompatActivity {
             if (getIntent().hasExtra("PRECOVENDA")) {
                 precoVenda = getIntent().getStringExtra("PRECOVENDA");
 
+                Log.d("PRECOJOGODOUSUARIO","" + precoVenda);
+
                 if (getIntent().hasExtra("VENDE")) {
                     vende = getIntent().getStringExtra("VENDE");
                 } else {

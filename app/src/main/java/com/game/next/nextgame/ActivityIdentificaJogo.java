@@ -507,11 +507,7 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
                             hashMap.put("precoAluga", "N");
                         }
 
-                        //if(vende == "S"){
-                            hashMap.put("precoVenda", String.valueOf(progressChangedValuePreco));
-                        //}else{
-                        //    hashMap.put("precoVenda", "N");
-                        //}
+                        hashMap.put("precoVenda", String.valueOf(progressChangedValuePreco));
 
                         hashMap.put("domingo", domingoSelecionado);
                         hashMap.put("segunda", segundaSelecionado);
@@ -579,11 +575,7 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
                                 hashMap.put("precoAluga", "N");
                             }
 
-                            if(vende == "S"){
-                                hashMap.put("precoVenda", String.valueOf(progressChangedValuePreco));
-                            }else{
-                                hashMap.put("precoVenda", "N");
-                            }
+                            hashMap.put("precoVenda", String.valueOf(progressChangedValuePreco));
 
                             hashMap.put("domingo", domingoSelecionado);
                             hashMap.put("segunda", segundaSelecionado);
@@ -654,12 +646,8 @@ public class ActivityIdentificaJogo extends AppCompatActivity {
                             hashMap.put("precoAluga", "N");
                         }
 
-                        if(vende == "S"){
-                            hashMap.put("precoVenda", String.valueOf(progressChangedValuePreco));
-                        }else{
-                            hashMap.put("precoVenda", "N");
-                        }
-
+                        hashMap.put("precoVenda", String.valueOf(progressChangedValuePreco));
+                        
                         hashMap.put("domingo", domingoSelecionado);
                         hashMap.put("segunda", segundaSelecionado);
                         hashMap.put("terca", tercaSelecionado);
