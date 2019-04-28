@@ -183,6 +183,9 @@ public class MyAdapterQuemTemOJogo extends RecyclerView.Adapter<MyAdapterQuemTem
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     LocationData locationUser = postSnapshot.getValue(LocationData.class);
 
+                    //String latitudeUser = postSnapshot.child("latitude").getValue(String.class);
+                    //String longitudeUser = postSnapshot.child("longitude").getValue(String.class);
+
                     if((locationUser.getUserId() != null && listaUserGames.get(position).getUserId() != null) && user != null){
                         if(locationUser.getUserId().equals(listaUserGames.get(position).getUserId())){
                             //latOtherUser = locationUser.getEntregaLatitude();

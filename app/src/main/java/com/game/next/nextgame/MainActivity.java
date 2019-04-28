@@ -151,7 +151,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         startGettingLocations();
 
-
         referenceTransacoes.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -1179,7 +1178,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         MIN_TIME_BW_UPDATES,
                         MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
 
-            } else if (isNetwork) {
+            }
+
+            if (isNetwork) {
                 // from Network Provider
 
                 lm.requestLocationUpdates(
@@ -1188,6 +1189,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
 
             }
+
+
         } else {
             Toast.makeText(this, "Não é possível obter a localização", Toast.LENGTH_SHORT).show();
         }
@@ -1215,12 +1218,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             } else {
 
                                 if (locationData.getEntregaLatitude() == null) {
+
                                     localDeEncontro = currentLocationLatLong;
 
+                                    reference.child("location").child(user.getUid()).child("userId").setValue(user.getUid());
                                     reference.child("location").child(user.getUid()).child("latitude").setValue(String.valueOf(currentLocationLatLong.latitude));
                                     reference.child("location").child(user.getUid()).child("longitude").setValue(String.valueOf(currentLocationLatLong.longitude));
                                 }else {
-
 
                                     String entregaLatitude = dataSnapshot.child("entregaLatitude").getValue(String.class);
                                     String entregaLongitude = dataSnapshot.child("entregaLongitude").getValue(String.class);

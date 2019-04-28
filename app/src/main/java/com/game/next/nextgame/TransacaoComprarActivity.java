@@ -187,22 +187,25 @@ public class TransacaoComprarActivity extends AppCompatActivity {
                                     TransacaoUser transacaoUser = snapshot.getValue(TransacaoUser.class);
                                     String key = snapshot.getKey();
 
-                                    if ((transacaoUser.getJogo().getCodigoDeBarra().equals(model.getCodigoDeBarra()) && transacaoUser.getFornecedorId().equals(fornecedorId)) && transacaoUser.getTime().equals(time)) {
+                                    //if(transacaoUser.getJogo().getCodigoDeBarra() != null && model.getCodigoDeBarra()){
+                                        //if ((transacaoUser.getJogo().getCodigoDeBarra().equals(model.getCodigoDeBarra()) &&
+                                    if (transacaoUser.getFornecedorId().equals(fornecedorId) && transacaoUser.getTime().equals(time)) {
 
-                                        HashMap<String, Object> hashMap = new HashMap<>();
-                                        hashMap.put("userId", user.getUid());
-                                        hashMap.put("fornecedorId", fornecedorId);
-                                        hashMap.put("valorAluguel", "N");
-                                        hashMap.put("valorCaucao", precoJogo);
-                                        hashMap.put("jogo", model);
-                                        hashMap.put("time", data);
-                                        hashMap.put("status", "INICIO");
+                                            HashMap<String, Object> hashMap = new HashMap<>();
+                                            hashMap.put("userId", user.getUid());
+                                            hashMap.put("fornecedorId", fornecedorId);
+                                            hashMap.put("valorAluguel", "N");
+                                            hashMap.put("valorCaucao", precoJogo);
+                                            hashMap.put("jogo", model);
+                                            hashMap.put("time", data);
+                                            hashMap.put("status", "INICIO");
 
-                                        referenceTransacaoUser.child(key).setValue(hashMap);
+                                            referenceTransacaoUser.child(key).setValue(hashMap);
 
-                                        entrou = true;
-                                        break;
-                                    }
+                                            entrou = true;
+                                            break;
+                                        }
+                                    //}
                                 }
 
                                 if (entrou == false) {
