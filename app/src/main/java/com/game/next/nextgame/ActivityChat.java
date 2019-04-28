@@ -143,8 +143,9 @@ public class ActivityChat extends AppCompatActivity {
                 Intent intent = new Intent(ActivityChat.this, ActivityLogin.class);
                 //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
                 finishAffinity();
+                startActivity(intent);
+                sair();
                 return true;
         }
 
@@ -211,5 +212,11 @@ public class ActivityChat extends AppCompatActivity {
     public void onBackPressed() {
         finish();
         super.onBackPressed();
+    }
+
+    public void sair(){
+        System.runFinalizersOnExit(true) ;
+        super.finish();
+        android.os.Process.killProcess(android.os.Process.myPid());
     }
 }

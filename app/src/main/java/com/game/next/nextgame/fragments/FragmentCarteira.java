@@ -58,6 +58,8 @@ public class FragmentCarteira extends Fragment {
 
                     String array[] = userCarteira.getSaldo().split("\\.");
 
+                    Log.d("CARTEIRA", "Carteira tem " + userCarteira.getSaldo());
+
                     if(array.length > 1) {
                         valorInteiro = array[0];
                         centavos = array[1];

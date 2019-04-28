@@ -145,15 +145,22 @@ public class ActivityMeusJogos extends AppCompatActivity {
                 //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 //intent.putExtra("EXIT", true);
+                finishAffinity();
                 startActivity(intent);
                 //Intent broadcastIntent = new Intent();
                 //broadcastIntent.setAction("com.package.ACTION_LOGOUT");
                 //sendBroadcast(broadcastIntent);
-                finishAffinity();
+                sair();
                 return true;
         }
 
         return false;
+    }
+
+    public void sair(){
+        System.runFinalizersOnExit(true) ;
+        super.finish();
+        android.os.Process.killProcess(android.os.Process.myPid());
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
