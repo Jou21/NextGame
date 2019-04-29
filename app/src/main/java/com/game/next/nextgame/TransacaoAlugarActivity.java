@@ -78,7 +78,7 @@ public class TransacaoAlugarActivity extends AppCompatActivity {
                                 centavos = centavos.concat("0");
                             }
 
-                            txtTransacaoValorNaCarteira.setText("R$ " + valorInteiro + "," + centavos);
+                            txtTransacaoValorNaCarteira.setText("R$ " + valorInteiro + "," + centavos.substring(0,2));
                         }else {
                             valorInteiro = array[0];
                             txtTransacaoValorNaCarteira.setText("R$ " + valorInteiro + ",00");
@@ -132,7 +132,7 @@ public class TransacaoAlugarActivity extends AppCompatActivity {
                     centavos = centavos.concat("0");
                 }
 
-                txtTransacaoValorAluguel.setText("R$ " + valorInteiro + "," + centavos);
+                txtTransacaoValorAluguel.setText("R$ " + valorInteiro + "," + centavos.substring(0,2));
             }else {
                 valorInteiro = array[0];
                 txtTransacaoValorAluguel.setText("R$ " + valorInteiro + ",00");
@@ -159,7 +159,7 @@ public class TransacaoAlugarActivity extends AppCompatActivity {
                     centavos = centavos.concat("0");
                 }
 
-                txtTransacaoValorCaucao.setText("R$ " + valorInteiro + "," + centavos);
+                txtTransacaoValorCaucao.setText("R$ " + valorInteiro + "," + centavos.substring(0,2));
             }else {
                 valorInteiro = array[0];
                 txtTransacaoValorCaucao.setText("R$ " + valorInteiro + ",00");

@@ -77,7 +77,7 @@ public class TransacaoComprarActivity extends AppCompatActivity {
                             centavos = centavos.concat("0");
                         }
 
-                        txtTransacaoValorNaCarteiraComprar.setText("R$ " + valorInteiro + "," + centavos);
+                        txtTransacaoValorNaCarteiraComprar.setText("R$ " + valorInteiro + "," + centavos.substring(0,2));
                     }
                 }
             }
@@ -126,7 +126,7 @@ public class TransacaoComprarActivity extends AppCompatActivity {
                     centavos = centavos.concat("0");
                 }
 
-                txtTransacaoValorComprar.setText("R$ " + valorInteiro + "," + centavos);
+                txtTransacaoValorComprar.setText("R$ " + valorInteiro + "," + centavos.substring(0,2));
             }else {
                 valorInteiro = array[0];
                 txtTransacaoValorComprar.setText("R$ " + valorInteiro + ",00");
