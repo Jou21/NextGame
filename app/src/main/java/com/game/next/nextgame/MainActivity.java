@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                                                 centavos = centavos.concat("0");
                                                             }
 
-                                                            //Toast.makeText(MainActivity.this, "Parabéns, foi adicionado R$ " + valorInteiro + ","+ centavos +" de saldo a sua carteira!", Toast.LENGTH_LONG).show();
+                                                            //Toast.makeText(MainActivity.this, "Parabéns, foi adicionado R$ " + valorInteiro + ","+ centavos.substring(0,2) +" de saldo a sua carteira!", Toast.LENGTH_LONG).show();
 
                                                             referenceTransacaoUser.child(key3).child("status").setValue("CONCLUIDO");
 
@@ -260,7 +260,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                                                 centavos = centavos.concat("0");
                                                             }
 
-                                                            //Toast.makeText(MainActivity.this, "Parabéns, foi adicionado R$ " + valorInteiro + ","+ centavos +" de saldo a sua carteira!", Toast.LENGTH_LONG).show();
+                                                            //Toast.makeText(MainActivity.this, "Parabéns, foi adicionado R$ " + valorInteiro + ","+ centavos.substring(0,2) +" de saldo a sua carteira!", Toast.LENGTH_LONG).show();
 
                                                             referenceTransacaoUser.child(key3).child("status").setValue("CONCLUIDO");
 
@@ -311,7 +311,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                                                 centavos = centavos.concat("0");
                                                             }
 
-                                                            //Toast.makeText(MainActivity.this, "Obrigado por devolver o jogo. R$ " + valorInteiro + ","+ centavos +" foi debitado da sua carteira!", Toast.LENGTH_LONG).show();
+                                                            //Toast.makeText(MainActivity.this, "Obrigado por devolver o jogo. R$ " + valorInteiro + ","+ centavos.substring(0,2) +" foi debitado da sua carteira!", Toast.LENGTH_LONG).show();
 
                                                             referenceTransacaoUser.child(key3).child("status").setValue("CONCLUIDO");
 
@@ -712,7 +712,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                                                     centavos = centavos.concat("0");
                                                                 }
 
-                                                                Toast.makeText(MainActivity.this, "Parabéns, foi adicionado R$ " + valorInteiro + ","+ centavos +" de saldo a sua carteira!", Toast.LENGTH_LONG).show();
+                                                                Toast.makeText(MainActivity.this, "Parabéns, foi adicionado R$ " + valorInteiro + ","+ centavos.substring(0,2) +" de saldo a sua carteira!", Toast.LENGTH_LONG).show();
 
                                                                 referenceTransacoes.child(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getUserId()).child(key).child("status").setValue("CONCLUIDO");
 
@@ -746,7 +746,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                                                     centavos = centavos.concat("0");
                                                                 }
 
-                                                                Toast.makeText(MainActivity.this, "Parabéns, foi adicionado R$ " + valorInteiro + ","+ centavos +" de saldo a sua carteira!", Toast.LENGTH_LONG).show();
+                                                                Toast.makeText(MainActivity.this, "Parabéns, foi adicionado R$ " + valorInteiro + ","+ centavos.substring(0,2) +" de saldo a sua carteira!", Toast.LENGTH_LONG).show();
 
                                                                 referenceTransacoes.child(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getUserId()).child(key).child("status").setValue("CONCLUIDO");
 
@@ -797,7 +797,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                                                     centavos = centavos.concat("0");
                                                                 }
 
-                                                                //Toast.makeText(MainActivity.this, "Obrigado por devolver o jogo. R$ " + valorInteiro + ","+ centavos +" foi debitado da sua carteira!", Toast.LENGTH_LONG).show();
+                                                                //Toast.makeText(MainActivity.this, "Obrigado por devolver o jogo. R$ " + valorInteiro + ","+ centavos.substring(0,2) +" foi debitado da sua carteira!", Toast.LENGTH_LONG).show();
 
                                                                 referenceTransacoes.child(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getUserId()).child(key).child("status").setValue("CONCLUIDO");
 
@@ -832,7 +832,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                                                     centavos = centavos.concat("0");
                                                                 }
 
-                                                                //Toast.makeText(MainActivity.this, "Obrigado por devolver o jogo. R$ " + valorInteiro + ","+ centavos +" foi debitado da sua carteira!", Toast.LENGTH_LONG).show();
+                                                                //Toast.makeText(MainActivity.this, "Obrigado por devolver o jogo. R$ " + valorInteiro + ","+ centavos.substring(0,2) +" foi debitado da sua carteira!", Toast.LENGTH_LONG).show();
 
                                                                 referenceTransacoes.child(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getUserId()).child(key).child("status").setValue("CONCLUIDO");
 
@@ -1029,7 +1029,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                                                         centavos = centavos.concat("0");
                                                                     }
 
-                                                                    //Toast.makeText(MainActivity.this, "Parabéns, foi adicionado R$ " + valorInteiro + ","+ centavos +" de saldo a sua carteira!", Toast.LENGTH_LONG).show();
+                                                                    //Toast.makeText(MainActivity.this, "Parabéns, foi adicionado R$ " + valorInteiro + ","+ centavos.substring(0,2) +" de saldo a sua carteira!", Toast.LENGTH_LONG).show();
 
                                                                     referenceTransacaoUser.child(key2).child("status").setValue("CONCLUIDO");
 
@@ -1063,7 +1063,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                                                         centavos = centavos.concat("0");
                                                                     }
 
-                                                                    //Toast.makeText(MainActivity.this, "Parabéns, foi adicionado R$ " + valorInteiro + ","+ centavos +" de saldo a sua carteira!", Toast.LENGTH_LONG).show();
+                                                                    //Toast.makeText(MainActivity.this, "Parabéns, foi adicionado R$ " + valorInteiro + ","+ centavos.substring(0,2) +" de saldo a sua carteira!", Toast.LENGTH_LONG).show();
 
                                                                     referenceTransacaoUser.child(key2).child("status").setValue("CONCLUIDO");
 
@@ -1115,7 +1115,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                                                         centavos = centavos.concat("0");
                                                                     }
 
-                                                                    Toast.makeText(MainActivity.this, "Obrigado por comprar o jogo. R$ " + valorInteiro + ","+ centavos +" foi debitado da sua carteira!", Toast.LENGTH_LONG).show();
+                                                                    Toast.makeText(MainActivity.this, "Obrigado por comprar o jogo. R$ " + valorInteiro + ","+ centavos.substring(0,2) +" foi debitado da sua carteira!", Toast.LENGTH_LONG).show();
 
                                                                     referenceTransacaoUser.child(key2).child("status").setValue("CONCLUIDO");
 
@@ -1152,7 +1152,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                                                         centavos = centavos.concat("0");
                                                                     }
 
-                                                                    Toast.makeText(MainActivity.this, "Obrigado por comprar o jogo. R$ " + valorInteiro + ","+ centavos +" foi debitado da sua carteira!", Toast.LENGTH_LONG).show();
+                                                                    Toast.makeText(MainActivity.this, "Obrigado por comprar o jogo. R$ " + valorInteiro + ","+ centavos.substring(0,2) +" foi debitado da sua carteira!", Toast.LENGTH_LONG).show();
 
                                                                     referenceTransacaoUser.child(key2).child("status").setValue("CONCLUIDO");
 
