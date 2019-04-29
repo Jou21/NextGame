@@ -68,7 +68,7 @@ public class FragmentCarteira extends Fragment {
                             centavos = centavos.concat("0");
                         }
 
-                        txtCarteiraSaldo.setText("R$ " + valorInteiro + "," + centavos);
+                        txtCarteiraSaldo.setText("R$ " + valorInteiro + "," + centavos.substring(0,2));
                     }else {
                         valorInteiro = array[0];
                         txtCarteiraSaldo.setText("R$ " + valorInteiro + ",00");
