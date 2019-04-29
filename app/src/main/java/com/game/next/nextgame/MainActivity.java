@@ -97,12 +97,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private boolean pegouTransacoesProximas = false;
 
     private int contador = 0;
+    private int contador2 = 0;
 
     private ArrayList<String> keys = new ArrayList<>();
+    private ArrayList<String> keys2 = new ArrayList<>();
     private ArrayList<TransacaoUser> transacaoUsers = new ArrayList<>();
     private ArrayList<TransacaoUser> transacaoUsersProximas = new ArrayList<>();
     private ArrayList<TransacaoUser> transacaoUsersProximasFornecedorReceberDeVoltaOJogo = new ArrayList<>();
+    private ArrayList<TransacaoUser> todasAsTransacoes = new ArrayList<>();
     private HashMap<String,String> hashMap = new HashMap<>();
+    private HashMap<String,String> hashMap2 = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -407,9 +411,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     transacaoUsers = new ArrayList<>();
 
+                    todasAsTransacoes = new ArrayList<>();
+
                     keys = new ArrayList<>();
 
                     hashMap = new HashMap<>();
+
+                    hashMap2 = new HashMap<>();
 
                     pegouTransacoes = false;
 
@@ -427,640 +435,65 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                                         referenceTransacaoUser.addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
-                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot1) {
 
-                                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                                    transacaoUser = snapshot.getValue(TransacaoUser.class);
-                                                    String key = snapshot.getKey();
+                                                for (DataSnapshot snapshot1 : dataSnapshot1.getChildren()) {
+                                                    transacaoUser = snapshot1.getValue(TransacaoUser.class);
+                                                    String key = snapshot1.getKey();
 
                                                     transacaoUsers.add(transacaoUser);
                                                     keys.add(key);
                                                     hashMap.put(transacaoUser.getUserId(), key);
                                                 }
 
-                                                pegouTransacoes = true;
-                                                //Log.d("ENTROUPROXIMAS0", "ENTROUPROXIMAS0");
-                                                //Toast.makeText(MainActivity.this, "ENTROUPROXIMAS0", Toast.LENGTH_SHORT).show();
-
-
-                                                if (pegouTransacoes == true) {
-
-                                                    contador = 0;
-
-                                                    transacaoUsersProximas = new ArrayList<>();
-                                                    transacaoUsersProximasFornecedorReceberDeVoltaOJogo = new ArrayList<>();
-
-                                                    for (final TransacaoUser transacaoUser : transacaoUsers) {
-
-                                                        //Log.d("TRASACOESUSERS", "" + transacaoUser.getFornecedorId());
-
-                                                        if (transacaoUser.getFornecedorId() != null) {
-
-                                                            reference.child("location").child(transacaoUser.getFornecedorId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                                                @Override
-                                                                public void onDataChange(DataSnapshot dataSnapshot) {
-
-                                                                    //Log.d("ENTROUPROXIMAS1", "ENTROUPROXIMAS1");
-
-
-                                                                    String latitudeFonecedor = dataSnapshot.child("latitude").getValue(String.class);
-                                                                    String longitudeFonecedor = dataSnapshot.child("longitude").getValue(String.class);
-
-                                                                    if (latitudeFonecedor != null && longitudeFonecedor != null) {
-
-                                                                        LatLng posicaoFonecedor = new LatLng(Double.parseDouble(latitudeFonecedor), Double.parseDouble(longitudeFonecedor));
-
-                                                                        double distance = SphericalUtil.computeDistanceBetween(posicaoUsuario, posicaoFonecedor);
-
-                                                                        if (transacaoUser.getFornecedorId() != user.getUid() && distance < 100) {
-
-                                                                            transacaoUsersProximas.add(transacaoUser);
-
-                                                                        }else {
-
-                                                                            transacaoUsersProximasFornecedorReceberDeVoltaOJogo.add(transacaoUser);
-
-                                                                        }
-                                                                    }
-
-                                                                    contador++;
-
-
-                                                                    if (contador == transacaoUsers.size()) {
-
-                                                                        //=======USUÁRIO PEGAR O JOGO===================================================================================
-
-                                                                        if (transacaoUsersProximas.size() > 1) {
-
-                                                                            //gerar lista para o usuario para ele escolher a transação correta
-                                                                            Toast.makeText(MainActivity.this, "Tem mais de um usuário próximo que iniciou uma transação com você. Por favor fique próximo do usuário em que você " +
-                                                                                    "deseja realizar a transação e a pelo menos 100 metros de distância dos outros", Toast.LENGTH_LONG).show();
-
-                                                                        } else if (transacaoUsersProximas.size() == 1) {
-
-                                                                            referenceCarteiraUser.child(transacaoUsersProximas.get(0).getUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                                                                @Override
-                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                                                    Carteira userCarteira = dataSnapshot.getValue(Carteira.class);
-
-                                                                                    final Double quantoUsuarioTemNaCarteira = Double.parseDouble(userCarteira.getSaldo());
-
-                                                                                    Log.d("ENTROUPROXIMAS1", "CurrentUser tem " + quantoUsuarioTemNaCarteira);
-
-                                                                                    Double somatorio = 0.0;
-                                                                                    boolean podeRealizarATransacao = false;
-
-                                                                                    for(TransacaoUser userTransacoes : transacaoUsers){
-                                                                                        if(userTransacoes.getStatus().equals("ENTREGADO")){
-                                                                                            somatorio += Double.parseDouble(userTransacoes.getValorCaucao());
-                                                                                        }
-                                                                                    }
-
-                                                                                    somatorio += Double.parseDouble(transacaoUsersProximas.get(0).getValorCaucao());
-
-                                                                                    if(quantoUsuarioTemNaCarteira >= somatorio){
-                                                                                        podeRealizarATransacao = true;
-                                                                                    }
-
-                                                                                    if (transacaoUsersProximas.get(0).getStatus().equals("INICIO") && podeRealizarATransacao) {
-                                                                                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-
-                                                                                        builder.setMessage("Você acaba de receber o jogo " + transacaoUsersProximas.get(0).getJogo().getNome() + ". Boa diversão!!!").setTitle("PARABÉNS!!!");
-                                                                                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                                                                            public void onClick(DialogInterface dialog, int id) {
-
-                                                                                            }
-                                                                                        });
-
-                                                                                        String key = (String) hashMap.get(transacaoUsersProximas.get(0).getUserId());
-
-                                                                                        AlertDialog dialog = builder.create();
-                                                                                        if (transacaoUsersProximas.get(0).getValorAluguel().equals("N")) {
-
-                                                                                            final String key2 = (String) hashMap.get(transacaoUsersProximas.get(0).getUserId());
-
-                                                                                            //entrou = false;
-
-
-                                                                                            String saldoParaAddCarteiraCaucao = transacaoUsersProximas.get(0).getValorCaucao();
-
-                                                                                            String array[] = transacaoUsersProximas.get(0).getTime().split("-");
-
-                                                                                            String horario = array[0];
-                                                                                            String data = array[1];
-
-                                                                                            final Double saldoTotalParaAddCarteira = Double.parseDouble(saldoParaAddCarteiraCaucao);
-
-
-                                                                                            referenceCarteiraUser.child(transacaoUsersProximas.get(0).getFornecedorId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                                                                                @Override
-                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                                                                    if(dataSnapshot.exists()){
-                                                                                                        Carteira userCarteira = dataSnapshot.getValue(Carteira.class);
-
-                                                                                                        String saldoTotal = String.valueOf(Double.parseDouble(userCarteira.getSaldo()) + saldoTotalParaAddCarteira);
-
-                                                                                                        Log.d("ENTROUPROXIMAS2", "Fornecedor vai ter " + saldoTotal);
-
-                                                                                                        HashMap<String, String> hashMap = new HashMap<>();
-                                                                                                        hashMap.put("id", transacaoUsersProximas.get(0).getFornecedorId());
-                                                                                                        hashMap.put("saldo", saldoTotal);
-
-                                                                                                        referenceCarteiraUser.child(transacaoUsersProximas.get(0).getFornecedorId()).setValue(hashMap);
-
-                                                                                                        String valorInteiro, centavos;
-
-                                                                                                        String saldoDebitado = String.valueOf(saldoTotalParaAddCarteira);
-
-                                                                                                        String array[] = saldoDebitado.split("\\.");
-
-                                                                                                        if(array.length > 1) {
-                                                                                                            valorInteiro = array[0];
-                                                                                                            centavos = array[1];
-
-                                                                                                            if(array[1].length() == 1){
-                                                                                                                centavos = centavos.concat("0");
-                                                                                                            }
-
-                                                                                                            //Toast.makeText(MainActivity.this, "Parabéns, foi adicionado R$ " + valorInteiro + ","+ centavos +" de saldo a sua carteira!", Toast.LENGTH_LONG).show();
-
-                                                                                                            referenceTransacaoUser.child(key2).child("status").setValue("CONCLUIDO");
-
-                                                                                                        }else {
-                                                                                                            valorInteiro = array[0];
-                                                                                                            //Toast.makeText(MainActivity.this, "Parabéns, foi adicionado R$ " + valorInteiro + ",00 de saldo a sua carteira!", Toast.LENGTH_LONG).show();
-
-                                                                                                            referenceTransacaoUser.child(key2).child("status").setValue("CONCLUIDO");
-                                                                                                        }
-
-                                                                                                        //entrou = true;
-
-                                                                                                    }else{
-                                                                                                        HashMap<String, String> hashMap = new HashMap<>();
-                                                                                                        hashMap.put("id", transacaoUsersProximas.get(0).getFornecedorId());
-                                                                                                        hashMap.put("saldo", String.valueOf(saldoTotalParaAddCarteira));
-
-                                                                                                        Log.d("ENTROUPROXIMAS2", "Fornecedor vai ter " + saldoTotalParaAddCarteira);
-
-                                                                                                        referenceCarteiraUser.child(transacaoUsersProximas.get(0).getFornecedorId()).setValue(hashMap);
-
-                                                                                                        String valorInteiro, centavos;
-
-                                                                                                        String saldoDebitado = String.valueOf(saldoTotalParaAddCarteira);
-
-                                                                                                        String array[] = saldoDebitado.split("\\.");
-
-                                                                                                        if(array.length > 1) {
-                                                                                                            valorInteiro = array[0];
-                                                                                                            centavos = array[1];
-
-                                                                                                            if(array[1].length() == 1){
-                                                                                                                centavos = centavos.concat("0");
-                                                                                                            }
-
-                                                                                                            //Toast.makeText(MainActivity.this, "Parabéns, foi adicionado R$ " + valorInteiro + ","+ centavos +" de saldo a sua carteira!", Toast.LENGTH_LONG).show();
-
-                                                                                                            referenceTransacaoUser.child(key2).child("status").setValue("CONCLUIDO");
-
-                                                                                                        }else {
-                                                                                                            valorInteiro = array[0];
-                                                                                                            //Toast.makeText(MainActivity.this, "Parabéns, foi adicionado R$ " + valorInteiro + ",00 de saldo a sua carteira!", Toast.LENGTH_LONG).show();
-
-                                                                                                            referenceTransacaoUser.child(key2).child("status").setValue("CONCLUIDO");
-                                                                                                        }
-
-                                                                                                        //entrou = true;
-
-                                                                                                    }
-
-                                                                                                }
-
-                                                                                                @Override
-                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                                                                                }
-                                                                                            });
-
-
-                                                                                            referenceCarteiraUser.child(transacaoUsersProximas.get(0).getUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                                                                                @Override
-                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                                                                    if(dataSnapshot.exists()){
-                                                                                                        Carteira userCarteira = dataSnapshot.getValue(Carteira.class);
-
-                                                                                                        String saldoTotal = String.valueOf(Double.parseDouble(userCarteira.getSaldo()) - saldoTotalParaAddCarteira);
-
-                                                                                                        Log.d("ENTROUPROXIMAS3", "CurrentUser vai ter " + saldoTotal);
-
-                                                                                                        HashMap<String, String> hashMap = new HashMap<>();
-                                                                                                        hashMap.put("id", transacaoUsersProximas.get(0).getUserId());
-                                                                                                        hashMap.put("saldo", saldoTotal);
-
-                                                                                                        referenceCarteiraUser.child(transacaoUsersProximas.get(0).getUserId()).setValue(hashMap);
-
-                                                                                                        String valorInteiro, centavos;
-
-                                                                                                        String saldoDebitado = String.valueOf(saldoTotalParaAddCarteira);
-
-                                                                                                        String array[] = saldoDebitado.split("\\.");
-
-                                                                                                        if(array.length > 1) {
-                                                                                                            valorInteiro = array[0];
-                                                                                                            centavos = array[1];
-
-                                                                                                            if(array[1].length() == 1){
-                                                                                                                centavos = centavos.concat("0");
-                                                                                                            }
-
-                                                                                                            Toast.makeText(MainActivity.this, "Obrigado por comprar o jogo. R$ " + valorInteiro + ","+ centavos +" foi debitado da sua carteira!", Toast.LENGTH_LONG).show();
-
-                                                                                                            referenceTransacaoUser.child(key2).child("status").setValue("CONCLUIDO");
-
-                                                                                                        }else {
-                                                                                                            valorInteiro = array[0];
-                                                                                                            Toast.makeText(MainActivity.this, "Obrigado por comprar o jogo. R$ " + valorInteiro + ",00 foi debitado da sua carteira!", Toast.LENGTH_LONG).show();
-
-                                                                                                            referenceTransacaoUser.child(key2).child("status").setValue("CONCLUIDO");
-                                                                                                        }
-
-                                                                                                        //entrou = true;
-
-                                                                                                    }else{
-
-                                                                                                        HashMap<String, String> hashMap = new HashMap<>();
-                                                                                                        hashMap.put("id", transacaoUsersProximas.get(0).getUserId());
-                                                                                                        hashMap.put("saldo", String.valueOf(-saldoTotalParaAddCarteira));
-
-                                                                                                        Log.d("ENTROUPROXIMAS4", "CurrentUser vai ter menos" + saldoTotalParaAddCarteira);
-
-                                                                                                        referenceCarteiraUser.child(transacaoUsersProximas.get(0).getUserId()).setValue(hashMap);
-
-                                                                                                        String valorInteiro, centavos;
-
-                                                                                                        String saldoDebitado = String.valueOf(saldoTotalParaAddCarteira);
-
-                                                                                                        String array[] = saldoDebitado.split("\\.");
-
-                                                                                                        if(array.length > 1) {
-                                                                                                            valorInteiro = array[0];
-                                                                                                            centavos = array[1];
-
-                                                                                                            if(array[1].length() == 1){
-                                                                                                                centavos = centavos.concat("0");
-                                                                                                            }
-
-                                                                                                            Toast.makeText(MainActivity.this, "Obrigado por comprar o jogo. R$ " + valorInteiro + ","+ centavos +" foi debitado da sua carteira!", Toast.LENGTH_LONG).show();
-
-                                                                                                            referenceTransacaoUser.child(key2).child("status").setValue("CONCLUIDO");
-
-                                                                                                        }else {
-                                                                                                            valorInteiro = array[0];
-                                                                                                            Toast.makeText(MainActivity.this, "Obrigado por comprar o jogo. R$ " + valorInteiro + ",00 foi debitado da sua carteira!", Toast.LENGTH_LONG).show();
-
-                                                                                                            referenceTransacaoUser.child(key2).child("status").setValue("CONCLUIDO");
-                                                                                                        }
-
-                                                                                                        //entrou = true;
-
-                                                                                                    }
-
-                                                                                                }
-
-                                                                                                @Override
-                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                                                                                }
-                                                                                            });
-
-                                                                                        } else {
-                                                                                            referenceTransacaoUser.child(key).child("status").setValue("ENTREGADO");
-                                                                                        }
-
-
-                                                                                        dialog.show();
-
-
-                                                                                    } else {
-                                                                                        if(!podeRealizarATransacao){
-                                                                                            Toast.makeText(MainActivity.this, "Você não tem saldo suficiente!", Toast.LENGTH_LONG).show();
-                                                                                        }else {
-                                                                                            Toast.makeText(MainActivity.this, "O jogo já está entregue!", Toast.LENGTH_LONG).show();
-                                                                                        }
-                                                                                    }
-
-                                                                                }
-
-                                                                                @Override
-                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                                                                }
-                                                                            });
-
-
-
-                                                                        } else {
-                                                                            Toast.makeText(MainActivity.this, "É necessário estar próximo do usuário fornecedor...", Toast.LENGTH_LONG).show();
-                                                                        }
-
-                                                                        //=====================================================================================================================
-
-                                                                        //=========FORNECEDOR PEGAR DE VOLTA O JOGO============================================================================
-
-                                                                        if (transacaoUsersProximasFornecedorReceberDeVoltaOJogo.size() > 1) {
-
-                                                                            //gerar lista para o usuario para ele escolher a transação correta
-                                                                            Toast.makeText(MainActivity.this, "Tem mais de um usuário próximo que iniciou uma transação com você. Por favor fique próximo do usuário em que você " +
-                                                                                    "deseja realizar a transação e a pelo menos 100 metros de distância dos outros", Toast.LENGTH_LONG).show();
-
-                                                                        } else if (transacaoUsersProximasFornecedorReceberDeVoltaOJogo.size() == 1) {
-                                                                            Log.d("ENTROUFUNCIONARIO", user.getUid() + "" +transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getFornecedorId());
-                                                                            if (transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getStatus().equals("ENTREGADO") && user.getUid().equals(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getFornecedorId())) {
-                                                                                Log.d("ENTROUFUNCIONARIO1", user.getUid() + "" +transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getFornecedorId());
-                                                                                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-
-                                                                                builder.setMessage("Você acaba de receber de volta o jogo " + transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getJogo().getNome() + ". Obrigado por entreter as pessoas que utilizam o NextGame!").setTitle("PARABÉNS!!!");
-                                                                                builder.setPositiveButton("Ok, Valeu!", new DialogInterface.OnClickListener() {
-                                                                                    public void onClick(DialogInterface dialog, int id) {
-
-                                                                                    }
-                                                                                });
-
-                                                                                final String key = (String) hashMap.get(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getUserId());
-
-                                                                                AlertDialog dialog = builder.create();
-
-                                                                                //entrou = false;
-
-
-                                                                                String saldoParaAddCarteiraAluguel = transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getValorAluguel();
-
-                                                                                String saldoParaAddCarteiraCaucao = transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getValorCaucao();
-
-                                                                                Double caucaoPuroSemOAluguel = Double.parseDouble(saldoParaAddCarteiraCaucao) - Double.parseDouble(saldoParaAddCarteiraAluguel);
-
-                                                                                Double parcelaCaucaoPuroSemOAluguel = caucaoPuroSemOAluguel / 7;
-
-                                                                                Double parcelaAluguel = (Double.parseDouble(saldoParaAddCarteiraAluguel)) / 7;
-
-                                                                                Double saldoTotalParaAddCarteira = 0.0;
-
-                                                                                String array[] = transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getTime().split("-");
-
-                                                                                String horario = array[0];
-                                                                                String data = array[1];
-
-                                                                                try {
-
-                                                                                    Calendar rightNow = Calendar.getInstance();
-                                                                                    TimeZone tz = TimeZone.getTimeZone("GMT-3:00");
-                                                                                    rightNow.setTimeZone(tz);
-
-                                                                                    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-                                                                                    df.setLenient (false);
-                                                                                    Date dt = df.parse(data);
-                                                                                    Calendar cal = Calendar.getInstance();
-                                                                                    cal.setTime(dt);
-
-                                                                                    rightNow.add(Calendar.DATE, - cal.get(Calendar.DAY_OF_MONTH));
-
-                                                                                    int diasQueOUsuarioFicouComOJogo = rightNow.get(Calendar.DAY_OF_MONTH);
-
-                                                                                    if(diasQueOUsuarioFicouComOJogo == 0){
-
-                                                                                    }else if(diasQueOUsuarioFicouComOJogo == 1){
-                                                                                        saldoTotalParaAddCarteira = parcelaAluguel ;
-                                                                                    }else if(diasQueOUsuarioFicouComOJogo == 2){
-                                                                                        saldoTotalParaAddCarteira = parcelaAluguel * 2 ;
-                                                                                    }else if(diasQueOUsuarioFicouComOJogo == 3){
-                                                                                        saldoTotalParaAddCarteira = parcelaAluguel * 3 ;
-                                                                                    }else if(diasQueOUsuarioFicouComOJogo == 4){
-                                                                                        saldoTotalParaAddCarteira = parcelaAluguel * 4 ;
-                                                                                    }else if(diasQueOUsuarioFicouComOJogo == 5){
-                                                                                        saldoTotalParaAddCarteira = parcelaAluguel * 5 ;
-                                                                                    }else if(diasQueOUsuarioFicouComOJogo == 6){
-                                                                                        saldoTotalParaAddCarteira = Double.parseDouble(saldoParaAddCarteiraAluguel);
-
-                                                                                    }else if(diasQueOUsuarioFicouComOJogo == 7){ //começa a descontar do caução por + 7 dias
-                                                                                            saldoTotalParaAddCarteira = Double.parseDouble(saldoParaAddCarteiraAluguel) + parcelaCaucaoPuroSemOAluguel;
-                                                                                    }else if(diasQueOUsuarioFicouComOJogo == 8){
-                                                                                        saldoTotalParaAddCarteira = Double.parseDouble(saldoParaAddCarteiraAluguel) + parcelaCaucaoPuroSemOAluguel * 2;
-                                                                                    }else if(diasQueOUsuarioFicouComOJogo == 9){
-                                                                                        saldoTotalParaAddCarteira = Double.parseDouble(saldoParaAddCarteiraAluguel) + parcelaCaucaoPuroSemOAluguel * 3;
-                                                                                    }else if(diasQueOUsuarioFicouComOJogo == 10){
-                                                                                        saldoTotalParaAddCarteira = Double.parseDouble(saldoParaAddCarteiraAluguel) + parcelaCaucaoPuroSemOAluguel * 4;
-                                                                                    }else if(diasQueOUsuarioFicouComOJogo == 11){
-                                                                                        saldoTotalParaAddCarteira = Double.parseDouble(saldoParaAddCarteiraAluguel) + parcelaCaucaoPuroSemOAluguel * 5;
-                                                                                    }else if(diasQueOUsuarioFicouComOJogo == 12){
-                                                                                        saldoTotalParaAddCarteira = Double.parseDouble(saldoParaAddCarteiraAluguel) + parcelaCaucaoPuroSemOAluguel * 6;
-                                                                                    }else if(diasQueOUsuarioFicouComOJogo == 13){
-                                                                                        saldoTotalParaAddCarteira = Double.parseDouble(saldoParaAddCarteiraAluguel) + caucaoPuroSemOAluguel;
-                                                                                    }else {
-                                                                                        // Não precisa mais devolver o jogo
-                                                                                        saldoTotalParaAddCarteira = Double.parseDouble(saldoParaAddCarteiraAluguel) + caucaoPuroSemOAluguel;
-                                                                                    }
-
-                                                                                    final Double saldoParaAddCarteiraDescontadoOsDias = saldoTotalParaAddCarteira;
-
-                                                                                    referenceCarteiraUser.child(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getFornecedorId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                                                                        @Override
-                                                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                                                            if(dataSnapshot.exists()){
-                                                                                                Carteira userCarteira = dataSnapshot.getValue(Carteira.class);
-
-                                                                                                String saldoTotal = String.valueOf(Double.parseDouble(userCarteira.getSaldo()) + saldoParaAddCarteiraDescontadoOsDias);
-
-                                                                                                HashMap<String, String> hashMap = new HashMap<>();
-                                                                                                hashMap.put("id", transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getFornecedorId());
-                                                                                                hashMap.put("saldo", saldoTotal);
-
-                                                                                                referenceCarteiraUser.child(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getFornecedorId()).setValue(hashMap);
-
-                                                                                                String valorInteiro, centavos;
-
-                                                                                                String saldoDebitado = String.valueOf(saldoParaAddCarteiraDescontadoOsDias);
-
-                                                                                                String array[] = saldoDebitado.split("\\.");
-
-                                                                                                if(array.length > 1) {
-                                                                                                    valorInteiro = array[0];
-                                                                                                    centavos = array[1];
-
-                                                                                                    if(array[1].length() == 1){
-                                                                                                        centavos = centavos.concat("0");
-                                                                                                    }
-
-                                                                                                    Toast.makeText(MainActivity.this, "Parabéns, foi adicionado R$ " + valorInteiro + ","+ centavos +" de saldo a sua carteira!", Toast.LENGTH_LONG).show();
-
-                                                                                                    referenceTransacaoUser.child(key).child("status").setValue("CONCLUIDO");
-
-                                                                                                }else {
-                                                                                                    valorInteiro = array[0];
-                                                                                                    Toast.makeText(MainActivity.this, "Parabéns, foi adicionado R$ " + valorInteiro + ",00 de saldo a sua carteira!", Toast.LENGTH_LONG).show();
-
-                                                                                                    referenceTransacaoUser.child(key).child("status").setValue("CONCLUIDO");
-                                                                                                }
-
-                                                                                                //entrou = true;
-
-                                                                                            }else{
-                                                                                                HashMap<String, String> hashMap = new HashMap<>();
-                                                                                                hashMap.put("id", transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getFornecedorId());
-                                                                                                hashMap.put("saldo", String.valueOf(saldoParaAddCarteiraDescontadoOsDias));
-
-                                                                                                referenceCarteiraUser.child(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getFornecedorId()).setValue(hashMap);
-
-                                                                                                String valorInteiro, centavos;
-
-                                                                                                String saldoDebitado = String.valueOf(saldoParaAddCarteiraDescontadoOsDias);
-
-                                                                                                String array[] = saldoDebitado.split("\\.");
-
-                                                                                                if(array.length > 1) {
-                                                                                                    valorInteiro = array[0];
-                                                                                                    centavos = array[1];
-
-                                                                                                    if(array[1].length() == 1){
-                                                                                                        centavos = centavos.concat("0");
-                                                                                                    }
-
-                                                                                                    Toast.makeText(MainActivity.this, "Parabéns, foi adicionado R$ " + valorInteiro + ","+ centavos +" de saldo a sua carteira!", Toast.LENGTH_LONG).show();
-
-                                                                                                    referenceTransacaoUser.child(key).child("status").setValue("CONCLUIDO");
-
-                                                                                                }else {
-                                                                                                    valorInteiro = array[0];
-                                                                                                    Toast.makeText(MainActivity.this, "Parabéns, foi adicionado R$ " + valorInteiro + ",00 de saldo a sua carteira!", Toast.LENGTH_LONG).show();
-
-                                                                                                    referenceTransacaoUser.child(key).child("status").setValue("CONCLUIDO");
-                                                                                                }
-
-                                                                                                //entrou = true;
-
-                                                                                            }
-
-                                                                                        }
-
-                                                                                        @Override
-                                                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                                                                        }
-                                                                                    });
-
-                                                                                    referenceCarteiraUser.child(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                                                                        @Override
-                                                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                                                            if(dataSnapshot.exists()){
-                                                                                                Carteira userCarteira = dataSnapshot.getValue(Carteira.class);
-
-                                                                                                String saldoTotal = String.valueOf(Double.parseDouble(userCarteira.getSaldo()) - saldoParaAddCarteiraDescontadoOsDias);
-
-                                                                                                HashMap<String, String> hashMap = new HashMap<>();
-                                                                                                hashMap.put("id", transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getUserId());
-                                                                                                hashMap.put("saldo", saldoTotal);
-
-                                                                                                referenceCarteiraUser.child(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getUserId()).setValue(hashMap);
-
-                                                                                                String valorInteiro, centavos;
-
-                                                                                                String saldoDebitado = String.valueOf(saldoParaAddCarteiraDescontadoOsDias);
-
-                                                                                                String array[] = saldoDebitado.split("\\.");
-
-                                                                                                if(array.length > 1) {
-                                                                                                    valorInteiro = array[0];
-                                                                                                    centavos = array[1];
-
-                                                                                                    if(array[1].length() == 1){
-                                                                                                        centavos = centavos.concat("0");
-                                                                                                    }
-
-                                                                                                    //Toast.makeText(MainActivity.this, "Obrigado por devolver o jogo. R$ " + valorInteiro + ","+ centavos +" foi debitado da sua carteira!", Toast.LENGTH_LONG).show();
-
-                                                                                                    referenceTransacaoUser.child(key).child("status").setValue("CONCLUIDO");
-
-                                                                                                }else {
-                                                                                                    valorInteiro = array[0];
-                                                                                                    //Toast.makeText(MainActivity.this, "Obrigado por devolver o jogo. R$ " + valorInteiro + ",00 foi debitado da sua carteira!", Toast.LENGTH_LONG).show();
-
-                                                                                                    referenceTransacaoUser.child(key).child("status").setValue("CONCLUIDO");
-                                                                                                }
-
-                                                                                                //entrou = true;
-
-                                                                                            }else{
-
-                                                                                                HashMap<String, String> hashMap = new HashMap<>();
-                                                                                                hashMap.put("id", transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getUserId());
-                                                                                                hashMap.put("saldo", String.valueOf(-saldoParaAddCarteiraDescontadoOsDias));
-
-                                                                                                referenceCarteiraUser.child(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getUserId()).setValue(hashMap);
-
-                                                                                                String valorInteiro, centavos;
-
-                                                                                                String saldoDebitado = String.valueOf(saldoParaAddCarteiraDescontadoOsDias);
-
-                                                                                                String array[] = saldoDebitado.split("\\.");
-
-                                                                                                if(array.length > 1) {
-                                                                                                    valorInteiro = array[0];
-                                                                                                    centavos = array[1];
-
-                                                                                                    if(array[1].length() == 1){
-                                                                                                        centavos = centavos.concat("0");
-                                                                                                    }
-
-                                                                                                    //Toast.makeText(MainActivity.this, "Obrigado por devolver o jogo. R$ " + valorInteiro + ","+ centavos +" foi debitado da sua carteira!", Toast.LENGTH_LONG).show();
-
-                                                                                                    referenceTransacaoUser.child(key).child("status").setValue("CONCLUIDO");
-
-                                                                                                }else {
-                                                                                                    valorInteiro = array[0];
-                                                                                                    //Toast.makeText(MainActivity.this, "Obrigado por devolver o jogo. R$ " + valorInteiro + ",00 foi debitado da sua carteira!", Toast.LENGTH_LONG).show();
-
-                                                                                                    referenceTransacaoUser.child(key).child("status").setValue("CONCLUIDO");
-                                                                                                }
-
-                                                                                                //entrou = true;
-
-                                                                                            }
-
-                                                                                        }
-
-                                                                                        @Override
-                                                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                                                                        }
-                                                                                    });
-
-                                                                                    dialog.show();
-
-                                                                                } catch (ParseException e) {
-                                                                                    Toast.makeText(MainActivity.this, "Ocorreu algum erro... Caso o status mudou para CONCLUIDO, desconsidere essa mensagem!", Toast.LENGTH_LONG).show();
-                                                                                }
-
-                                                                            } else if(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getStatus().equals("INICIO")){
-                                                                                Toast.makeText(MainActivity.this, "O usuário ainda não pegou o seu jogo...", Toast.LENGTH_LONG).show();
-                                                                            } else {
-                                                                                Toast.makeText(MainActivity.this, "O jogo já está entregue!", Toast.LENGTH_LONG).show();
-                                                                            }
-
-                                                                        } else {
-                                                                            Toast.makeText(MainActivity.this, "É necessário estar próximo do usuário que deseja seu jogo...", Toast.LENGTH_LONG).show();
-                                                                        }
-
-                                                                        //=====================================================================================================================
-
-                                                                    }
+                                                if(dataSnapshot1.exists()){
+                                                    referenceTransacoes.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                            for(DataSnapshot snapShot : dataSnapshot.getChildren()) {
+                                                                for (DataSnapshot snapShot2 : snapShot.getChildren()) {
+                                                                    final TransacaoUser transacaoUser = snapShot2.getValue(TransacaoUser.class);
+                                                                    String key4 = snapShot2.getKey();
+
+                                                                    todasAsTransacoes.add(transacaoUser);
+                                                                    keys2.add(key4);
+                                                                    hashMap2.put(transacaoUser.getUserId(), key4);
                                                                 }
+                                                            }
 
-                                                                @Override
-                                                                public void onCancelled(DatabaseError databaseError) {
-                                                                }
-                                                            });
+                                                            executaTransacoes(posicaoUsuario);
 
                                                         }
-                                                    }
 
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                        }
+                                                    });
+
+                                                }else {
+                                                    referenceTransacoes.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                            for(DataSnapshot snapShot : dataSnapshot.getChildren()) {
+                                                                for (DataSnapshot snapShot2 : snapShot.getChildren()) {
+                                                                    final TransacaoUser transacaoUser = snapShot2.getValue(TransacaoUser.class);
+                                                                    String key4 = snapShot2.getKey();
+
+                                                                    todasAsTransacoes.add(transacaoUser);
+                                                                    keys2.add(key4);
+                                                                    hashMap2.put(transacaoUser.getUserId(), key4);
+                                                                }
+                                                            }
+
+                                                            executaTransacoes(posicaoUsuario);
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                        }
+                                                    });
                                                 }
 
                                             }
@@ -1085,6 +518,718 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
     }
+
+
+    private void executaTransacoes(final LatLng posicaoUsuario){
+
+        //Log.d("ENTROUFUNCIONARIO3", "" + transacaoUsers.get(0).getFornecedorId());
+
+        pegouTransacoes = true;
+        //Log.d("ENTROUPROXIMAS0", "ENTROUPROXIMAS0");
+        //Toast.makeText(MainActivity.this, "ENTROUPROXIMAS0", Toast.LENGTH_SHORT).show();
+
+
+        if (pegouTransacoes == true) {
+
+            contador = 0;
+            contador2 = 0;
+
+            transacaoUsersProximas = new ArrayList<>();
+            transacaoUsersProximasFornecedorReceberDeVoltaOJogo = new ArrayList<>();
+
+
+            for (final TransacaoUser transacaoUser1 : todasAsTransacoes) {
+
+                Log.d("ENTROUPROXIMAS0", "ENTROUPROXIMAS0");
+
+                if (transacaoUser1.getFornecedorId() != null && transacaoUser1.getUserId() != null) {
+
+                    Log.d("ENTROUPROXIMAS0", transacaoUser1.getFornecedorId());
+                    Log.d("ENTROUPROXIMAS0", transacaoUser1.getUserId());
+                    Log.d("ENTROUPROXIMAS0", user.getUid());
+
+                    if(transacaoUser1.getFornecedorId().equals(user.getUid())) {
+
+                        Log.d("ENTROUPROXIMAS0", "ENTROUPROXIMAS0");
+
+                        reference.child("location").child(transacaoUser1.getUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                String latitudeUsuarioQuePegouOJogo = dataSnapshot.child("latitude").getValue(String.class);
+                                String longitudeUsuarioQuePegouOJogo = dataSnapshot.child("longitude").getValue(String.class);
+
+                                if (latitudeUsuarioQuePegouOJogo != null && longitudeUsuarioQuePegouOJogo != null) {
+
+                                    LatLng posicaoUsuarioQuePegouOJogo = new LatLng(Double.parseDouble(latitudeUsuarioQuePegouOJogo), Double.parseDouble(longitudeUsuarioQuePegouOJogo));
+
+                                    double distance = SphericalUtil.computeDistanceBetween(posicaoUsuario, posicaoUsuarioQuePegouOJogo);
+
+                                    if (transacaoUser1.getUserId() != user.getUid() && distance < 100) {
+
+                                        transacaoUsersProximasFornecedorReceberDeVoltaOJogo.add(transacaoUser1);
+
+                                    }else {
+
+
+
+                                    }
+
+                                }
+
+
+                                contador2++;
+
+
+                                if (contador2 == todasAsTransacoes.size()) {
+
+                                    //=========FORNECEDOR PEGAR DE VOLTA O JOGO============================================================================
+
+
+
+                                    if (transacaoUsersProximasFornecedorReceberDeVoltaOJogo.size() > 1) {
+
+                                        //gerar lista para o usuario para ele escolher a transação correta
+                                        Toast.makeText(MainActivity.this, "Tem mais de um usuário próximo que iniciou uma transação com você. Por favor fique próximo do usuário em que você " +
+                                                "deseja realizar a transação e a pelo menos 100 metros de distância dos outros", Toast.LENGTH_LONG).show();
+
+                                    } else if (transacaoUsersProximasFornecedorReceberDeVoltaOJogo.size() == 1) {
+
+                                        if (transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getStatus().equals("ENTREGADO") && user.getUid().equals(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getFornecedorId())) {
+
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+                                            builder.setMessage("Você acaba de receber de volta o jogo " + transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getJogo().getNome() + ". Obrigado por entreter as pessoas que utilizam o NextGame!").setTitle("PARABÉNS!!!");
+                                            builder.setPositiveButton("Ok, Valeu!", new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+
+                                                }
+                                            });
+
+                                            final String key = (String) hashMap2.get(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getUserId());
+
+                                            Log.d("FUNFOU3", key);
+
+                                            AlertDialog dialog = builder.create();
+
+                                            //entrou = false;
+
+
+                                            String saldoParaAddCarteiraAluguel = transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getValorAluguel();
+
+                                            String saldoParaAddCarteiraCaucao = transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getValorCaucao();
+
+                                            Double caucaoPuroSemOAluguel = Double.parseDouble(saldoParaAddCarteiraCaucao) - Double.parseDouble(saldoParaAddCarteiraAluguel);
+
+                                            Double parcelaCaucaoPuroSemOAluguel = caucaoPuroSemOAluguel / 7;
+
+                                            Double parcelaAluguel = (Double.parseDouble(saldoParaAddCarteiraAluguel)) / 7;
+
+                                            Double saldoTotalParaAddCarteira = 0.0;
+
+                                            String array[] = transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getTime().split("-");
+
+                                            String horario = array[0];
+                                            String data = array[1];
+
+                                            try {
+
+                                                Calendar rightNow = Calendar.getInstance();
+                                                TimeZone tz = TimeZone.getTimeZone("GMT-3:00");
+                                                rightNow.setTimeZone(tz);
+
+                                                DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                                                df.setLenient (false);
+                                                Date dt = df.parse(data);
+                                                Calendar cal = Calendar.getInstance();
+                                                cal.setTime(dt);
+
+                                                rightNow.add(Calendar.DATE, - cal.get(Calendar.DAY_OF_MONTH));
+
+                                                int diasQueOUsuarioFicouComOJogo = rightNow.get(Calendar.DAY_OF_MONTH);
+
+                                                if(diasQueOUsuarioFicouComOJogo == 0){
+
+                                                }else if(diasQueOUsuarioFicouComOJogo == 1){
+                                                    saldoTotalParaAddCarteira = parcelaAluguel ;
+                                                }else if(diasQueOUsuarioFicouComOJogo == 2){
+                                                    saldoTotalParaAddCarteira = parcelaAluguel * 2 ;
+                                                }else if(diasQueOUsuarioFicouComOJogo == 3){
+                                                    saldoTotalParaAddCarteira = parcelaAluguel * 3 ;
+                                                }else if(diasQueOUsuarioFicouComOJogo == 4){
+                                                    saldoTotalParaAddCarteira = parcelaAluguel * 4 ;
+                                                }else if(diasQueOUsuarioFicouComOJogo == 5){
+                                                    saldoTotalParaAddCarteira = parcelaAluguel * 5 ;
+                                                }else if(diasQueOUsuarioFicouComOJogo == 6){
+                                                    saldoTotalParaAddCarteira = Double.parseDouble(saldoParaAddCarteiraAluguel);
+
+                                                }else if(diasQueOUsuarioFicouComOJogo == 7){ //começa a descontar do caução por + 7 dias
+                                                    saldoTotalParaAddCarteira = Double.parseDouble(saldoParaAddCarteiraAluguel) + parcelaCaucaoPuroSemOAluguel;
+                                                }else if(diasQueOUsuarioFicouComOJogo == 8){
+                                                    saldoTotalParaAddCarteira = Double.parseDouble(saldoParaAddCarteiraAluguel) + parcelaCaucaoPuroSemOAluguel * 2;
+                                                }else if(diasQueOUsuarioFicouComOJogo == 9){
+                                                    saldoTotalParaAddCarteira = Double.parseDouble(saldoParaAddCarteiraAluguel) + parcelaCaucaoPuroSemOAluguel * 3;
+                                                }else if(diasQueOUsuarioFicouComOJogo == 10){
+                                                    saldoTotalParaAddCarteira = Double.parseDouble(saldoParaAddCarteiraAluguel) + parcelaCaucaoPuroSemOAluguel * 4;
+                                                }else if(diasQueOUsuarioFicouComOJogo == 11){
+                                                    saldoTotalParaAddCarteira = Double.parseDouble(saldoParaAddCarteiraAluguel) + parcelaCaucaoPuroSemOAluguel * 5;
+                                                }else if(diasQueOUsuarioFicouComOJogo == 12){
+                                                    saldoTotalParaAddCarteira = Double.parseDouble(saldoParaAddCarteiraAluguel) + parcelaCaucaoPuroSemOAluguel * 6;
+                                                }else if(diasQueOUsuarioFicouComOJogo == 13){
+                                                    saldoTotalParaAddCarteira = Double.parseDouble(saldoParaAddCarteiraAluguel) + caucaoPuroSemOAluguel;
+                                                }else {
+                                                    // Não precisa mais devolver o jogo
+                                                    saldoTotalParaAddCarteira = Double.parseDouble(saldoParaAddCarteiraAluguel) + caucaoPuroSemOAluguel;
+                                                }
+
+                                                final Double saldoParaAddCarteiraDescontadoOsDias = saldoTotalParaAddCarteira;
+
+                                                referenceCarteiraUser.child(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getFornecedorId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        if(dataSnapshot.exists()){
+                                                            Carteira userCarteira = dataSnapshot.getValue(Carteira.class);
+
+                                                            String saldoTotal = String.valueOf(Double.parseDouble(userCarteira.getSaldo()) + saldoParaAddCarteiraDescontadoOsDias);
+
+                                                            HashMap<String, String> hashMap = new HashMap<>();
+                                                            hashMap.put("id", transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getFornecedorId());
+                                                            hashMap.put("saldo", saldoTotal);
+
+                                                            referenceCarteiraUser.child(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getFornecedorId()).setValue(hashMap);
+
+                                                            String valorInteiro, centavos;
+
+                                                            String saldoDebitado = String.valueOf(saldoParaAddCarteiraDescontadoOsDias);
+
+                                                            String array[] = saldoDebitado.split("\\.");
+
+                                                            if(array.length > 1) {
+                                                                valorInteiro = array[0];
+                                                                centavos = array[1];
+
+                                                                if(array[1].length() == 1){
+                                                                    centavos = centavos.concat("0");
+                                                                }
+
+                                                                Toast.makeText(MainActivity.this, "Parabéns, foi adicionado R$ " + valorInteiro + ","+ centavos +" de saldo a sua carteira!", Toast.LENGTH_LONG).show();
+
+                                                                referenceTransacoes.child(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getUserId()).child(key).child("status").setValue("CONCLUIDO");
+
+                                                            }else {
+                                                                valorInteiro = array[0];
+                                                                Toast.makeText(MainActivity.this, "Parabéns, foi adicionado R$ " + valorInteiro + ",00 de saldo a sua carteira!", Toast.LENGTH_LONG).show();
+
+                                                                referenceTransacoes.child(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getUserId()).child(key).child("status").setValue("CONCLUIDO");
+                                                            }
+
+                                                            //entrou = true;
+
+                                                        }else{
+                                                            HashMap<String, String> hashMap = new HashMap<>();
+                                                            hashMap.put("id", transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getFornecedorId());
+                                                            hashMap.put("saldo", String.valueOf(saldoParaAddCarteiraDescontadoOsDias));
+
+                                                            referenceCarteiraUser.child(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getFornecedorId()).setValue(hashMap);
+
+                                                            String valorInteiro, centavos;
+
+                                                            String saldoDebitado = String.valueOf(saldoParaAddCarteiraDescontadoOsDias);
+
+                                                            String array[] = saldoDebitado.split("\\.");
+
+                                                            if(array.length > 1) {
+                                                                valorInteiro = array[0];
+                                                                centavos = array[1];
+
+                                                                if(array[1].length() == 1){
+                                                                    centavos = centavos.concat("0");
+                                                                }
+
+                                                                Toast.makeText(MainActivity.this, "Parabéns, foi adicionado R$ " + valorInteiro + ","+ centavos +" de saldo a sua carteira!", Toast.LENGTH_LONG).show();
+
+                                                                referenceTransacoes.child(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getUserId()).child(key).child("status").setValue("CONCLUIDO");
+
+                                                            }else {
+                                                                valorInteiro = array[0];
+                                                                Toast.makeText(MainActivity.this, "Parabéns, foi adicionado R$ " + valorInteiro + ",00 de saldo a sua carteira!", Toast.LENGTH_LONG).show();
+
+                                                                referenceTransacoes.child(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getUserId()).child(key).child("status").setValue("CONCLUIDO");
+                                                            }
+
+                                                            //entrou = true;
+
+                                                        }
+
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+
+                                                referenceCarteiraUser.child(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        if(dataSnapshot.exists()){
+                                                            Carteira userCarteira = dataSnapshot.getValue(Carteira.class);
+
+                                                            String saldoTotal = String.valueOf(Double.parseDouble(userCarteira.getSaldo()) - saldoParaAddCarteiraDescontadoOsDias);
+
+                                                            HashMap<String, String> hashMap = new HashMap<>();
+                                                            hashMap.put("id", transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getUserId());
+                                                            hashMap.put("saldo", saldoTotal);
+
+                                                            referenceCarteiraUser.child(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getUserId()).setValue(hashMap);
+
+                                                            String valorInteiro, centavos;
+
+                                                            String saldoDebitado = String.valueOf(saldoParaAddCarteiraDescontadoOsDias);
+
+                                                            String array[] = saldoDebitado.split("\\.");
+
+                                                            if(array.length > 1) {
+                                                                valorInteiro = array[0];
+                                                                centavos = array[1];
+
+                                                                if(array[1].length() == 1){
+                                                                    centavos = centavos.concat("0");
+                                                                }
+
+                                                                //Toast.makeText(MainActivity.this, "Obrigado por devolver o jogo. R$ " + valorInteiro + ","+ centavos +" foi debitado da sua carteira!", Toast.LENGTH_LONG).show();
+
+                                                                referenceTransacoes.child(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getUserId()).child(key).child("status").setValue("CONCLUIDO");
+
+                                                            }else {
+                                                                valorInteiro = array[0];
+                                                                //Toast.makeText(MainActivity.this, "Obrigado por devolver o jogo. R$ " + valorInteiro + ",00 foi debitado da sua carteira!", Toast.LENGTH_LONG).show();
+
+                                                                referenceTransacoes.child(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getUserId()).child(key).child("status").setValue("CONCLUIDO");
+                                                            }
+
+                                                            //entrou = true;
+
+                                                        }else{
+
+                                                            HashMap<String, String> hashMap = new HashMap<>();
+                                                            hashMap.put("id", transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getUserId());
+                                                            hashMap.put("saldo", String.valueOf(-saldoParaAddCarteiraDescontadoOsDias));
+
+                                                            referenceCarteiraUser.child(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getUserId()).setValue(hashMap);
+
+                                                            String valorInteiro, centavos;
+
+                                                            String saldoDebitado = String.valueOf(saldoParaAddCarteiraDescontadoOsDias);
+
+                                                            String array[] = saldoDebitado.split("\\.");
+
+                                                            if(array.length > 1) {
+                                                                valorInteiro = array[0];
+                                                                centavos = array[1];
+
+                                                                if(array[1].length() == 1){
+                                                                    centavos = centavos.concat("0");
+                                                                }
+
+                                                                //Toast.makeText(MainActivity.this, "Obrigado por devolver o jogo. R$ " + valorInteiro + ","+ centavos +" foi debitado da sua carteira!", Toast.LENGTH_LONG).show();
+
+                                                                referenceTransacoes.child(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getUserId()).child(key).child("status").setValue("CONCLUIDO");
+
+                                                            }else {
+                                                                valorInteiro = array[0];
+                                                                //Toast.makeText(MainActivity.this, "Obrigado por devolver o jogo. R$ " + valorInteiro + ",00 foi debitado da sua carteira!", Toast.LENGTH_LONG).show();
+
+                                                                referenceTransacoes.child(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getUserId()).child(key).child("status").setValue("CONCLUIDO");
+                                                            }
+
+                                                            //entrou = true;
+
+                                                        }
+
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+
+                                                dialog.show();
+
+                                            } catch (ParseException e) {
+                                                Toast.makeText(MainActivity.this, "Ocorreu algum erro... Caso o status mudou para CONCLUIDO, desconsidere essa mensagem!", Toast.LENGTH_LONG).show();
+                                            }
+
+                                        } else if(transacaoUsersProximasFornecedorReceberDeVoltaOJogo.get(0).getStatus().equals("INICIO")){
+                                            Toast.makeText(MainActivity.this, "O usuário ainda não pegou o seu jogo...", Toast.LENGTH_LONG).show();
+                                        } else {
+                                            Toast.makeText(MainActivity.this, "O jogo já está entregue!", Toast.LENGTH_LONG).show();
+                                        }
+
+                                    } else {
+                                        Toast.makeText(MainActivity.this, "É necessário estar próximo do usuário que deseja seu jogo...", Toast.LENGTH_LONG).show();
+                                    }
+
+                                    //=====================================================================================================================
+
+
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+
+                    }
+                }
+            }
+
+
+
+
+
+
+
+
+            for (final TransacaoUser transacaoUser : transacaoUsers) {
+
+                Log.d("ENTROUFUNCIONARIO3", "ENTROUFUNCIONARIO3");
+
+                if (transacaoUser.getFornecedorId() != null) {
+
+                    reference.child("location").child(transacaoUser.getFornecedorId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                            //Log.d("ENTROUPROXIMAS1", "ENTROUPROXIMAS1");
+
+
+                            String latitudeFonecedor = dataSnapshot.child("latitude").getValue(String.class);
+                            String longitudeFonecedor = dataSnapshot.child("longitude").getValue(String.class);
+
+                            if (latitudeFonecedor != null && longitudeFonecedor != null) {
+
+                                LatLng posicaoFonecedor = new LatLng(Double.parseDouble(latitudeFonecedor), Double.parseDouble(longitudeFonecedor));
+
+                                double distance = SphericalUtil.computeDistanceBetween(posicaoUsuario, posicaoFonecedor);
+
+                                if (transacaoUser.getFornecedorId() != user.getUid() && distance < 100) {
+
+                                    transacaoUsersProximas.add(transacaoUser);
+
+                                }else {
+
+
+
+                                }
+                                Log.d("ENTROUFUNCIONARIO3", "ENTROUFUNCIONARIO3");
+                            }
+
+                            contador++;
+
+
+                            if (contador == transacaoUsers.size()) {
+
+                                //=======USUÁRIO PEGAR O JOGO===================================================================================
+
+                                if (transacaoUsersProximas.size() > 1) {
+
+                                    //gerar lista para o usuario para ele escolher a transação correta
+                                    Toast.makeText(MainActivity.this, "Tem mais de um usuário próximo que iniciou uma transação com você. Por favor fique próximo do usuário em que você " +
+                                            "deseja realizar a transação e a pelo menos 100 metros de distância dos outros", Toast.LENGTH_LONG).show();
+
+                                } else if (transacaoUsersProximas.size() == 1) {
+
+                                    referenceCarteiraUser.child(transacaoUsersProximas.get(0).getUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            Carteira userCarteira = dataSnapshot.getValue(Carteira.class);
+
+                                            final Double quantoUsuarioTemNaCarteira = Double.parseDouble(userCarteira.getSaldo());
+
+                                            Log.d("ENTROUPROXIMAS1", "CurrentUser tem " + quantoUsuarioTemNaCarteira);
+
+                                            Double somatorio = 0.0;
+                                            boolean podeRealizarATransacao = false;
+
+                                            for(TransacaoUser userTransacoes : transacaoUsers){
+                                                if(userTransacoes.getStatus().equals("ENTREGADO")){
+                                                    somatorio += Double.parseDouble(userTransacoes.getValorCaucao());
+                                                }
+                                            }
+
+                                            somatorio += Double.parseDouble(transacaoUsersProximas.get(0).getValorCaucao());
+
+                                            if(quantoUsuarioTemNaCarteira >= somatorio){
+                                                podeRealizarATransacao = true;
+                                            }
+
+                                            if (transacaoUsersProximas.get(0).getStatus().equals("INICIO") && podeRealizarATransacao) {
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+                                                builder.setMessage("Você acaba de receber o jogo " + transacaoUsersProximas.get(0).getJogo().getNome() + ". Boa diversão!!!").setTitle("PARABÉNS!!!");
+                                                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int id) {
+
+                                                    }
+                                                });
+
+                                                String key = (String) hashMap.get(transacaoUsersProximas.get(0).getUserId());
+
+                                                AlertDialog dialog = builder.create();
+                                                if (transacaoUsersProximas.get(0).getValorAluguel().equals("N")) {
+
+                                                    final String key2 = (String) hashMap.get(transacaoUsersProximas.get(0).getUserId());
+
+                                                    //entrou = false;
+
+
+                                                    String saldoParaAddCarteiraCaucao = transacaoUsersProximas.get(0).getValorCaucao();
+
+                                                    String array[] = transacaoUsersProximas.get(0).getTime().split("-");
+
+                                                    String horario = array[0];
+                                                    String data = array[1];
+
+                                                    final Double saldoTotalParaAddCarteira = Double.parseDouble(saldoParaAddCarteiraCaucao);
+
+
+                                                    referenceCarteiraUser.child(transacaoUsersProximas.get(0).getFornecedorId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                            if(dataSnapshot.exists()){
+                                                                Carteira userCarteira = dataSnapshot.getValue(Carteira.class);
+
+                                                                String saldoTotal = String.valueOf(Double.parseDouble(userCarteira.getSaldo()) + saldoTotalParaAddCarteira);
+
+                                                                Log.d("ENTROUPROXIMAS2", "Fornecedor vai ter " + saldoTotal);
+
+                                                                HashMap<String, String> hashMap = new HashMap<>();
+                                                                hashMap.put("id", transacaoUsersProximas.get(0).getFornecedorId());
+                                                                hashMap.put("saldo", saldoTotal);
+
+                                                                referenceCarteiraUser.child(transacaoUsersProximas.get(0).getFornecedorId()).setValue(hashMap);
+
+                                                                String valorInteiro, centavos;
+
+                                                                String saldoDebitado = String.valueOf(saldoTotalParaAddCarteira);
+
+                                                                String array[] = saldoDebitado.split("\\.");
+
+                                                                if(array.length > 1) {
+                                                                    valorInteiro = array[0];
+                                                                    centavos = array[1];
+
+                                                                    if(array[1].length() == 1){
+                                                                        centavos = centavos.concat("0");
+                                                                    }
+
+                                                                    //Toast.makeText(MainActivity.this, "Parabéns, foi adicionado R$ " + valorInteiro + ","+ centavos +" de saldo a sua carteira!", Toast.LENGTH_LONG).show();
+
+                                                                    referenceTransacaoUser.child(key2).child("status").setValue("CONCLUIDO");
+
+                                                                }else {
+                                                                    valorInteiro = array[0];
+                                                                    //Toast.makeText(MainActivity.this, "Parabéns, foi adicionado R$ " + valorInteiro + ",00 de saldo a sua carteira!", Toast.LENGTH_LONG).show();
+
+                                                                    referenceTransacaoUser.child(key2).child("status").setValue("CONCLUIDO");
+                                                                }
+
+                                                                //entrou = true;
+
+                                                            }else{
+                                                                HashMap<String, String> hashMap = new HashMap<>();
+                                                                hashMap.put("id", transacaoUsersProximas.get(0).getFornecedorId());
+                                                                hashMap.put("saldo", String.valueOf(saldoTotalParaAddCarteira));
+
+                                                                Log.d("ENTROUPROXIMAS2", "Fornecedor vai ter " + saldoTotalParaAddCarteira);
+
+                                                                referenceCarteiraUser.child(transacaoUsersProximas.get(0).getFornecedorId()).setValue(hashMap);
+
+                                                                String valorInteiro, centavos;
+
+                                                                String saldoDebitado = String.valueOf(saldoTotalParaAddCarteira);
+
+                                                                String array[] = saldoDebitado.split("\\.");
+
+                                                                if(array.length > 1) {
+                                                                    valorInteiro = array[0];
+                                                                    centavos = array[1];
+
+                                                                    if(array[1].length() == 1){
+                                                                        centavos = centavos.concat("0");
+                                                                    }
+
+                                                                    //Toast.makeText(MainActivity.this, "Parabéns, foi adicionado R$ " + valorInteiro + ","+ centavos +" de saldo a sua carteira!", Toast.LENGTH_LONG).show();
+
+                                                                    referenceTransacaoUser.child(key2).child("status").setValue("CONCLUIDO");
+
+                                                                }else {
+                                                                    valorInteiro = array[0];
+                                                                    //Toast.makeText(MainActivity.this, "Parabéns, foi adicionado R$ " + valorInteiro + ",00 de saldo a sua carteira!", Toast.LENGTH_LONG).show();
+
+                                                                    referenceTransacaoUser.child(key2).child("status").setValue("CONCLUIDO");
+                                                                }
+
+                                                                //entrou = true;
+
+                                                            }
+
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                        }
+                                                    });
+
+
+                                                    referenceCarteiraUser.child(transacaoUsersProximas.get(0).getUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                            if(dataSnapshot.exists()){
+                                                                Carteira userCarteira = dataSnapshot.getValue(Carteira.class);
+
+                                                                String saldoTotal = String.valueOf(Double.parseDouble(userCarteira.getSaldo()) - saldoTotalParaAddCarteira);
+
+                                                                Log.d("ENTROUPROXIMAS3", "CurrentUser vai ter " + saldoTotal);
+
+                                                                HashMap<String, String> hashMap = new HashMap<>();
+                                                                hashMap.put("id", transacaoUsersProximas.get(0).getUserId());
+                                                                hashMap.put("saldo", saldoTotal);
+
+                                                                referenceCarteiraUser.child(transacaoUsersProximas.get(0).getUserId()).setValue(hashMap);
+
+                                                                String valorInteiro, centavos;
+
+                                                                String saldoDebitado = String.valueOf(saldoTotalParaAddCarteira);
+
+                                                                String array[] = saldoDebitado.split("\\.");
+
+                                                                if(array.length > 1) {
+                                                                    valorInteiro = array[0];
+                                                                    centavos = array[1];
+
+                                                                    if(array[1].length() == 1){
+                                                                        centavos = centavos.concat("0");
+                                                                    }
+
+                                                                    Toast.makeText(MainActivity.this, "Obrigado por comprar o jogo. R$ " + valorInteiro + ","+ centavos +" foi debitado da sua carteira!", Toast.LENGTH_LONG).show();
+
+                                                                    referenceTransacaoUser.child(key2).child("status").setValue("CONCLUIDO");
+
+                                                                }else {
+                                                                    valorInteiro = array[0];
+                                                                    Toast.makeText(MainActivity.this, "Obrigado por comprar o jogo. R$ " + valorInteiro + ",00 foi debitado da sua carteira!", Toast.LENGTH_LONG).show();
+
+                                                                    referenceTransacaoUser.child(key2).child("status").setValue("CONCLUIDO");
+                                                                }
+
+                                                                //entrou = true;
+
+                                                            }else{
+
+                                                                HashMap<String, String> hashMap = new HashMap<>();
+                                                                hashMap.put("id", transacaoUsersProximas.get(0).getUserId());
+                                                                hashMap.put("saldo", String.valueOf(-saldoTotalParaAddCarteira));
+
+                                                                Log.d("ENTROUPROXIMAS4", "CurrentUser vai ter menos" + saldoTotalParaAddCarteira);
+
+                                                                referenceCarteiraUser.child(transacaoUsersProximas.get(0).getUserId()).setValue(hashMap);
+
+                                                                String valorInteiro, centavos;
+
+                                                                String saldoDebitado = String.valueOf(saldoTotalParaAddCarteira);
+
+                                                                String array[] = saldoDebitado.split("\\.");
+
+                                                                if(array.length > 1) {
+                                                                    valorInteiro = array[0];
+                                                                    centavos = array[1];
+
+                                                                    if(array[1].length() == 1){
+                                                                        centavos = centavos.concat("0");
+                                                                    }
+
+                                                                    Toast.makeText(MainActivity.this, "Obrigado por comprar o jogo. R$ " + valorInteiro + ","+ centavos +" foi debitado da sua carteira!", Toast.LENGTH_LONG).show();
+
+                                                                    referenceTransacaoUser.child(key2).child("status").setValue("CONCLUIDO");
+
+                                                                }else {
+                                                                    valorInteiro = array[0];
+                                                                    Toast.makeText(MainActivity.this, "Obrigado por comprar o jogo. R$ " + valorInteiro + ",00 foi debitado da sua carteira!", Toast.LENGTH_LONG).show();
+
+                                                                    referenceTransacaoUser.child(key2).child("status").setValue("CONCLUIDO");
+                                                                }
+
+                                                                //entrou = true;
+
+                                                            }
+
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                        }
+                                                    });
+
+                                                } else {
+                                                    referenceTransacaoUser.child(key).child("status").setValue("ENTREGADO");
+                                                }
+
+
+                                                dialog.show();
+
+
+                                            } else {
+                                                if(!podeRealizarATransacao){
+                                                    Toast.makeText(MainActivity.this, "Você não tem saldo suficiente!", Toast.LENGTH_LONG).show();
+                                                }else {
+                                                    Toast.makeText(MainActivity.this, "O jogo já está entregue!", Toast.LENGTH_LONG).show();
+                                                }
+                                            }
+
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
+
+
+
+                                } else {
+                                    Toast.makeText(MainActivity.this, "É necessário estar próximo do usuário fornecedor...", Toast.LENGTH_LONG).show();
+                                }
+
+                                //=====================================================================================================================
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                        }
+                    });
+
+                }
+            }
+
+        }
+
+    }
+
+
+
+
+
 
     //===========================ATUALIZA LOCALIZAÇÃO===============================================================================================
 
