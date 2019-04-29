@@ -1047,8 +1047,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                                                 hashMap.put("id", transacaoUsersProximas.get(0).getFornecedorId());
                                                                 hashMap.put("saldo", String.valueOf(saldoTotalParaAddCarteira));
 
-                                                                Log.d("ENTROUPROXIMAS2", "Fornecedor vai ter " + saldoTotalParaAddCarteira);
-
                                                                 referenceCarteiraUser.child(transacaoUsersProximas.get(0).getFornecedorId()).setValue(hashMap);
 
                                                                 String valorInteiro, centavos;
@@ -1096,8 +1094,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                                                 Carteira userCarteira = dataSnapshot.getValue(Carteira.class);
 
                                                                 String saldoTotal = String.valueOf(Double.parseDouble(userCarteira.getSaldo()) - saldoTotalParaAddCarteira);
-
-                                                                Log.d("ENTROUPROXIMAS3", "CurrentUser vai ter " + saldoTotal);
 
                                                                 HashMap<String, String> hashMap = new HashMap<>();
                                                                 hashMap.put("id", transacaoUsersProximas.get(0).getUserId());
@@ -1180,6 +1176,21 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                                     });
 
                                                 } else {
+
+                                                    Calendar rightNow = Calendar.getInstance();
+                                                    TimeZone tz = TimeZone.getTimeZone("GMT-3:00");
+                                                    rightNow.setTimeZone(tz);
+                                                    int hour = rightNow.get(Calendar.HOUR_OF_DAY);
+                                                    int minute = rightNow.get(Calendar.MINUTE);
+                                                    int second = rightNow.get(Calendar.SECOND);
+                                                    int dia = rightNow.get(Calendar.DAY_OF_MONTH);
+                                                    int mesZeroAteOnze = rightNow.get(Calendar.MONTH);
+                                                    int mesUmAteDoze = mesZeroAteOnze + 1;
+                                                    int ano = rightNow.get(Calendar.YEAR);
+
+                                                    String data = String.valueOf(hour) + ":" + String.valueOf(minute) + ":" + String.valueOf(second) + "-" + String.valueOf(dia) + "/" + String.valueOf(mesUmAteDoze) + "/" + String.valueOf(ano);
+
+                                                    referenceTransacaoUser.child(key).child("time").setValue(data);
                                                     referenceTransacaoUser.child(key).child("status").setValue("ENTREGADO");
                                                 }
 
