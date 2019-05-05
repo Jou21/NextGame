@@ -8,6 +8,7 @@
     android:layout_gravity="center"
     android:orientation="vertical"
     android:visibility="visible"
+    android:background="@color/branco"
     tools:context=".PagamentoActivity">
 
     <android.support.v7.widget.RecyclerView

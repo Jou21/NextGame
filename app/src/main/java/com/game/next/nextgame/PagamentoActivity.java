@@ -1,10 +1,14 @@
 package com.game.next.nextgame;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -14,6 +18,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -87,6 +93,10 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
         }else {
             Toast.makeText(PagamentoActivity.this, "Activity cannot find  extras " + "ADICIONARSALDO", Toast.LENGTH_SHORT).show();
             Log.d("EXTRASJOGO", "Activity cannot find  extras " + "ADICIONARSALDO");
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            setSystemBarTheme(PagamentoActivity.this,true,R.color.branco);
         }
 
         btnAddCard = (Button) findViewById(R.id.btn_add_card);
@@ -368,5 +378,19 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
         if (viewHolder instanceof MyAdapterCreditCards.ViewHolder) {
             mAdapter.remove(viewHolder.getAdapterPosition(),PagamentoActivity.this);
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public static final void setSystemBarTheme(final Activity pActivity, final boolean textIsDark, int corStatusBar) {
+
+        Window window = pActivity.getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(ContextCompat.getColor(pActivity,corStatusBar));
+
+        // Fetch the current flags.
+        final int lFlags = window.getDecorView().getSystemUiVisibility();
+        // Update the SystemUiVisibility dependening on whether we want a Light or Dark theme.
+        pActivity.getWindow().getDecorView().setSystemUiVisibility(textIsDark ? (lFlags | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR) : (lFlags & ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR));
     }
 }
