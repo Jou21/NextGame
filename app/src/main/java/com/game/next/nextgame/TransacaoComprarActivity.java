@@ -142,54 +142,56 @@ public class TransacaoComprarActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String valorNaCarteira = txtTransacaoValorNaCarteiraComprar.getText().toString();
-                String valorNaCarteiraNew = "";
-                String valorNaCarteiraNew2 = "";
-                String valorNaCarteiraNew3 = "";
-                valorNaCarteiraNew = valorNaCarteira.replace("R$ ", "");
-                valorNaCarteiraNew2 = valorNaCarteiraNew.replace("R$", "");
-                valorNaCarteiraNew3 = valorNaCarteiraNew2.replace(",", ".");
-                Double valorNaCarteiraDouble = Double.parseDouble(valorNaCarteiraNew3);
+                if(checkBoxTransacaoComprar.isChecked()){
 
-                String valorCaucao = txtTransacaoValorComprar.getText().toString();
-                String valorCaucaoNew = "";
-                String valorCaucaoNew2 = "";
-                String valorCaucaoNew3 = "";
-                valorCaucaoNew = valorCaucao.replace("R$ ", "");
-                valorCaucaoNew2 = valorCaucaoNew.replace("R$", "");
-                valorCaucaoNew3 = valorCaucaoNew2.replace(",", ".");
-                Double valorCaucaoDouble = Double.parseDouble(valorCaucaoNew3);
+                    String valorNaCarteira = txtTransacaoValorNaCarteiraComprar.getText().toString();
+                    String valorNaCarteiraNew = "";
+                    String valorNaCarteiraNew2 = "";
+                    String valorNaCarteiraNew3 = "";
+                    valorNaCarteiraNew = valorNaCarteira.replace("R$ ", "");
+                    valorNaCarteiraNew2 = valorNaCarteiraNew.replace("R$", "");
+                    valorNaCarteiraNew3 = valorNaCarteiraNew2.replace(",", ".");
+                    Double valorNaCarteiraDouble = Double.parseDouble(valorNaCarteiraNew3);
 
-                Calendar rightNow = Calendar.getInstance();
-                TimeZone tz = TimeZone.getTimeZone("GMT-3:00");
-                rightNow.setTimeZone(tz);
-                int hour = rightNow.get(Calendar.HOUR_OF_DAY);
-                int minute = rightNow.get(Calendar.MINUTE);
-                int second = rightNow.get(Calendar.SECOND);
-                int dia = rightNow.get(Calendar.DAY_OF_MONTH);
-                int mesZeroAteOnze = rightNow.get(Calendar.MONTH);
-                int mesUmAteDoze = mesZeroAteOnze + 1;
-                int ano = rightNow.get(Calendar.YEAR);
+                    String valorCaucao = txtTransacaoValorComprar.getText().toString();
+                    String valorCaucaoNew = "";
+                    String valorCaucaoNew2 = "";
+                    String valorCaucaoNew3 = "";
+                    valorCaucaoNew = valorCaucao.replace("R$ ", "");
+                    valorCaucaoNew2 = valorCaucaoNew.replace("R$", "");
+                    valorCaucaoNew3 = valorCaucaoNew2.replace(",", ".");
+                    Double valorCaucaoDouble = Double.parseDouble(valorCaucaoNew3);
 
-                data = String.valueOf(hour) + ":" + String.valueOf(minute) + ":" + String.valueOf(second) + "-" + String.valueOf(dia) + "/" + String.valueOf(mesUmAteDoze) + "/" + String.valueOf(ano);
+                    Calendar rightNow = Calendar.getInstance();
+                    TimeZone tz = TimeZone.getTimeZone("GMT-3:00");
+                    rightNow.setTimeZone(tz);
+                    int hour = rightNow.get(Calendar.HOUR_OF_DAY);
+                    int minute = rightNow.get(Calendar.MINUTE);
+                    int second = rightNow.get(Calendar.SECOND);
+                    int dia = rightNow.get(Calendar.DAY_OF_MONTH);
+                    int mesZeroAteOnze = rightNow.get(Calendar.MONTH);
+                    int mesUmAteDoze = mesZeroAteOnze + 1;
+                    int ano = rightNow.get(Calendar.YEAR);
 
-                if(!valorNaCarteiraNew3.equals("N") && !valorCaucaoNew3.equals("N") && !valorNaCarteiraNew3.equals("S") && !valorCaucaoNew3.equals("S") ){
+                    data = String.valueOf(hour) + ":" + String.valueOf(minute) + ":" + String.valueOf(second) + "-" + String.valueOf(dia) + "/" + String.valueOf(mesUmAteDoze) + "/" + String.valueOf(ano);
 
-                    if (valorNaCarteiraDouble >= valorCaucaoDouble) {
+                    if (!valorNaCarteiraNew3.equals("N") && !valorCaucaoNew3.equals("N") && !valorNaCarteiraNew3.equals("S") && !valorCaucaoNew3.equals("S")) {
 
-                        referenceTransacaoUser.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (valorNaCarteiraDouble >= valorCaucaoDouble) {
 
-                                boolean entrou = false;
+                            referenceTransacaoUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                    TransacaoUser transacaoUser = snapshot.getValue(TransacaoUser.class);
-                                    String key = snapshot.getKey();
+                                    boolean entrou = false;
 
-                                    //if(transacaoUser.getJogo().getCodigoDeBarra() != null && model.getCodigoDeBarra()){
+                                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                        TransacaoUser transacaoUser = snapshot.getValue(TransacaoUser.class);
+                                        String key = snapshot.getKey();
+
+                                        //if(transacaoUser.getJogo().getCodigoDeBarra() != null && model.getCodigoDeBarra()){
                                         //if ((transacaoUser.getJogo().getCodigoDeBarra().equals(model.getCodigoDeBarra()) &&
-                                    if (transacaoUser.getFornecedorId().equals(fornecedorId) && transacaoUser.getTime().equals(time)) {
+                                        if (transacaoUser.getFornecedorId().equals(fornecedorId) && transacaoUser.getTime().equals(time)) {
 
                                             HashMap<String, Object> hashMap = new HashMap<>();
                                             hashMap.put("userId", user.getUid());
@@ -205,45 +207,48 @@ public class TransacaoComprarActivity extends AppCompatActivity {
                                             entrou = true;
                                             break;
                                         }
-                                    //}
+                                        //}
+                                    }
+
+                                    if (entrou == false) {
+
+                                        HashMap<String, Object> hashMap = new HashMap<>();
+                                        hashMap.put("userId", user.getUid());
+                                        hashMap.put("fornecedorId", fornecedorId);
+                                        hashMap.put("valorAluguel", "N");
+                                        hashMap.put("valorCaucao", precoJogo);
+                                        hashMap.put("jogo", model);
+                                        hashMap.put("time", data);
+                                        hashMap.put("status", "INICIO");
+
+                                        referenceTransacaoUser.push().setValue(hashMap);
+                                    }
+
+
                                 }
 
-                                if (entrou == false) {
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                    HashMap<String, Object> hashMap = new HashMap<>();
-                                    hashMap.put("userId", user.getUid());
-                                    hashMap.put("fornecedorId", fornecedorId);
-                                    hashMap.put("valorAluguel", "N");
-                                    hashMap.put("valorCaucao", precoJogo);
-                                    hashMap.put("jogo", model);
-                                    hashMap.put("time", data);
-                                    hashMap.put("status", "INICIO");
-
-                                    referenceTransacaoUser.push().setValue(hashMap);
                                 }
+                            });
 
+                            Intent intent = new Intent(TransacaoComprarActivity.this, MessageActivity.class);
+                            intent.putExtra("userid", fornecedorId);
+                            intent.putExtra("MOSTRADIALOG", "COMPRAR");
+                            intent.putExtra("JOGODOUSUARIO", model);
+                            startActivity(intent);
+                            finish();
 
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
-
-                        Intent intent = new Intent(TransacaoComprarActivity.this, MessageActivity.class);
-                        intent.putExtra("userid", fornecedorId);
-                        intent.putExtra("MOSTRADIALOG", "COMPRAR");
-                        intent.putExtra("JOGODOUSUARIO", model);
-                        startActivity(intent);
-                        finish();
+                        } else {
+                            Toast.makeText(TransacaoComprarActivity.this, "Você não tem saldo suficiente! Adicione saldo para continuar.", Toast.LENGTH_SHORT).show();
+                        }
 
                     } else {
-                        Toast.makeText(TransacaoComprarActivity.this, "Você não tem saldo suficiente! Adicione saldo para continuar.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(TransacaoComprarActivity.this, "Não foi possível ler o valor", Toast.LENGTH_SHORT).show();
                     }
-
-                } else {
-                    Toast.makeText(TransacaoComprarActivity.this, "Não foi possível ler o valor", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(TransacaoComprarActivity.this, "Você precisa aceitar os termos de uso", Toast.LENGTH_SHORT).show();
                 }
             }
         });
