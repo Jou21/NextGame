@@ -83,7 +83,9 @@ public class MyAdapterListJogos extends ArrayAdapter<Jogo> {
             if (constraint != null) {
                 suggestions.clear();
                 for (Jogo jogo : tempCustomer) {
-                    if (jogo.getNome().toLowerCase().startsWith(constraint.toString().toLowerCase())) {
+                    String filterPattern = constraint.toString().toLowerCase().trim();
+
+                    if (jogo.getNome().toLowerCase().contains(filterPattern)) {
                         suggestions.add(jogo);
                     }
                 }
