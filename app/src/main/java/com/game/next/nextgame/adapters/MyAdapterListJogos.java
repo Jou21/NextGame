@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 import com.game.next.nextgame.R;
@@ -103,6 +104,16 @@ public class MyAdapterListJogos extends ArrayAdapter<Jogo> {
         protected void publishResults(CharSequence constraint, FilterResults results) {
             ArrayList<Jogo> jogos = (ArrayList<Jogo>) results.values;
             if (results != null && results.count > 0) {
+                if (!jogos.isEmpty()) {
+                    clear();
+                    addAll(jogos);
+                    notifyDataSetChanged();
+                }
+            }
+
+            /*
+            ArrayList<Jogo> jogos = (ArrayList<Jogo>) results.values;
+            if (results != null && results.count > 0) {
                 clear();
                 if(!jogos.isEmpty()){
                     for (Jogo jogo : jogos) {
@@ -111,6 +122,7 @@ public class MyAdapterListJogos extends ArrayAdapter<Jogo> {
                     }
                 }
             }
+            */
         }
     };
 
