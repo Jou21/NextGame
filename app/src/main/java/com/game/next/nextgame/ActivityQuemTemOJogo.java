@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +42,9 @@ public class ActivityQuemTemOJogo extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter mAdapter;
 
-    private TextView txtQuemTemOJogo;
+    private TextView txtQuemTemOJogo, txtNaoTemUsuariosOferecendoEsseJogo;
+
+    private ProgressBar mProgressBar;
 
     private ArrayList<UserGame> listaUserGames = new ArrayList<>();
 
@@ -54,6 +57,8 @@ public class ActivityQuemTemOJogo extends AppCompatActivity {
             setSystemBarTheme(ActivityQuemTemOJogo.this,true,R.color.branco);
         }
 
+        txtNaoTemUsuariosOferecendoEsseJogo = (TextView) findViewById(R.id.txt_nao_tem_usuarios_oferecendo_esse_jogo);
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBarQuemTemOJogo);
         txtQuemTemOJogo = (TextView) findViewById(R.id.txt_quem_tem_o_jogo);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_quem_tem_o_jogo);
         recyclerView.setHasFixedSize(true);
@@ -62,6 +67,8 @@ public class ActivityQuemTemOJogo extends AppCompatActivity {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference();
+
+        exibirProgress(true);
 
         if (getIntent().hasExtra("JOGO")) {
             model = (Jogo) getIntent().getSerializableExtra("JOGO");
@@ -89,14 +96,19 @@ public class ActivityQuemTemOJogo extends AppCompatActivity {
                                 if(!userGame.getUserId().equals(user.getUid())){
                                     listaUserGames.add(userGame);
                                 }
-
                             }
-
                         }
-
                     }
+
+                    if(listaUserGames.isEmpty()){
+                        txtNaoTemUsuariosOferecendoEsseJogo.setVisibility(View.VISIBLE);
+                    }else {
+                        txtNaoTemUsuariosOferecendoEsseJogo.setVisibility(View.GONE);
+                    }
+
                     mAdapter = new MyAdapterQuemTemOJogo(listaUserGames, model);
                     recyclerView.setAdapter(mAdapter);
+                    exibirProgress(false);
                 }
 
                 @Override
@@ -106,8 +118,9 @@ public class ActivityQuemTemOJogo extends AppCompatActivity {
             });
 
         } else {
-            Toast.makeText(ActivityQuemTemOJogo.this,"Activity cannot find  extras " + "JOGO",Toast.LENGTH_SHORT).show();
-            Log.d("EXTRASJOGO","Activity cannot find  extras " + "JOGO");
+            exibirProgress(false);
+            //Toast.makeText(ActivityQuemTemOJogo.this,"Activity cannot find  extras " + "JOGO",Toast.LENGTH_SHORT).show();
+            //Log.d("EXTRASJOGO","Activity cannot find  extras " + "JOGO");
         }
 
     }
@@ -133,4 +146,9 @@ public class ActivityQuemTemOJogo extends AppCompatActivity {
         // Update the SystemUiVisibility dependening on whether we want a Light or Dark theme.
         pActivity.getWindow().getDecorView().setSystemUiVisibility(textIsDark ? (lFlags | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR) : (lFlags & ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR));
     }
+
+    public void exibirProgress(boolean exibir) {
+        mProgressBar.setVisibility(exibir ? View.VISIBLE : View.GONE);
+    }
+
 }
