@@ -1,6 +1,7 @@
 package com.game.next.nextgame.fragments;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
@@ -51,6 +52,7 @@ public class FragmentA extends Fragment {
     private LinearLayout layoutButtons;
     private LinearLayout layoutContent;
     private LinearLayout layoutBranco;
+    private LinearLayout linearLayout;
     private boolean isOpen = false;
     private float posicaoXInicialPesquisar;
     private float posicaoYInicialPesquisar;
@@ -79,6 +81,7 @@ public class FragmentA extends Fragment {
         layoutButtons = (LinearLayout) view.findViewById(R.id.layoutButtons);
         layoutContent = (LinearLayout) view.findViewById(R.id.layoutContent);
         layoutBranco = (LinearLayout) view.findViewById(R.id.layoutBranco);
+        linearLayout = (LinearLayout) view.findViewById(R.id.linearLayout);
 
         recyclerViewOfRecyclers = (RecyclerView) view.findViewById(R.id.my_recycler_view_of_recyclers);
         recyclerViewOfRecyclers.setHasFixedSize(true);
@@ -222,6 +225,31 @@ public class FragmentA extends Fragment {
             animatorSet.play(animatorY).with(animatorY2).with(animatorX2).with(animatorX3).before(animatorX).with(animatorRotate).with(animatorAlpha).before(anim);
             animatorSet.start();
 
+            animatorSet.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    recyclerViewOfRecyclers.setVisibility(View.VISIBLE);
+                    linearLayout.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+                    // ...
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    recyclerViewOfRecyclers.setVisibility(View.GONE);
+                    linearLayout.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                    // ...
+                }
+            });
+
+
             //=========================================
 
             isOpen = true;
@@ -245,7 +273,8 @@ public class FragmentA extends Fragment {
             anim.addListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animator) {
-                    //fab3.setVisibility(View.VISIBLE);
+                    recyclerViewOfRecyclers.setVisibility(View.VISIBLE);
+                    linearLayout.setVisibility(View.VISIBLE);
                 }
 
                 @Override
