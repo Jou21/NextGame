@@ -142,8 +142,8 @@ public class ActivityMeusJogos extends AppCompatActivity {
                 FirebaseAuth.getInstance().signOut();
                 // change this code beacuse your app will crash
                 Intent intent = new Intent(ActivityMeusJogos.this, ActivityLogin.class);
-                //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 //intent.putExtra("EXIT", true);
                 finishAffinity();
                 startActivity(intent);
