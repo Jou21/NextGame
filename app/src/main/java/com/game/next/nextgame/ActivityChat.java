@@ -141,8 +141,8 @@ public class ActivityChat extends AppCompatActivity {
                 FirebaseAuth.getInstance().signOut();
                 // change this code beacuse your app will crash
                 Intent intent = new Intent(ActivityChat.this, ActivityLogin.class);
-                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 finishAffinity();
                 startActivity(intent);
                 sair();
@@ -215,8 +215,8 @@ public class ActivityChat extends AppCompatActivity {
     }
 
     public void sair(){
-        System.runFinalizersOnExit(true) ;
-        super.finish();
+        //System.runFinalizersOnExit(true) ;
+       // super.finish();
         android.os.Process.killProcess(android.os.Process.myPid());
     }
 }

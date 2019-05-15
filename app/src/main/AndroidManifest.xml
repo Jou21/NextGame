@@ -29,7 +29,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".InfoTransacaoActivity"></activity>
+        <activity android:name=".ListaScanUsuariosProximosActivity"></activity>
+        <activity android:name=".InfoTransacaoActivity" />
         <activity
             android:name=".CustomScannerActivity"
             android:screenOrientation="portrait" />

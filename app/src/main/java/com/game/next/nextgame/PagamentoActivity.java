@@ -220,8 +220,26 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
             @Override
             public void onClick(View v) {
 
-                CreditCard creditCard = (CreditCard) v;
-                pagarComCartao(creditCard);
+                final CreditCard creditCard = (CreditCard) v;
+
+                DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
+                connectedRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        boolean connected = snapshot.getValue(Boolean.class);
+                        if (connected) {
+                            pagarComCartao(creditCard);
+                        } else {
+                            Toast.makeText(PagamentoActivity.this, "Você está desconectado. Por favor se conecte a uma rede e tente adicionar saldo novamente.", Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(PagamentoActivity.this, "Listener was cancelled", Toast.LENGTH_LONG).show();
+                    }
+                });
+
 
             }
         });

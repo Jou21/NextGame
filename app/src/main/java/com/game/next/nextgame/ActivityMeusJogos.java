@@ -158,8 +158,8 @@ public class ActivityMeusJogos extends AppCompatActivity {
     }
 
     public void sair(){
-        System.runFinalizersOnExit(true) ;
-        super.finish();
+        //System.runFinalizersOnExit(true) ;
+        //super.finish();
         android.os.Process.killProcess(android.os.Process.myPid());
     }
 
