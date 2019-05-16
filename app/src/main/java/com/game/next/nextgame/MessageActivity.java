@@ -142,7 +142,7 @@ public class MessageActivity extends AppCompatActivity {
             }
 
             if(alugarOuComprar.equals("TROCAR")){
-                sendMessage(fuser.getUid(), userid, "Olá, tudo jóia! Gostaria de trocar o jogo \'" + model.getNome() + "\' com você. Teria interesse?");
+                sendMessage(fuser.getUid(), userid, "Olá, tudo jóia! Fiquei interessado no seu jogo \'" + model.getNome() + "\'. Teria interesse de negociar comigo?");
             }
 
             if(alugarOuComprar.equals("COMPRAR")){

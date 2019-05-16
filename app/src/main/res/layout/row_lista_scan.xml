@@ -11,29 +11,50 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true"
         android:layout_marginRight="6dip"
+        android:layout_alignParentStart="true"
         android:src="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/first_line_lista_scan"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignWithParentIfMissing="true"
+
+        android:layout_above="@id/second_line_lista_scan"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@id/txt_lista_scan_preco_compra"
+        android:layout_toRightOf="@id/img_row_lista_scan"
+        android:gravity="center_vertical"
+        android:text="Example application"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/second_line_lista_scan"
         android:layout_width="fill_parent"
         android:layout_height="26dip"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
+
         android:layout_toRightOf="@id/img_row_lista_scan"
+        android:layout_toLeftOf="@id/txt_lista_scan_preco_compra"
         android:text="Description"
         android:textSize="12sp" />
 
     <TextView
-        android:id="@+id/first_line_lista_scan"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/second_line_lista_scan"
-        android:layout_alignParentRight="true"
+        android:id="@+id/txt_lista_scan_preco_compra"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="R$ 00,00"
+        android:background="@drawable/shape_btn_arredondado_verde"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textColor="#ffffff"
+        android:textSize="17sp"
+        android:paddingHorizontal="5dp"
+        android:layout_marginVertical="10dp"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true"
-        android:layout_alignWithParentIfMissing="true"
-        android:layout_toRightOf="@id/img_row_lista_scan"
-        android:gravity="center_vertical"
-        android:text="Example application"
-        android:textSize="16sp" />
+        android:layout_alignParentEnd="true"
+        android:layout_marginLeft="6dip"/>
 
 </RelativeLayout>

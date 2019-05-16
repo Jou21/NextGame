@@ -216,7 +216,7 @@ public class ActivityChat extends AppCompatActivity {
 
     public void sair(){
         //System.runFinalizersOnExit(true) ;
-       // super.finish();
+        //super.finish();
         android.os.Process.killProcess(android.os.Process.myPid());
     }
 }

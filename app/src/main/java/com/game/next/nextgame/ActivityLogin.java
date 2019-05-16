@@ -186,7 +186,15 @@ public class ActivityLogin extends AppCompatActivity{
 
                     @Override
                     public void onError(FacebookException exception) {
-                        Toast.makeText(ActivityLogin.this, exception.getMessage(), Toast.LENGTH_LONG).show();
+
+                        String errorCode = exception.getMessage();
+
+                        if(errorCode.equals("CONNECTION_FAILURE: CONNECTION_FAILURE")) {
+                            Toast.makeText(ActivityLogin.this, "Você precisa ter conexão com a internet!", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(ActivityLogin.this, exception.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+
                     }
                 });
 
@@ -270,6 +278,14 @@ public class ActivityLogin extends AppCompatActivity{
     }
 
     public void verificarUsuarioLogado(){
+
+        //if (reference == null) {
+
+            //database.setPersistenceEnabled(true);
+            //reference = database.getReference();
+
+        //}
+
         mAuth = getFirebaseAutenticacao();
 
         if( mAuth.getCurrentUser() != null ){
@@ -282,7 +298,10 @@ public class ActivityLogin extends AppCompatActivity{
     //retorna a instancia do FirebaseAuth
     public FirebaseAuth getFirebaseAutenticacao(){
         if( mAuth == null ){
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             mAuth = FirebaseAuth.getInstance();
+        }else {
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         }
         return mAuth;
 

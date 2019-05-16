@@ -114,8 +114,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-
         FirebaseDatabase.getInstance().getReference("Xbox").keepSynced(true);
         FirebaseDatabase.getInstance().getReference("PS4").keepSynced(true);
         FirebaseDatabase.getInstance().getReference("CarteiraUsers").keepSynced(true);

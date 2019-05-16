@@ -188,7 +188,7 @@
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/shape_btn_arredondado_azul"
-        android:text="TROCAR"
+        android:text="CHAT"
         android:textColor="#fff"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"

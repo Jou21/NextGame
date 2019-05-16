@@ -43,6 +43,7 @@ public class MyAdapterListaScan extends RecyclerView.Adapter<MyAdapterListaScan.
         public TextView txtFooter;
         public View layout;
         public ImageView imgUser;
+        public TextView txtPrecoCompra;
 
         public ViewHolder(View v) {
             super(v);
@@ -50,6 +51,7 @@ public class MyAdapterListaScan extends RecyclerView.Adapter<MyAdapterListaScan.
             txtHeader = (TextView) v.findViewById(R.id.first_line_lista_scan);
             txtFooter = (TextView) v.findViewById(R.id.second_line_lista_scan);
             imgUser = (ImageView) v.findViewById(R.id.img_row_lista_scan);
+            txtPrecoCompra = (TextView) v.findViewById(R.id.txt_lista_scan_preco_compra);
         }
     }
 
@@ -76,6 +78,9 @@ public class MyAdapterListaScan extends RecyclerView.Adapter<MyAdapterListaScan.
 
         final String nomeJogo = transacoesUsers.get(position).getJogo().getNome();
         holder.txtHeader.setText("Jogo: " +nomeJogo);
+
+        final String precoJogo = transacoesUsers.get(position).getValorCaucao();
+        holder.txtPrecoCompra.setText("R$ " + precoJogo);
 
         referenceUsers.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
