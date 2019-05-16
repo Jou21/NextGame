@@ -2,11 +2,14 @@ package com.game.next.nextgame;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +25,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.cooltechworks.creditcarddesign.CardEditActivity;
@@ -74,10 +78,22 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
     private MyAdapterCreditCards mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
+    private ProgressBar mProgressBar;
+
+    private ConstraintLayout layAguardePagseguro;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pagamento);
+
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBarAguardePagseguro);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP){
+            mProgressBar.setProgressTintList(ColorStateList.valueOf(Color.GREEN));
+        }
+
+        layAguardePagseguro = (ConstraintLayout) findViewById(R.id.lay_aguarde_pagseguro);
 
         entrou = false;
 
@@ -107,6 +123,12 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+
+        layAguardePagseguro.setVisibility(View.GONE);
+
+        recyclerView.setVisibility(View.VISIBLE);
+
+        btnAddCard.setVisibility(View.VISIBLE);
 
         // adding item touch helper
         // only ItemTouchHelper.LEFT added to detect Right to Left swipe
@@ -247,6 +269,14 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
 
     private void pagarComCartao( CreditCard creditCard ){
 
+        exibirProgress(true);
+
+        layAguardePagseguro.setVisibility(View.VISIBLE);
+
+        recyclerView.setVisibility(View.GONE);
+
+        btnAddCard.setVisibility(View.GONE);
+
 
         //TODO DESATIVAR QUANDO TIVER EM PRODUÇÃO
 
@@ -268,7 +298,7 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
                     Toast.makeText(PagamentoActivity.this, "Parabéns, você adicionou saldo a sua carteira!", Toast.LENGTH_LONG).show();
 
                     entrou = true;
-                    finish();
+                    //finish();
                 }else if(!dataSnapshot.exists() && entrou == false){
                     HashMap<String, String> hashMap = new HashMap<>();
                     hashMap.put("id", user.getUid());
@@ -280,7 +310,8 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
                     //startActivity(mainIntent);
                     Toast.makeText(PagamentoActivity.this, "Parabéns, você adicionou saldo a sua carteira!", Toast.LENGTH_LONG).show();
                     entrou = true;
-                    finish();
+
+                    //finish();
                 }
 
             }
@@ -293,41 +324,68 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
 
 
 
-
         //Inicialização a lib com parametros necessarios
         PSCheckoutConfig psCheckoutConfig = new PSCheckoutConfig();
         psCheckoutConfig.setSellerEmail("jvsb21@gmail.com");
-        psCheckoutConfig.setSellerToken("4E3C345F7A124E149704B4BE2CC7DB01");
+        //psCheckoutConfig.setSellerToken("4E3C345F7A124E149704B4BE2CC7DB01");
+        psCheckoutConfig.setSellerToken("ef6f4bef-2c72-4b69-917a-8ccaaaf514149358da5642029ef7dad4c924ad3f29e6407e-e175-407b-bd2f-b14b9479ce6b");
+        //psCheckoutConfig.setSellerEmail("vendedor@teste.com");
+        //psCheckoutConfig.setSellerToken("EDA6C0FD171A46C093BB4E9FBB052148");
 
         //Inicializa apenas os recursos de pagamento transparente e boleto
         PSCheckout.initTransparent(PagamentoActivity.this, psCheckoutConfig);
 
         PSTransparentDefaultRequest psTransparentDefaultRequest = new PSTransparentDefaultRequest();
 
-            psTransparentDefaultRequest
-                    .setDocumentNumber("99404021040")
-                    .setName(creditCard.getCardHolderName())
-                    .setEmail(user.getEmail())
-                    .setAreaCode("34")
-                    .setPhoneNumber("999508523")
-                    .setStreet("Rua Tapajos")
-                    .setAddressComplement("")
-                    .setAddressNumber("23")
-                    .setDistrict("Saraiva")
-                    .setCity("Uberlândia")
-                    .setState("MG")
-                    .setCountry("BRA")
-                    .setPostalCode("38408414")
-                    .setTotalValue(saldoParaAddCarteira)
-                    .setAmount(saldoParaAddCarteira)
-                    .setDescriptionPayment("Pagamento do teste de integração")
-                    .setQuantity(1)
-                    .setCreditCard(creditCard.getCardNumber())
-                    .setCvv(creditCard.getCVV())
-                    .setExpMonth(creditCard.getmMes())
-                    .setExpYear(creditCard.getmAno())
-                    .setBirthDate("04/05/1988");
+        psTransparentDefaultRequest
+                .setDocumentNumber("99404021040")
+                .setName(creditCard.getCardHolderName())
+                .setEmail(user.getEmail())
+                .setAreaCode("34")
+                .setPhoneNumber("999508523")
+                .setStreet("Rua Tapajos")
+                .setAddressComplement("")
+                .setAddressNumber("23")
+                .setDistrict("Saraiva")
+                .setCity("Uberlândia")
+                .setState("MG")
+                .setCountry("BRA")
+                .setPostalCode("38408414")
+                .setTotalValue(saldoParaAddCarteira)
+                .setAmount(saldoParaAddCarteira)
+                .setDescriptionPayment("Pagamento do teste de integração")
+                .setQuantity(1)
+                .setCreditCard(creditCard.getCardNumber())
+                .setCvv(creditCard.getCVV())
+                .setExpMonth(creditCard.getmMes())
+                .setExpYear(creditCard.getmAno())
+                .setBirthDate("04/05/1988");
 
+        /*
+        psTransparentDefaultRequest
+                .setDocumentNumber("99404021040")
+                .setName("João da Silva")
+                .setEmail("joao.silva@teste.com")
+                .setAreaCode("34")
+                .setPhoneNumber("999508523")
+                .setStreet("Rua Tapajos")
+                .setAddressComplement("")
+                .setAddressNumber("23")
+                .setDistrict("Saraiva")
+                .setCity("Uberlândia")
+                .setState("MG")
+                .setCountry("BRA")
+                .setPostalCode("38408414")
+                .setTotalValue("50.00")
+                .setAmount("50.00")
+                .setDescriptionPayment("Pagamento do teste de integração")
+                .setQuantity(1)
+                .setCreditCard("4111111111111111")
+                .setCvv("123")
+                .setExpMonth("12")
+                .setExpYear("30")
+                .setBirthDate("04/05/1988");
+        */
 
         Log.d("DADOSCARTAO","NOME: " + creditCard.getCardHolderName() +
                 "\nNUMEROCARTAO: " + creditCard.getCardNumber() +
@@ -348,24 +406,21 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
                 Log.d("STATUS1","STATUS: " + responseVO.getStatus());
 
                 //TODO ATIVAR QUANDO TIVER EM PRODUÇÃO
-                /*
-                HashMap<String, Object> hashMap = new HashMap<>();
-                hashMap.put("userId", user.getUid());
-                hashMap.put("fornecedorId", fornecedorId);
-                hashMap.put("valorAluguel", precoAluguelJogo);
-                hashMap.put("valorCaucao", precoJogo);
 
-                referenceTransacaoUser.push().setValue(hashMap);
-                */
+                //exibirProgress(false);
+
+                //finish();
+
             }
 
             @Override
             public void onFailure(PSCheckoutResponse responseVO) {
 
+                exibirProgress(false);
 
+                finish();
 
-
-                Toast.makeText(PagamentoActivity.this, "Fail: "+responseVO.getMessage(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(PagamentoActivity.this, "Fail: "+responseVO.getMessage(), Toast.LENGTH_LONG).show();
                 Log.d("ERRO1","ERRO: " + responseVO.getCode());
 
             }
@@ -373,10 +428,7 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
             @Override
             public void onProcessing() {
 
-
-
-
-                Toast.makeText(PagamentoActivity.this, "Processing...", Toast.LENGTH_LONG).show();
+                //Toast.makeText(PagamentoActivity.this, "Processing...", Toast.LENGTH_LONG).show();
                 Log.d("PROCESS1","PROCESS: " + "Processing");
             }
         };
@@ -410,5 +462,9 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
         final int lFlags = window.getDecorView().getSystemUiVisibility();
         // Update the SystemUiVisibility dependening on whether we want a Light or Dark theme.
         pActivity.getWindow().getDecorView().setSystemUiVisibility(textIsDark ? (lFlags | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR) : (lFlags & ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR));
+    }
+
+    private void exibirProgress(boolean exibir) {
+        mProgressBar.setVisibility(exibir ? View.VISIBLE : View.GONE);
     }
 }
