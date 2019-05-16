@@ -80,7 +80,7 @@ public class MyAdapterListaScan extends RecyclerView.Adapter<MyAdapterListaScan.
         holder.txtHeader.setText("Jogo: " +nomeJogo);
 
         final String precoJogo = transacoesUsers.get(position).getValorCaucao();
-        holder.txtPrecoCompra.setText("R$ " + precoJogo);
+        holder.txtPrecoCompra.setText("R$ " + precoJogo + ",00");
 
         referenceUsers.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
