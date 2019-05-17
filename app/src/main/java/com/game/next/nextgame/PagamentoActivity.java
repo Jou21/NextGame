@@ -407,9 +407,9 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
 
                 //TODO ATIVAR QUANDO TIVER EM PRODUÇÃO
 
-                //exibirProgress(false);
+                exibirProgress(false);
 
-                //finish();
+                finish();
 
             }
 
