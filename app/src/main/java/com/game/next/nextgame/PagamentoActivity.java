@@ -26,6 +26,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cooltechworks.creditcarddesign.CardEditActivity;
@@ -59,6 +60,8 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
 
     private final int CREATE_NEW_CARD = 0;
 
+    private TextView txtAdicioneSaldoParaProsseguir;
+
     private ArrayList<View> creditCardList;
     private Button btnAddCard;
 
@@ -66,6 +69,7 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
     private FirebaseUser user;
 
     private boolean entrou = false;
+    private boolean temCartaoCadastrado = false;
 
     private String name = "";
     private String cvv = "";
@@ -88,12 +92,19 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
         setContentView(R.layout.activity_pagamento);
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBarAguardePagseguro);
+        txtAdicioneSaldoParaProsseguir = (TextView) findViewById(R.id.txt_adicione_saldo_para_prosseguir);
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP){
             mProgressBar.setProgressTintList(ColorStateList.valueOf(Color.GREEN));
         }
 
         layAguardePagseguro = (ConstraintLayout) findViewById(R.id.lay_aguarde_pagseguro);
+
+        if(temCartaoCadastrado == true){
+            txtAdicioneSaldoParaProsseguir.setText("Clique em cima de um cartão para adicionar saldo em sua conta!");
+        }else {
+            txtAdicioneSaldoParaProsseguir.setText("Adicione um cartão para prosseguir...");
+        }
 
         entrou = false;
 
@@ -129,6 +140,8 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
         recyclerView.setVisibility(View.VISIBLE);
 
         btnAddCard.setVisibility(View.VISIBLE);
+
+        txtAdicioneSaldoParaProsseguir.setVisibility(View.VISIBLE);
 
         // adding item touch helper
         // only ItemTouchHelper.LEFT added to detect Right to Left swipe
@@ -198,7 +211,16 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
                         recyclerView.setAdapter(mAdapter);
 
                         addCardListener(sampleCreditCardView);
+
+
                     }
+                }
+                if(!creditCardList.isEmpty()){
+                    temCartaoCadastrado = true;
+                    txtAdicioneSaldoParaProsseguir.setText("Clique em cima de um cartão para adicionar saldo em sua conta!");
+                } else {
+                    temCartaoCadastrado = false;
+                    txtAdicioneSaldoParaProsseguir.setText("Adicione um cartão para prosseguir...");
                 }
             }
 
@@ -276,6 +298,8 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
         recyclerView.setVisibility(View.GONE);
 
         btnAddCard.setVisibility(View.GONE);
+
+        txtAdicioneSaldoParaProsseguir.setVisibility(View.GONE);
 
 
         //TODO DESATIVAR QUANDO TIVER EM PRODUÇÃO

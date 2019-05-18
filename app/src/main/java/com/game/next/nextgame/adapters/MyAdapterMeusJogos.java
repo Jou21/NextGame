@@ -90,13 +90,13 @@ public class MyAdapterMeusJogos extends RecyclerView.Adapter<MyAdapterMeusJogos.
 
         final String name = userGames.get(position).getNomeJogo();
         holder.txtHeader.setText(name);
-        if(userGames.get(position).getPrecoVenda().equals("N")){
+        if(userGames.get(position).getVende().equals("N")){
             holder.txtPrecoRowJogo.setText("Indisponível");
         }else{
             holder.txtPrecoRowJogo.setText("R$" + userGames.get(position).getPrecoVenda() + ",00");
         }
 
-        if(userGames.get(position).getPrecoAluga().equals("N")){
+        if(userGames.get(position).getAluga().equals("N")){
             holder.txtAluguelRowJogo.setText("Indisponível");
         }else{
             holder.txtAluguelRowJogo.setText("R$" + userGames.get(position).getPrecoAluga() + ",00");

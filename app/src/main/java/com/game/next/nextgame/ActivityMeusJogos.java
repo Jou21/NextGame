@@ -1,5 +1,7 @@
 package com.game.next.nextgame;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -150,7 +152,8 @@ public class ActivityMeusJogos extends AppCompatActivity {
                 //Intent broadcastIntent = new Intent();
                 //broadcastIntent.setAction("com.package.ACTION_LOGOUT");
                 //sendBroadcast(broadcastIntent);
-                sair();
+                //sair();
+                killApplication("com.game.next.nextgame");
                 return true;
         }
 
@@ -158,7 +161,7 @@ public class ActivityMeusJogos extends AppCompatActivity {
     }
 
     public void sair(){
-        //System.runFinalizersOnExit(true) ;
+        //System.runFinalizersOnExit(true);
         //super.finish();
         android.os.Process.killProcess(android.os.Process.myPid());
     }
@@ -203,5 +206,11 @@ public class ActivityMeusJogos extends AppCompatActivity {
         if (fragment != null) {
             fragment.onActivityResult(requestCode, resultCode, intent);
         }
+    }
+
+    public void killApplication(String killPackage) {//com.game.next.nextgame
+        ActivityManager am =(ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
+        android.os.Process.killProcess(android.os.Process.myPid());
+        am.killBackgroundProcesses(killPackage);
     }
 }
