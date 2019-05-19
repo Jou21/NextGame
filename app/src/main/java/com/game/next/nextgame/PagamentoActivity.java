@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
@@ -49,6 +50,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import br.com.uol.pslibs.checkout_in_app.PSCheckout;
 import br.com.uol.pslibs.checkout_in_app.transparent.listener.PSCheckoutListener;
@@ -94,9 +98,7 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
         mProgressBar = (ProgressBar) findViewById(R.id.progressBarAguardePagseguro);
         txtAdicioneSaldoParaProsseguir = (TextView) findViewById(R.id.txt_adicione_saldo_para_prosseguir);
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP){
-            mProgressBar.setProgressTintList(ColorStateList.valueOf(Color.GREEN));
-        }
+
 
         layAguardePagseguro = (ConstraintLayout) findViewById(R.id.lay_aguarde_pagseguro);
 
@@ -322,7 +324,19 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
                     Toast.makeText(PagamentoActivity.this, "Parabéns, você adicionou saldo a sua carteira!", Toast.LENGTH_LONG).show();
 
                     entrou = true;
-                    //finish();
+
+                    new Handler().postDelayed(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            exibirProgress(false);
+                            finish();
+                        }
+
+                    }, 2000);
+
+
+
                 }else if(!dataSnapshot.exists() && entrou == false){
                     HashMap<String, String> hashMap = new HashMap<>();
                     hashMap.put("id", user.getUid());
@@ -335,7 +349,17 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
                     Toast.makeText(PagamentoActivity.this, "Parabéns, você adicionou saldo a sua carteira!", Toast.LENGTH_LONG).show();
                     entrou = true;
 
-                    //finish();
+                    new Handler().postDelayed(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            exibirProgress(false);
+                            finish();
+                        }
+
+                    }, 2000);
+
+
                 }
 
             }
@@ -347,7 +371,7 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
         });
 
 
-
+        /*
         //Inicialização a lib com parametros necessarios
         PSCheckoutConfig psCheckoutConfig = new PSCheckoutConfig();
         psCheckoutConfig.setSellerEmail("jvsb21@gmail.com");
@@ -409,7 +433,7 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
                 .setExpMonth("12")
                 .setExpYear("30")
                 .setBirthDate("04/05/1988");
-        */
+
 
         Log.d("DADOSCARTAO","NOME: " + creditCard.getCardHolderName() +
                 "\nNUMEROCARTAO: " + creditCard.getCardNumber() +
@@ -459,12 +483,12 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
 
 
         PSCheckout.payTransparentDefault(psTransparentDefaultRequest, psCheckoutListener, (AppCompatActivity) PagamentoActivity.this);
-
+        */
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        PSCheckout.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+        //PSCheckout.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
     }
 
     @Override
