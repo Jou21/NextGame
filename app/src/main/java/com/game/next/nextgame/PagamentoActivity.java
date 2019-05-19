@@ -321,7 +321,6 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
 
                     //Intent mainIntent = new Intent(PagamentoActivity.this, MainActivity.class);
                     //startActivity(mainIntent);
-                    Toast.makeText(PagamentoActivity.this, "Parabéns, você adicionou saldo a sua carteira!", Toast.LENGTH_LONG).show();
 
                     entrou = true;
 
@@ -329,6 +328,7 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
 
                         @Override
                         public void run() {
+                            Toast.makeText(PagamentoActivity.this, "Parabéns, você adicionou saldo a sua carteira!", Toast.LENGTH_LONG).show();
                             exibirProgress(false);
                             finish();
                         }
@@ -346,13 +346,14 @@ public class PagamentoActivity extends AppCompatActivity implements RecyclerItem
 
                     //Intent mainIntent = new Intent(PagamentoActivity.this, MainActivity.class);
                     //startActivity(mainIntent);
-                    Toast.makeText(PagamentoActivity.this, "Parabéns, você adicionou saldo a sua carteira!", Toast.LENGTH_LONG).show();
+
                     entrou = true;
 
                     new Handler().postDelayed(new Runnable() {
 
                         @Override
                         public void run() {
+                            Toast.makeText(PagamentoActivity.this, "Parabéns, você adicionou saldo a sua carteira!", Toast.LENGTH_LONG).show();
                             exibirProgress(false);
                             finish();
                         }
