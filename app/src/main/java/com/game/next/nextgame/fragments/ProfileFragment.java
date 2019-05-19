@@ -132,7 +132,7 @@ public class ProfileFragment extends Fragment {
 
     private void uploadImage(){
         final ProgressDialog pd = new ProgressDialog(getContext());
-        pd.setMessage("Processando upload...");
+        pd.setMessage("Carregando imagem...");
         pd.show();
 
         if (imageUri != null){
@@ -188,7 +188,7 @@ public class ProfileFragment extends Fragment {
             imageUri = data.getData();
 
             if (uploadTask != null && uploadTask.isInProgress()){
-                Toast.makeText(getContext(), "Processando upload...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Carregando imagem...", Toast.LENGTH_SHORT).show();
             } else {
                 uploadImage();
             }
