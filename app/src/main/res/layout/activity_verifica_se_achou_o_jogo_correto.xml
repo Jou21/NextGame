@@ -31,12 +31,13 @@
 
     <TextView
         android:id="@+id/txt_nome_do_jogo_verifica_se_achou_o_jogo_correto"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="40dp"
         android:text="Nome do Jogo"
+        android:gravity="center"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/btn_sim_verifica_se_achou_o_jogo_correto"
