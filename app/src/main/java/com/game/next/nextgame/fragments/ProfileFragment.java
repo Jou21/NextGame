@@ -132,7 +132,7 @@ public class ProfileFragment extends Fragment {
 
     private void uploadImage(){
         final ProgressDialog pd = new ProgressDialog(getContext());
-        pd.setMessage("Uploading");
+        pd.setMessage("Processando upload...");
         pd.show();
 
         if (imageUri != null){
@@ -163,7 +163,7 @@ public class ProfileFragment extends Fragment {
 
                         pd.dismiss();
                     } else {
-                        Toast.makeText(getContext(), "Failed!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Falha!", Toast.LENGTH_SHORT).show();
                         pd.dismiss();
                     }
                 }
@@ -175,7 +175,7 @@ public class ProfileFragment extends Fragment {
                 }
             });
         } else {
-            Toast.makeText(getContext(), "No image selected", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Nenhuma imagem selecionada", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -188,7 +188,7 @@ public class ProfileFragment extends Fragment {
             imageUri = data.getData();
 
             if (uploadTask != null && uploadTask.isInProgress()){
-                Toast.makeText(getContext(), "Upload in preogress", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Processando upload...", Toast.LENGTH_SHORT).show();
             } else {
                 uploadImage();
             }
